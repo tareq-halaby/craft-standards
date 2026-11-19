@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ArtCraft Theme & Design Tokens Schema",
+  "type": "object",
+  "required": ["name", "mode", "colors", "metrics"],
+  "properties": {
+    "name": { "type": "string" },
+    "mode": { "type": "string", "enum": ["dark", "light"] },
+    "colors": {
+      "type": "object",
+      "required": ["background", "surface", "border", "text_primary", "accent", "danger", "focus_ring"],
+      "properties": {
+        "background": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "surface": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "border": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "text_primary": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "accent": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "danger": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+        "focus_ring": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["radius", "focus_ring_width"],
+      "properties": {
+        "radius": { "type": "number" },
+        "focus_ring_width": { "type": "number" }
+      }
+    }
+  }
+}
