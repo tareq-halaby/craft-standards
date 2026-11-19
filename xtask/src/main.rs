@@ -375,20 +375,18 @@ fn run_html_report() {
         let gh = &spec.github_url;
 
         items_html.push_str(&format!(
-            r#"<div class="card" data-category="{cat}">
-                <div class="card-header">
-                    <span class="badge {cat}">{cat}</span>
-                    <span class="badge status">{status}</span>
-                    <h3>{id}: {title}</h3>
+            r#"<article class="standard-tile" data-category="{cat}" onclick="openSpec('{id}')">
+                <div class="tile-meta">
+                    <span class="tile-id">{id}</span>
+                    <span class="tile-cat-badge cat-{cat}">{cat}</span>
                 </div>
-                <div class="card-body">
-                    <p>{body_preview}</p>
+                <h3 class="tile-title">{title}</h3>
+                <div class="tile-desc">{body_preview}</div>
+                <div class="tile-footer">
+                    <div class="tile-read-btn">Read specification <span>→</span></div>
+                    <a href="{gh}" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
                 </div>
-                <div class="card-footer">
-                    <button onclick="openSpec('{id}')" class="spec-btn">View Specification →</button>
-                    <a href="{gh}" target="_blank" class="gh-link" title="View Source on GitHub">GitHub ↗</a>
-                </div>
-            </div>"#
+            </article>"#
         ));
 
         json_items.push(format!(
