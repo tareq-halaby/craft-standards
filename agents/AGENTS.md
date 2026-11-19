@@ -1,13 +1,28 @@
 # Universal Instructions for AI Coding Agents in ArtCraft Repositories
 
-> **Authority:** This document is maintained by `storytold/craft-standards`. All AI agents (AutoCraft bots, Antigravity, Cursor, Copilot, Claude Code) working on PhotoCraft, DesignCraft, EffectCraft, VectorCraft, WordCraft, Craft Launcher, or craft-libs **MUST** follow these invariants.
+> **Authority:** This document is maintained by `storytold/craft-standards`. All AI agents (AutoCraft bots, Antigravity, Cursor, Copilot, Claude Code) working across the entire ArtCraft application suite and shared libraries **MUST** adhere to these invariants.
 
 ---
 
-## 1. Golden Rules of ArtCraft Development
+## 1. Scope of the ArtCraft Suite
+
+These standards govern all creative, productivity, CAD, audio, and media applications in the ecosystem:
+* **AI & Generative Media:** ArtCraft Studio
+* **Graphics & Design:** PhotoCraft, VectorCraft, LightCraft, DesignCraft, FigCraft, TextureCraft, MaterialCraft
+* **Video & Effects:** FilmCraft, EffectCraft, AniCraft
+* **Audio:** SoundCraft
+* **CAD & Drafting:** CADCraft
+* **Office & Productivity:** WordCraft, GridCraft, DeckCraft, PdfCraft
+* **Developer Tools:** Craft Anything
+* **Third-Party & Mail:** SolidCraft, MailCraft
+* **Infrastructure:** Craft Launcher, craft-libs, craft-wiki, autocraft
+
+---
+
+## 2. Golden Rules of ArtCraft Development
 
 1. **Never Re-invent Shared Primitives:**
-   Before implementing a UI widget, printing function, keymap logic, or dialog, check `craft-libs`. If a primitive exists (`craft-ui`, `craft-keymap`, `craft-i18n`, `craft-print`), use it. If it doesn't, propose or implement it upstream in `craft-libs`, not in an isolated app codebase.
+   Before implementing a UI widget, printing function, keymap logic, or dialog, check `craft-libs`. If a primitive exists (`craft-ui`, `craft-keymap`, `craft-i18n`, `craft-print`, `craft-window`), use it. Propose or implement missing primitives upstream in `craft-libs`, never in an isolated app codebase.
 
 2. **Modifier Semantics on Release Events:**
    In egui, users release keys rapidly. When checking modifiers for clicks (e.g. `Alt`-click), **never** check `ui.input(|i| i.modifiers.alt)` in the click handler. Always read modifiers from the primary button release event (`resp.interact_pointer_pos()`, pointer release event records), or use `craft-ui::ToolSlot`.
@@ -24,19 +39,8 @@
 6. **Right-to-Left (RTL) Layout Invariance:**
    UI layout direction follows `craft_i18n::is_rtl()`. Primary toolbars dock on the right in RTL; inspectors dock on the left; flyouts open inward toward the canvas. Text labels must pass through `craft_i18n::rtl::widget(ui, text)` for automatic BiDi Unicode shaping.
 
----
-
-## 2. Standard ID Cross-Reference
-
-When tasked with implementing or modifying features, consult the corresponding standard in `standards/`:
-
-| Standard ID | Domain | Mandatory Acceptance Rule |
-| :--- | :--- | :--- |
-| **`STD-INPUT-001`** | Multi-Tool Buttons | Alt/Option-click cycles slot tools with instant wrap. Long-press (350ms) opens flyout. Suppress double-click dialogs. |
-| **`STD-NAV-001`** | Tab Navigation | `Ctrl+Tab` / `Ctrl+Shift+Tab` cycle tabs in MRU or spatial order. `Tab` hides all panels; `Shift+Tab` hides side docks. |
-| **`STD-A11Y-001`** | Accessibility | Interactive controls must possess AccessKit names/roles. Run `ui_accessibility_audit` in CI. |
-| **`STD-I18N-001`** | RTL & Shaping | Shell layout mirrors under RTL. Text runs resolve Unicode BiDi without changing stored data. |
-| **`STD-LIB-001`** | Printing | Cross-platform output routes through `craft-print` / `craft-winprint-gdi`, never platform APIs directly. |
+7. **Unified Cross-Platform Printing:**
+   Any document printing or page setup logic must route through `craft-libs::craft-print`. Never call Windows GDI, WinSpool, or CUPS directly from an application crate.
 
 ---
 

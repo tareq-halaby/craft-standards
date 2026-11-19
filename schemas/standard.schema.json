@@ -26,7 +26,30 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["photocraft", "designcraft", "effectcraft", "vectorcraft", "wordcraft", "craft-launcher"]
+        "enum": [
+          "artcraft-studio",
+          "photocraft",
+          "vectorcraft",
+          "lightcraft",
+          "designcraft",
+          "figcraft",
+          "texturecraft",
+          "materialcraft",
+          "filmcraft",
+          "effectcraft",
+          "anicraft",
+          "soundcraft",
+          "cadcraft",
+          "wordcraft",
+          "gridcraft",
+          "deckcraft",
+          "pdfcraft",
+          "craft-anything",
+          "solidcraft",
+          "mailcraft",
+          "craft-launcher",
+          "all"
+        ]
       }
     }
   }
