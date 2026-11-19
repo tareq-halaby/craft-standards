@@ -295,18 +295,21 @@ fn run_html_report() {
     <meta charset="UTF-8">
     <title>ArtCraft Standards Dashboard</title>
     <style>
-        body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #121417; color: #E1E4E8; margin: 0; padding: 32px; }}
+        body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0E1117; color: #E1E4E8; margin: 0; padding: 32px; }}
         h1 {{ margin: 0 0 8px 0; font-size: 28px; color: #FFF; }}
         .subtitle {{ color: #8B949E; margin-bottom: 24px; font-size: 15px; }}
         .stats {{ display: flex; gap: 16px; margin-bottom: 32px; }}
-        .stat-box {{ background: #1B1F24; padding: 16px 24px; border-radius: 8px; border: 1px solid #30363D; }}
+        .stat-box {{ background: #161B22; padding: 16px 24px; border-radius: 8px; border: 1px solid #30363D; }}
         .stat-num {{ font-size: 24px; font-weight: bold; color: #58A6FF; }}
         .stat-label {{ font-size: 13px; color: #8B949E; }}
-        .filters {{ display: flex; gap: 8px; margin-bottom: 24px; }}
-        .filter-btn {{ background: #21262D; color: #C9D1D9; border: 1px solid #30363D; padding: 6px 14px; border-radius: 6px; cursor: pointer; }}
+        .controls {{ display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; align-items: center; }}
+        .search-box {{ background: #161B22; border: 1px solid #30363D; color: #FFF; padding: 8px 16px; border-radius: 6px; font-size: 14px; width: 260px; outline: none; }}
+        .search-box:focus {{ border-color: #58A6FF; }}
+        .filter-btn {{ background: #21262D; color: #C9D1D9; border: 1px solid #30363D; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }}
         .filter-btn.active {{ background: #1F6FEB; color: #FFF; border-color: #58A6FF; }}
         .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }}
-        .card {{ background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 16px; }}
+        .card {{ background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 16px; transition: border-color 0.15s; }}
+        .card:hover {{ border-color: #58A6FF; }}
         .badge {{ font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; margin-right: 6px; }}
         .interaction {{ background: #388BFD33; color: #58A6FF; }}
         .navigation {{ background: #A371F733; color: #BC8CFF; }}
@@ -328,9 +331,37 @@ fn run_html_report() {
         <div class="stat-box"><div class="stat-num">100%</div><div class="stat-label">CI Verification</div></div>
         <div class="stat-box"><div class="stat-num">Enabled</div><div class="stat-label">AutoCraft MCP</div></div>
     </div>
-    <div class="grid">
+    <div class="controls">
+        <input type="text" id="search" class="search-box" placeholder="Search standards...">
+        <button class="filter-btn active" onclick="filterCategory('all', this)">All</button>
+        <button class="filter-btn" onclick="filterCategory('interaction', this)">Interaction</button>
+        <button class="filter-btn" onclick="filterCategory('navigation', this)">Navigation</button>
+        <button class="filter-btn" onclick="filterCategory('accessibility', this)">Accessibility</button>
+        <button class="filter-btn" onclick="filterCategory('internationalization', this)">i18n / RTL</button>
+        <button class="filter-btn" onclick="filterCategory('shell', this)">Shell & Chrome</button>
+        <button class="filter-btn" onclick="filterCategory('unified-libs', this)">Unified Libs</button>
+    </div>
+    <div class="grid" id="grid">
         {items}
     </div>
+    <script>
+        let currentCategory = 'all';
+        function filterCategory(cat, btn) {{
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilters();
+        }}
+        document.getElementById('search').addEventListener('input', applyFilters);
+        function applyFilters() {{
+            const q = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {{
+                const matchesCat = currentCategory === 'all' || card.dataset.category === currentCategory;
+                const matchesSearch = card.innerText.toLowerCase().includes(q);
+                card.style.display = (matchesCat && matchesSearch) ? 'block' : 'none';
+            }});
+        }}
+    </script>
 </body>
 </html>"#,
         total = files.len(),

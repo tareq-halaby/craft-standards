@@ -100,6 +100,7 @@ craft-standards/
 
 | Standard ID | Title | Category | Canonical Crate |
 | :--- | :--- | :--- | :--- |
+| **`STD-COLOR-001`** | [Color Space, Pickers & Proofing](standards/01-interaction/STD-COLOR-001-color-space-and-picker-ergonomics.md) | Interaction | `craft-libs::craft-color` |
 | **`STD-INPUT-001`** | [Multi-Tool Button Cycling](standards/01-interaction/STD-INPUT-001-tool-slot-cycling.md) | Interaction | `craft-libs::craft-ui` |
 | **`STD-INPUT-002`** | [Transient & Spring-Loaded Tools](standards/01-interaction/STD-INPUT-002-transient-spring-tools.md) | Interaction | `craft-libs::craft-ui` |
 | **`STD-INPUT-003`** | [Canvas Pan & Zoom Physics](standards/01-interaction/STD-INPUT-003-canvas-pan-zoom.md) | Interaction | `craft-libs::craft-ui` |
@@ -107,10 +108,12 @@ craft-standards/
 | **`STD-NAV-001`** | [Document Tab Switching (`Ctrl+Tab`)](standards/02-navigation/STD-NAV-001-document-tab-switching.md) | Navigation | `craft-libs::craft-keymap` |
 | **`STD-NAV-002`** | [Workspace Panel Toggles](standards/02-navigation/STD-NAV-002-workspace-panel-toggles.md) | Navigation | `craft-libs::craft-keymap` |
 | **`STD-NAV-003`** | [Arrow-Key Value Scrubbing](standards/02-navigation/STD-NAV-003-arrow-key-scrubbing.md) | Navigation | `craft-libs::craft-ui` |
+| **`STD-TIME-001`** | [Timeline Navigation & JKL Scrubbing](standards/02-navigation/STD-TIME-001-timeline-and-timecode-navigation.md) | Navigation | `craft-libs::craft-ui` |
 | **`STD-A11Y-001`** | [AccessKit Node Tagging & CI Audit](standards/03-accessibility/STD-A11Y-001-accesskit-naming-audit.md) | Accessibility | `craft-libs::craft-ui::a11y` |
 | **`STD-A11Y-002`** | [Focus Rings & Reduced Motion](standards/03-accessibility/STD-A11Y-002-keyboard-focus-and-contrast.md) | Accessibility | `craft-libs::craft-ui` |
 | **`STD-I18N-001`** | [Shell Mirroring & BiDi Shaping](standards/04-internationalization/STD-I18N-001-shell-mirroring-and-rtl.md) | Internationalization | `craft-libs::craft-i18n` |
 | **`STD-I18N-002`** | [Numeric & Unit Formatting](standards/04-internationalization/STD-I18N-002-number-and-locale-formatting.md) | Internationalization | `craft-libs::craft-i18n` |
+| **`STD-CLIP-001`** | [Clipboard & Drag-and-Drop Ingestion](standards/05-shell-and-chrome/STD-CLIP-001-drag-drop-and-clipboard-exchange.md) | Shell | `craft-libs::craft-window` |
 | **`STD-CMD-001`** | [Command Taxonomy & Headless MCP](standards/05-shell-and-chrome/STD-CMD-001-universal-command-taxonomy.md) | Shell | `craft-libs::craft-keymap` |
 | **`STD-SHELL-001`** | [Dialog Lifecycle & Button Order](standards/05-shell-and-chrome/STD-SHELL-001-dialog-lifecycle.md) | Shell | `craft-libs::craft-dialogs` |
 | **`STD-SHELL-002`** | [Document Dirty State & Autosave](standards/05-shell-and-chrome/STD-SHELL-002-document-dirty-and-autosave.md) | Shell | `craft-libs::craft-window` |

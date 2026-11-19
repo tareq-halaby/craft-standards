@@ -430,3 +430,76 @@ fn execute_resolve_library_primitive(args: &Value) -> Value {
         _ => json!({ "error": format!("No standard library mapped for domain: '{domain}'. Consider proposing one.") }),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_list_standards_all() {
+        let res = execute_list_standards(&json!({}));
+        let list = res["standards"].as_array().expect("array of standards");
+        assert!(list.len() >= 16);
+    }
+
+    #[test]
+    fn test_list_standards_filter() {
+        let res = execute_list_standards(&json!({ "category": "interaction" }));
+        let list = res["standards"].as_array().expect("array of standards");
+        assert!(!list.is_empty());
+        for item in list {
+            assert_eq!(item["category"], "interaction");
+        }
+    }
+
+    #[test]
+    fn test_get_standard() {
+        let res = execute_get_standard(&json!({ "id": "STD-INPUT-001" }));
+        assert_eq!(res["id"], "STD-INPUT-001");
+        assert!(res["rules"].as_array().unwrap().len() >= 3);
+    }
+
+    #[test]
+    fn test_verify_component_flags_violations() {
+        let bad_code = r#"
+            let alt = inp.modifiers.alt;
+            if resp.clicked() && alt { app.cycle(); }
+            else if resp.double_clicked() { app.open_dialog(); }
+        "#;
+        let res = execute_verify_component(&json!({
+            "component_kind": "toolbar_button",
+            "code_snippet": bad_code
+        }));
+        assert_eq!(res["status"], "violations_found");
+        let violations = res["violations"].as_array().unwrap();
+        assert!(violations.len() >= 2);
+    }
+
+    #[test]
+    fn test_verify_component_passes_clean_code() {
+        let clean_code = r#"
+            let click_mods = get_release_mods();
+            if slot_click && click_mods.alt { app.cycle(); }
+            if resp.double_clicked() && !modified && !prev_modified { app.open(); }
+            craft_ui::a11y::role_name(&resp, Role::Button, "tool");
+        "#;
+        let res = execute_verify_component(&json!({
+            "component_kind": "toolbar_button",
+            "code_snippet": clean_code
+        }));
+        assert_eq!(res["status"], "passed");
+    }
+
+    #[test]
+    fn test_generate_compliant_code() {
+        let res = execute_generate_compliant_code(&json!({ "template": "tool_slot" }));
+        assert_eq!(res["template"], "tool_slot");
+        assert!(res["rust_snippet"].as_str().unwrap().contains("STD-INPUT-001"));
+    }
+
+    #[test]
+    fn test_resolve_library_primitive() {
+        let res = execute_resolve_library_primitive(&json!({ "domain": "printing" }));
+        assert_eq!(res["crate"], "craft-print");
+    }
+}
