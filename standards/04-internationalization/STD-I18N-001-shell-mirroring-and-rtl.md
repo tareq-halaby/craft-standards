@@ -4,13 +4,14 @@ title: Full Shell Direction Mirroring and Unicode BiDi Text Galley Shaping
 category: internationalization
 status: active
 canonical_crate: craft-libs::craft-i18n
+wiki_reference: https://craft.wiki/apps/vectorcraft/set-right-to-left-and-indic-type/
 affected_apps: [photocraft, designcraft, effectcraft, vectorcraft, wordcraft]
 ---
 
 # STD-I18N-001: Full Shell Direction Mirroring and Unicode BiDi Text Galley Shaping
 
 ## 1. Abstract
-Right-to-Left (RTL) scripts (Arabic, Hebrew, Persian, Urdu) require complete layout mirroring of the desktop shell and correct bidirectional text shaping. This standard formalizes shell mirroring and Unicode BiDi classification.
+As documented on [Craft Wiki: Set right-to-left and Indic type](https://craft.wiki/apps/vectorcraft/set-right-to-left-and-indic-type/), Right-to-Left (RTL) scripts (Arabic, Hebrew, Persian, Urdu) require complete layout mirroring of the desktop shell, Indic typographic panel options, and bidirectional text shaping. This standard formalizes shell mirroring, typography options, and Unicode BiDi classification.
 
 ---
 
