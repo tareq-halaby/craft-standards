@@ -111,6 +111,7 @@ craft-standards/
 | **`STD-A11Y-002`** | [Focus Rings & Reduced Motion](standards/03-accessibility/STD-A11Y-002-keyboard-focus-and-contrast.md) | Accessibility | `craft-libs::craft-ui` |
 | **`STD-I18N-001`** | [Shell Mirroring & BiDi Shaping](standards/04-internationalization/STD-I18N-001-shell-mirroring-and-rtl.md) | Internationalization | `craft-libs::craft-i18n` |
 | **`STD-I18N-002`** | [Numeric & Unit Formatting](standards/04-internationalization/STD-I18N-002-number-and-locale-formatting.md) | Internationalization | `craft-libs::craft-i18n` |
+| **`STD-CMD-001`** | [Command Taxonomy & Headless MCP](standards/05-shell-and-chrome/STD-CMD-001-universal-command-taxonomy.md) | Shell | `craft-libs::craft-keymap` |
 | **`STD-SHELL-001`** | [Dialog Lifecycle & Button Order](standards/05-shell-and-chrome/STD-SHELL-001-dialog-lifecycle.md) | Shell | `craft-libs::craft-dialogs` |
 | **`STD-SHELL-002`** | [Document Dirty State & Autosave](standards/05-shell-and-chrome/STD-SHELL-002-document-dirty-and-autosave.md) | Shell | `craft-libs::craft-window` |
 | **`STD-LIB-001`** | [Cross-Platform Printing Pipeline](standards/06-unified-libs/STD-LIB-001-printing-pipeline.md) | Unified Libs | `craft-libs::craft-print` |
