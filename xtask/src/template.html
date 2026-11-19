@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArtCraft Universal Standards Dashboard & Specifications</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0E1117; color: #E1E4E8; margin: 0; padding: 0; }
+        
+        /* Dashboard Container */
+        .dash-container { padding: 32px; max-width: 1440px; margin: 0 auto; }
+        h1 { margin: 0 0 8px 0; font-size: 28px; color: #FFF; }
+        .subtitle { color: #8B949E; margin-bottom: 24px; font-size: 15px; }
+        .header-wrap { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .header-links { display: flex; gap: 12px; }
+        .nav-link { color: #58A6FF; text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 14px; background: #161B22; border: 1px solid #30363D; border-radius: 6px; transition: border-color 0.15s; }
+        .nav-link:hover { border-color: #58A6FF; }
+        
+        .stats { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+        .stat-box { background: #161B22; padding: 16px 24px; border-radius: 8px; border: 1px solid #30363D; min-width: 140px; }
+        .stat-num { font-size: 24px; font-weight: bold; color: #58A6FF; }
+        .stat-label { font-size: 13px; color: #8B949E; margin-top: 4px; }
+        
+        .controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; align-items: center; }
+        .search-box { background: #161B22; border: 1px solid #30363D; color: #FFF; padding: 8px 16px; border-radius: 6px; font-size: 14px; width: 280px; outline: none; transition: border-color 0.15s; }
+        .search-box:focus { border-color: #58A6FF; }
+        .filter-btn { background: #21262D; color: #C9D1D9; border: 1px solid #30363D; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.15s; }
+        .filter-btn:hover { border-color: #8B949E; }
+        .filter-btn.active { background: #1F6FEB; color: #FFF; border-color: #58A6FF; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+        .card { background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 18px; transition: border-color 0.15s, transform 0.1s; display: flex; flex-direction: column; justify-content: space-between; }
+        .card:hover { border-color: #58A6FF; transform: translateY(-2px); }
+        .badge { font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; margin-right: 6px; }
+        .interaction { background: #388BFD33; color: #58A6FF; }
+        .navigation { background: #A371F733; color: #BC8CFF; }
+        .accessibility { background: #3FB95033; color: #56D364; }
+        .internationalization { background: #D2992233; color: #E3B341; }
+        .shell { background: #F8514933; color: #FF7B72; }
+        .unified-libs { background: #2EA04333; color: #7EE787; }
+        .status { background: #21262D; color: #8B949E; }
+        h3 { margin: 10px 0 6px 0; font-size: 16px; color: #FFF; }
+        .card-body { font-size: 13px; color: #8B949E; line-height: 1.5; flex-grow: 1; }
+        .card-footer { border-top: 1px solid #21262D; margin-top: 14px; padding-top: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .spec-btn { background: #1F6FEB; color: #FFF; border: 1px solid #58A6FF; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+        .spec-btn:hover { background: #388BFD; }
+        .gh-link { color: #8B949E; text-decoration: none; font-size: 12px; font-weight: 500; }
+        .gh-link:hover { color: #58A6FF; text-decoration: underline; }
+        
+        /* Specification Viewer Styles */
+        #spec-view { display: none; min-height: 100vh; background: #0E1117; }
+        
+        .breadcrumb-bar { position: sticky; top: 0; z-index: 100; background: #161B22F2; backdrop-filter: blur(8px); border-bottom: 1px solid #30363D; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 14px; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+        .bc-link { color: #58A6FF; text-decoration: none; font-weight: 500; }
+        .bc-link:hover { text-decoration: underline; }
+        .bc-sep { color: #6E7681; }
+        .bc-current { color: #F0F6FC; font-weight: 600; }
+        
+        .spec-top-actions { display: flex; gap: 8px; align-items: center; }
+        .action-btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #30363D; background: #21262D; color: #C9D1D9; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; }
+        .action-btn:hover { background: #30363D; border-color: #8B949E; color: #FFF; }
+        .action-btn.primary { background: #1F6FEB; border-color: #58A6FF; color: #FFF; }
+        .action-btn.primary:hover { background: #388BFD; }
+        
+        .spec-wrapper { max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+        .spec-header-card { background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 24px 28px; margin-bottom: 32px; }
+        .spec-header-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+        .spec-main-title { font-size: 26px; font-weight: 700; color: #FFF; margin: 0 0 16px 0; line-height: 1.3; }
+        .spec-details-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+        .meta-pill { background: #0E1117; border: 1px solid #30363D; padding: 6px 12px; border-radius: 6px; font-size: 12px; color: #C9D1D9; }
+        .meta-pill strong { color: #8B949E; margin-right: 4px; }
+        .app-tag { display: inline-block; background: #21262D; color: #58A6FF; border: 1px solid #30363D; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 4px; font-family: ui-monospace, monospace; }
+        
+        /* Markdown Document Styles */
+        .spec-content { font-size: 15px; line-height: 1.7; color: #C9D1D9; }
+        .spec-content h1 { font-size: 24px; border-bottom: 1px solid #21262D; padding-bottom: 8px; margin-top: 32px; color: #FFF; }
+        .spec-content h2 { font-size: 20px; border-bottom: 1px solid #21262D; padding-bottom: 6px; margin-top: 28px; color: #FFF; }
+        .spec-content h3 { font-size: 16px; margin-top: 22px; color: #FFF; }
+        .spec-content p, .spec-content ul, .spec-content ol { margin-bottom: 16px; }
+        .spec-content ul, .spec-content ol { padding-left: 24px; }
+        .spec-content li { margin-bottom: 6px; }
+        .spec-content hr { border: 0; border-top: 1px solid #21262D; margin: 28px 0; }
+        
+        .spec-content pre { position: relative; background: #0D1117; border: 1px solid #30363D; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 20px 0; }
+        .spec-content code { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; }
+        .spec-content :not(pre) > code { background: #21262D; color: #FF7B72; padding: 2px 6px; border-radius: 4px; }
+        
+        .copy-code-btn { position: absolute; top: 8px; right: 8px; background: #21262D; border: 1px solid #30363D; color: #8B949E; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; opacity: 0.8; transition: all 0.15s; }
+        .copy-code-btn:hover { opacity: 1; color: #FFF; border-color: #58A6FF; }
+        
+        .spec-content table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+        .spec-content th, .spec-content td { border: 1px solid #30363D; padding: 10px 14px; text-align: left; }
+        .spec-content th { background: #161B22; color: #FFF; font-weight: 600; }
+        .spec-content tr:nth-child(even) { background: #12161C; }
+        
+        .spec-content blockquote { border-left: 4px solid #58A6FF; margin: 16px 0; padding: 8px 16px; background: #161B2288; color: #8B949E; border-radius: 0 4px 4px 0; }
+        
+        .rfc-term { font-weight: 700; color: #58A6FF; background: #388BFD1F; padding: 2px 5px; border-radius: 4px; font-size: 12px; }
+        
+        .spec-footer-nav { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #30363D; margin-top: 48px; padding-top: 24px; flex-wrap: wrap; gap: 12px; }
+    </style>
+</head>
+<body>
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="dash-container">
+        <div class="header-wrap">
+            <div class="header-left">
+                <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="48" height="48">
+                <div>
+                    <h1>ArtCraft Universal Standards Dashboard</h1>
+                    <div class="subtitle">Active Ergonomic Contracts & Agent Invariants for the 20+ ArtCraft Creative Suite</div>
+                </div>
+            </div>
+            <div class="header-links">
+                <a href="https://github.com/tareq-halaby/craft-standards" target="_blank" class="nav-link">GitHub Repository ↗</a>
+                <a href="https://craft.wiki" target="_blank" class="nav-link">Craft Wiki ↗</a>
+            </div>
+        </div>
+        <div class="stats">
+            <div class="stat-box"><div class="stat-num">__TOTAL__</div><div class="stat-label">Active Standards</div></div>
+            <div class="stat-box"><div class="stat-num">20+</div><div class="stat-label">Governed Apps</div></div>
+            <div class="stat-box"><div class="stat-num">100%</div><div class="stat-label">CI Verification</div></div>
+            <div class="stat-box"><div class="stat-num">Enabled</div><div class="stat-label">AutoCraft MCP</div></div>
+        </div>
+        <div class="controls">
+            <input type="text" id="search" class="search-box" placeholder="Search standards...">
+            <button class="filter-btn active" onclick="filterCategory('all', this)">All</button>
+            <button class="filter-btn" onclick="filterCategory('interaction', this)">Interaction</button>
+            <button class="filter-btn" onclick="filterCategory('navigation', this)">Navigation</button>
+            <button class="filter-btn" onclick="filterCategory('accessibility', this)">Accessibility</button>
+            <button class="filter-btn" onclick="filterCategory('internationalization', this)">i18n / RTL</button>
+            <button class="filter-btn" onclick="filterCategory('shell', this)">Shell & Chrome</button>
+            <button class="filter-btn" onclick="filterCategory('unified-libs', this)">Unified Libs</button>
+        </div>
+        <div class="grid" id="grid">
+__ITEMS__
+        </div>
+    </div>
+
+    <!-- SPECIFICATION VIEWER -->
+    <div id="spec-view">
+        <div class="breadcrumb-bar">
+            <div class="breadcrumbs">
+                <a href="#" onclick="showDashboard(event)" class="bc-link">craft-standards</a>
+                <span class="bc-sep">/</span>
+                <a href="#" onclick="showDashboard(event)" class="bc-link">standards</a>
+                <span class="bc-sep">/</span>
+                <a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)" class="bc-link">06-unified-libs</a>
+                <span class="bc-sep">/</span>
+                <span class="bc-current" id="bc-file">STD-LIB-002-keymap-architecture.md</span>
+            </div>
+            <div class="spec-top-actions">
+                <button class="action-btn primary" onclick="showDashboard(event)">← Back to Dashboard</button>
+                <button class="action-btn" id="copy-link-btn" onclick="copyCurrentLink()">Copy Link 🔗</button>
+                <a href="#" id="spec-gh-link" target="_blank" class="action-btn">Edit on GitHub ↗</a>
+            </div>
+        </div>
+
+        <div class="spec-wrapper">
+            <div class="spec-header-card">
+                <div class="spec-header-meta">
+                    <span id="spec-id-badge" class="badge"></span>
+                    <span id="spec-cat-badge" class="badge"></span>
+                    <span id="spec-status-badge" class="badge status"></span>
+                </div>
+                <h1 id="spec-title" class="spec-main-title"></h1>
+                <div class="spec-details-grid">
+                    <div class="meta-pill" id="spec-crate-pill"><strong>Canonical Crate:</strong> <code id="spec-crate"></code></div>
+                    <div class="meta-pill" id="spec-apps-pill"><strong>Affected Apps:</strong> <span id="spec-apps"></span></div>
+                    <div class="meta-pill" id="spec-wiki-pill" style="display:none;"><strong>Craft Wiki:</strong> <a id="spec-wiki-link" href="#" target="_blank" class="bc-link">Guide ↗</a></div>
+                </div>
+            </div>
+
+            <div id="spec-content" class="spec-content"></div>
+
+            <div class="spec-footer-nav">
+                <button class="action-btn" id="prev-spec-btn" onclick="navigateSpec(-1)">← Previous Standard</button>
+                <button class="action-btn primary" onclick="showDashboard(event)">Back to Top / Dashboard</button>
+                <button class="action-btn" id="next-spec-btn" onclick="navigateSpec(1)">Next Standard →</button>
+            </div>
+        </div>
+    </div>
+
+    <script id="specs-data" type="application/json">
+__SPECS_JSON__
+    </script>
+
+    <script>
+        const SPECS = JSON.parse(document.getElementById('specs-data').textContent);
+        const specsMap = {};
+        SPECS.forEach((s, idx) => {
+            s._index = idx;
+            specsMap[s.id] = s;
+        });
+
+        let currentCategory = 'all';
+        let activeSpecId = null;
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            applyFilters();
+        }
+
+        document.getElementById('search').addEventListener('input', applyFilters);
+
+        function applyFilters() {
+            const q = document.getElementById('search').value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const matchesCat = currentCategory === 'all' || card.dataset.category === currentCategory;
+                const matchesSearch = card.innerText.toLowerCase().includes(q);
+                card.style.display = (matchesCat && matchesSearch) ? 'flex' : 'none';
+            });
+        }
+
+        function openSpec(id, updateHash = true) {
+            const spec = specsMap[id];
+            if (!spec) return;
+            activeSpecId = id;
+
+            if (updateHash) {
+                window.location.hash = '#' + id;
+            }
+
+            // Populate breadcrumbs
+            document.getElementById('bc-cat-link').textContent = spec.cat_dir;
+            document.getElementById('bc-cat-link').dataset.category = spec.category;
+            document.getElementById('bc-file').textContent = spec.file_name;
+            document.getElementById('spec-gh-link').href = spec.github_url;
+
+            // Populate Header
+            const idBadge = document.getElementById('spec-id-badge');
+            idBadge.textContent = spec.id;
+            idBadge.className = 'badge ' + spec.category;
+
+            const catBadge = document.getElementById('spec-cat-badge');
+            catBadge.textContent = spec.category;
+            catBadge.className = 'badge ' + spec.category;
+
+            document.getElementById('spec-status-badge').textContent = spec.status;
+            document.getElementById('spec-title').textContent = spec.title;
+
+            // Canonical crate
+            const crateEl = document.getElementById('spec-crate');
+            if (spec.canonical_crate) {
+                crateEl.textContent = spec.canonical_crate;
+                document.getElementById('spec-crate-pill').style.display = 'block';
+            } else {
+                document.getElementById('spec-crate-pill').style.display = 'none';
+            }
+
+            // Affected apps
+            const appsContainer = document.getElementById('spec-apps');
+            appsContainer.innerHTML = '';
+            if (spec.affected_apps) {
+                const rawApps = spec.affected_apps.replace(/[\[\]]/g, '').split(',');
+                rawApps.forEach(app => {
+                    const a = app.trim();
+                    if (a) {
+                        const tag = document.createElement('span');
+                        tag.className = 'app-tag';
+                        tag.textContent = a;
+                        appsContainer.appendChild(tag);
+                    }
+                });
+                document.getElementById('spec-apps-pill').style.display = 'block';
+            } else {
+                document.getElementById('spec-apps-pill').style.display = 'none';
+            }
+
+            // Wiki link
+            const wikiPill = document.getElementById('spec-wiki-pill');
+            const wikiLink = document.getElementById('spec-wiki-link');
+            if (spec.wiki_reference) {
+                wikiLink.href = spec.wiki_reference;
+                wikiPill.style.display = 'block';
+            } else {
+                wikiPill.style.display = 'none';
+            }
+
+            // Render Markdown body
+            const contentEl = document.getElementById('spec-content');
+            if (window.marked && window.marked.parse) {
+                let rendered = marked.parse(spec.body);
+                // Highlight RFC keywords
+                rendered = rendered.replace(/\b(MUST NOT|SHALL NOT|MUST|SHALL|SHOULD NOT|SHOULD|RECOMMENDED|MAY|OPTIONAL)\b/g, '<span class="rfc-term">$1</span>');
+                contentEl.innerHTML = rendered;
+
+                // Syntax highlight code blocks and add copy button
+                contentEl.querySelectorAll('pre code').forEach(block => {
+                    if (window.hljs) hljs.highlightElement(block);
+                    const pre = block.parentElement;
+                    const btn = document.createElement('button');
+                    btn.className = 'copy-code-btn';
+                    btn.textContent = 'Copy';
+                    btn.onclick = () => {
+                        navigator.clipboard.writeText(block.textContent);
+                        btn.textContent = 'Copied!';
+                        setTimeout(() => btn.textContent = 'Copy', 1500);
+                    };
+                    pre.appendChild(btn);
+                });
+            } else {
+                contentEl.innerHTML = '<pre style="white-space: pre-wrap;">' + spec.body + '</pre>';
+            }
+
+            // Prev/Next buttons
+            const prevBtn = document.getElementById('prev-spec-btn');
+            const nextBtn = document.getElementById('next-spec-btn');
+            const idx = spec._index;
+
+            if (idx > 0) {
+                prevBtn.style.visibility = 'visible';
+                prevBtn.textContent = '← ' + SPECS[idx - 1].id;
+            } else {
+                prevBtn.style.visibility = 'hidden';
+            }
+
+            if (idx < SPECS.length - 1) {
+                nextBtn.style.visibility = 'visible';
+                nextBtn.textContent = SPECS[idx + 1].id + ' →';
+            } else {
+                nextBtn.style.visibility = 'hidden';
+            }
+
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('spec-view').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function showDashboard(e) {
+            if (e) e.preventDefault();
+            activeSpecId = null;
+            if (window.location.hash) {
+                history.pushState(null, null, ' ');
+            }
+            document.getElementById('spec-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function filterFromBreadcrumb(e) {
+            if (e) e.preventDefault();
+            const cat = document.getElementById('bc-cat-link').dataset.category || 'all';
+            showDashboard();
+            const targetBtn = Array.from(document.querySelectorAll('.filter-btn')).find(b => b.textContent.toLowerCase().includes(cat.toLowerCase()));
+            filterCategory(cat, targetBtn);
+        }
+
+        function copyCurrentLink() {
+            const btn = document.getElementById('copy-link-btn');
+            navigator.clipboard.writeText(window.location.href);
+            const original = btn.textContent;
+            btn.textContent = 'Copied! ✓';
+            setTimeout(() => btn.textContent = original, 2000);
+        }
+
+        function navigateSpec(delta) {
+            if (!activeSpecId) return;
+            const current = specsMap[activeSpecId];
+            if (!current) return;
+            const targetIdx = current._index + delta;
+            if (targetIdx >= 0 && targetIdx < SPECS.length) {
+                openSpec(SPECS[targetIdx].id);
+            }
+        }
+
+        function handleRouting() {
+            const hash = window.location.hash.replace(/^#\/?/, '').trim();
+            if (hash && specsMap[hash]) {
+                openSpec(hash, false);
+            } else {
+                document.getElementById('spec-view').style.display = 'none';
+                document.getElementById('dashboard-view').style.display = 'block';
+            }
+        }
+
+        window.addEventListener('hashchange', handleRouting);
+        window.addEventListener('DOMContentLoaded', handleRouting);
+    </script>
+</body>
+</html>

@@ -262,145 +262,158 @@ fn check_feature(base: &Path, files: &[&str], patterns: &[&str]) -> Option<bool>
     None
 }
 
-fn run_html_report() {
-    let dir = standards_dir();
-    let files = collect_standards(&dir);
-    let mut items_html = String::new();
+struct StandardSpec {
+    id: String,
+    title: String,
+    category: String,
+    status: String,
+    canonical_crate: String,
+    affected_apps: String,
+    wiki_reference: String,
+    cat_dir: String,
+    file_name: String,
+    github_url: String,
+    body: String,
+}
 
-    for file in &files {
-        if let Ok(content) = fs::read_to_string(file) {
-            if let Some((id, title, category, status)) = parse_frontmatter(&content) {
-                let body = content.split("---").nth(2).unwrap_or("").trim();
-                let body_preview = body.lines().take(4).collect::<Vec<_>>().join("<br>");
-                let file_name = file.file_name().and_then(|n| n.to_str()).unwrap_or("");
-                let cat_dir = match category.as_str() {
-                    "interaction" => "01-interaction",
-                    "navigation" => "02-navigation",
-                    "accessibility" => "03-accessibility",
-                    "internationalization" => "04-internationalization",
-                    "shell" => "05-shell-and-chrome",
-                    "unified-libs" => "06-unified-libs",
-                    _ => "",
-                };
-                let github_url = format!("https://github.com/tareq-halaby/craft-standards/blob/main/standards/{cat_dir}/{file_name}");
+fn parse_full_spec(file: &Path) -> Option<StandardSpec> {
+    let content = fs::read_to_string(file).ok()?;
+    if !content.starts_with("---") {
+        return None;
+    }
+    let end_idx = content[3..].find("---")?;
+    let header = &content[3..3 + end_idx];
+    let body = content[3 + end_idx + 3..].trim().to_string();
 
-                items_html.push_str(&format!(
-                    r#"<div class="card" data-category="{category}">
-                        <div class="card-header">
-                            <span class="badge {category}">{category}</span>
-                            <span class="badge status">{status}</span>
-                            <h3>{id}: {title}</h3>
-                        </div>
-                        <div class="card-body">
-                            <p>{body_preview}</p>
-                        </div>
-                        <div class="card-footer">
-                            <a href="{github_url}" target="_blank" class="spec-link">View Specification ↗</a>
-                        </div>
-                    </div>"#
-                ));
-            }
+    let mut id = String::new();
+    let mut title = String::new();
+    let mut category = String::new();
+    let mut status = String::new();
+    let mut canonical_crate = String::new();
+    let mut affected_apps = String::new();
+    let mut wiki_reference = String::new();
+
+    for line in header.lines() {
+        let line = line.trim();
+        if let Some(val) = line.strip_prefix("id:") {
+            id = val.trim().to_string();
+        } else if let Some(val) = line.strip_prefix("title:") {
+            title = val.trim().to_string();
+        } else if let Some(val) = line.strip_prefix("category:") {
+            category = val.trim().to_string();
+        } else if let Some(val) = line.strip_prefix("status:") {
+            status = val.trim().to_string();
+        } else if let Some(val) = line.strip_prefix("canonical_crate:") {
+            canonical_crate = val.trim().to_string();
+        } else if let Some(val) = line.strip_prefix("affected_apps:") {
+            affected_apps = val.trim().to_string();
+        } else if let Some(val) = line.strip_prefix("wiki_reference:") {
+            wiki_reference = val.trim().to_string();
         }
     }
 
-    let html = format!(
-        r#"<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>ArtCraft Standards Dashboard</title>
-    <style>
-        body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0E1117; color: #E1E4E8; margin: 0; padding: 32px; }}
-        h1 {{ margin: 0 0 8px 0; font-size: 28px; color: #FFF; }}
-        .subtitle {{ color: #8B949E; margin-bottom: 24px; font-size: 15px; }}
-        .header-wrap {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }}
-        .header-left {{ display: flex; align-items: center; gap: 16px; }}
-        .header-links {{ display: flex; gap: 12px; }}
-        .nav-link {{ color: #58A6FF; text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 12px; background: #161B22; border: 1px solid #30363D; border-radius: 6px; }}
-        .nav-link:hover {{ border-color: #58A6FF; }}
-        .spec-link {{ color: #58A6FF; text-decoration: none; font-size: 12px; font-weight: 500; display: inline-block; margin-top: 12px; }}
-        .spec-link:hover {{ text-decoration: underline; }}
-        .card-footer {{ border-top: 1px solid #21262D; margin-top: 12px; padding-top: 8px; }}
-        .stats {{ display: flex; gap: 16px; margin-bottom: 32px; }}
-        .stat-box {{ background: #161B22; padding: 16px 24px; border-radius: 8px; border: 1px solid #30363D; }}
-        .stat-num {{ font-size: 24px; font-weight: bold; color: #58A6FF; }}
-        .stat-label {{ font-size: 13px; color: #8B949E; }}
-        .controls {{ display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; align-items: center; }}
-        .search-box {{ background: #161B22; border: 1px solid #30363D; color: #FFF; padding: 8px 16px; border-radius: 6px; font-size: 14px; width: 260px; outline: none; }}
-        .search-box:focus {{ border-color: #58A6FF; }}
-        .filter-btn {{ background: #21262D; color: #C9D1D9; border: 1px solid #30363D; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }}
-        .filter-btn.active {{ background: #1F6FEB; color: #FFF; border-color: #58A6FF; }}
-        .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }}
-        .card {{ background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 16px; transition: border-color 0.15s; }}
-        .card:hover {{ border-color: #58A6FF; }}
-        .badge {{ font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: 600; text-transform: uppercase; margin-right: 6px; }}
-        .interaction {{ background: #388BFD33; color: #58A6FF; }}
-        .navigation {{ background: #A371F733; color: #BC8CFF; }}
-        .accessibility {{ background: #3FB95033; color: #56D364; }}
-        .internationalization {{ background: #D2992233; color: #E3B341; }}
-        .shell {{ background: #F8514933; color: #FF7B72; }}
-        .unified-libs {{ background: #2EA04333; color: #7EE787; }}
-        .status {{ background: #21262D; color: #8B949E; }}
-        h3 {{ margin: 10px 0 6px 0; font-size: 16px; color: #FFF; }}
-        .card-body {{ font-size: 13px; color: #8B949E; line-height: 1.5; }}
-    </style>
-</head>
-<body>
-    <div class="header-wrap">
-        <div class="header-left">
-            <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="48" height="48">
-            <div>
-                <h1>ArtCraft Universal Standards Dashboard</h1>
-                <div class="subtitle">Active Ergonomic Contracts & Agent Invariants for the 20+ ArtCraft Creative Suite</div>
-            </div>
-        </div>
-        <div class="header-links">
-            <a href="https://github.com/tareq-halaby/craft-standards" target="_blank" class="nav-link">GitHub Repository ↗</a>
-            <a href="https://craft.wiki" target="_blank" class="nav-link">Craft Wiki ↗</a>
-        </div>
-    </div>
-    <div class="stats">
-        <div class="stat-box"><div class="stat-num">{total}</div><div class="stat-label">Active Standards</div></div>
-        <div class="stat-box"><div class="stat-num">20+</div><div class="stat-label">Governed Apps</div></div>
-        <div class="stat-box"><div class="stat-num">100%</div><div class="stat-label">CI Verification</div></div>
-        <div class="stat-box"><div class="stat-num">Enabled</div><div class="stat-label">AutoCraft MCP</div></div>
-    </div>
-    <div class="controls">
-        <input type="text" id="search" class="search-box" placeholder="Search standards...">
-        <button class="filter-btn active" onclick="filterCategory('all', this)">All</button>
-        <button class="filter-btn" onclick="filterCategory('interaction', this)">Interaction</button>
-        <button class="filter-btn" onclick="filterCategory('navigation', this)">Navigation</button>
-        <button class="filter-btn" onclick="filterCategory('accessibility', this)">Accessibility</button>
-        <button class="filter-btn" onclick="filterCategory('internationalization', this)">i18n / RTL</button>
-        <button class="filter-btn" onclick="filterCategory('shell', this)">Shell & Chrome</button>
-        <button class="filter-btn" onclick="filterCategory('unified-libs', this)">Unified Libs</button>
-    </div>
-    <div class="grid" id="grid">
-        {items}
-    </div>
-    <script>
-        let currentCategory = 'all';
-        function filterCategory(cat, btn) {{
-            currentCategory = cat;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            applyFilters();
-        }}
-        document.getElementById('search').addEventListener('input', applyFilters);
-        function applyFilters() {{
-            const q = document.getElementById('search').value.toLowerCase();
-            document.querySelectorAll('.card').forEach(card => {{
-                const matchesCat = currentCategory === 'all' || card.dataset.category === currentCategory;
-                const matchesSearch = card.innerText.toLowerCase().includes(q);
-                card.style.display = (matchesCat && matchesSearch) ? 'block' : 'none';
-            }});
-        }}
-    </script>
-</body>
-</html>"#,
-        total = files.len(),
-        items = items_html
-    );
+    if id.is_empty() || title.is_empty() {
+        return None;
+    }
+
+    let file_name = file.file_name().and_then(|n| n.to_str()).unwrap_or("").to_string();
+    let cat_dir = file.parent().and_then(|p| p.file_name()).and_then(|n| n.to_str()).unwrap_or("").to_string();
+    let github_url = format!("https://github.com/tareq-halaby/craft-standards/blob/main/standards/{cat_dir}/{file_name}");
+
+    Some(StandardSpec {
+        id,
+        title,
+        category,
+        status,
+        canonical_crate,
+        affected_apps,
+        wiki_reference,
+        cat_dir,
+        file_name,
+        github_url,
+        body,
+    })
+}
+
+fn escape_json(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 100);
+    for c in s.chars() {
+        match c {
+            '\\' => out.push_str("\\\\"),
+            '"' => out.push_str("\\\""),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c => out.push(c),
+        }
+    }
+    out
+}
+
+fn run_html_report() {
+    let dir = standards_dir();
+    let files = collect_standards(&dir);
+    let mut specs = Vec::new();
+
+    for file in &files {
+        if let Some(spec) = parse_full_spec(file) {
+            specs.push(spec);
+        }
+    }
+
+    specs.sort_by(|a, b| a.id.cmp(&b.id));
+
+    let mut items_html = String::new();
+    let mut json_items = Vec::new();
+
+    for spec in &specs {
+        let body_preview = spec.body.lines().take(4).collect::<Vec<_>>().join("<br>");
+        let cat = &spec.category;
+        let id = &spec.id;
+        let title = &spec.title;
+        let status = &spec.status;
+        let gh = &spec.github_url;
+
+        items_html.push_str(&format!(
+            r#"<div class="card" data-category="{cat}">
+                <div class="card-header">
+                    <span class="badge {cat}">{cat}</span>
+                    <span class="badge status">{status}</span>
+                    <h3>{id}: {title}</h3>
+                </div>
+                <div class="card-body">
+                    <p>{body_preview}</p>
+                </div>
+                <div class="card-footer">
+                    <button onclick="openSpec('{id}')" class="spec-btn">View Specification →</button>
+                    <a href="{gh}" target="_blank" class="gh-link" title="View Source on GitHub">GitHub ↗</a>
+                </div>
+            </div>"#
+        ));
+
+        json_items.push(format!(
+            r#"{{"id":"{}","title":"{}","category":"{}","status":"{}","canonical_crate":"{}","affected_apps":"{}","wiki_reference":"{}","cat_dir":"{}","file_name":"{}","github_url":"{}","body":"{}"}}"#,
+            escape_json(id),
+            escape_json(title),
+            escape_json(cat),
+            escape_json(status),
+            escape_json(&spec.canonical_crate),
+            escape_json(&spec.affected_apps),
+            escape_json(&spec.wiki_reference),
+            escape_json(&spec.cat_dir),
+            escape_json(&spec.file_name),
+            escape_json(gh),
+            escape_json(&spec.body),
+        ));
+    }
+
+    let specs_json = format!("[{}]", json_items.join(",\n"));
+
+    const TEMPLATE: &str = include_str!("template.html");
+    let html = TEMPLATE
+        .replace("__TOTAL__", &specs.len().to_string())
+        .replace("__ITEMS__", &items_html)
+        .replace("__SPECS_JSON__", &specs_json);
 
     let output_path = standards_dir().parent().unwrap_or(Path::new(".")).join("standards-dashboard.html");
     if let Err(e) = fs::write(&output_path, html) {
