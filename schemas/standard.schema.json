@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ArtCraft Standard Specification Metadata Schema",
+  "type": "object",
+  "required": ["id", "title", "category", "status", "canonical_crate"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^STD-[A-Z0-9]+-[0-9]{3}$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["interaction", "navigation", "accessibility", "internationalization", "shell", "unified-libs"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "deprecated"]
+    },
+    "canonical_crate": {
+      "type": "string"
+    },
+    "affected_apps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["photocraft", "designcraft", "effectcraft", "vectorcraft", "wordcraft", "craft-launcher"]
+      }
+    }
+  }
+}
