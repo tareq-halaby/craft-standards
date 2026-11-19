@@ -13,6 +13,7 @@
 <p align="center">
   <img alt="License: MIT OR Apache-2.0" src="https://img.shields.io/badge/license-MIT%20%2F%20Apache--2.0-3a3a3a?style=flat-square">
   <img alt="Status: active" src="https://img.shields.io/badge/status-active-success?style=flat-square">
+  <a href="https://tareq-halaby.github.io/craft-standards/"><img alt="Live Dashboard" src="https://img.shields.io/badge/Dashboard-GitHub%20Pages-brightgreen?style=flat-square"></a>
   <img alt="MCP: enabled" src="https://img.shields.io/badge/MCP-craft--standards--mcp-blue?style=flat-square">
   <img alt="AutoCraft: integrated" src="https://img.shields.io/badge/AutoCraft-integrated-purple?style=flat-square">
   <img alt="Apps: 20+" src="https://img.shields.io/badge/ArtCraft%20Apps-20%2B-orange?style=flat-square">
@@ -97,6 +98,9 @@ craft-standards/
 ---
 
 ## Active Standards Catalog
+
+> [!TIP]
+> **Explore the interactive dashboard:** Browse, search, and filter all 20 standards with direct links to specs and live AST drift detection at **[https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)**.
 
 | Standard ID | Title | Category | Canonical Crate |
 | :--- | :--- | :--- | :--- |

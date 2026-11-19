@@ -119,27 +119,49 @@ cargo run --manifest-path xtask/Cargo.toml -- drift-scan
 ```
 
 ### 4. Regenerate the Interactive HTML Dashboard
-Generates or updates the standalone `standards-dashboard.html` with interactive search and category filtering:
+Generates or updates the standalone `standards-dashboard.html` with interactive search, direct links to specifications, and category filtering:
 ```bash
 cargo run --manifest-path xtask/Cargo.toml -- report
 ```
+> [!TIP]
+> The HTML dashboard is automatically built and deployed to **[GitHub Pages](https://tareq-halaby.github.io/craft-standards/)** whenever changes merge into `main`.
 
 ---
 
-## 5. Testing & Code Quality
+## 5. Testing, Code Quality & Commit Standards
 
+### Automated Pre-flight Checks
 Before opening a pull request, run the full validation suite locally:
 
 ```bash
-# 1. Audit all standards documents
+# 1. Audit all standards documents and metadata
 cargo run --manifest-path xtask/Cargo.toml -- audit
 
-# 2. Run all unit tests on the MCP server
+# 2. Run all unit tests on the MCP server (7 invariant tests)
 cargo test --manifest-path crates/craft-standards-mcp/Cargo.toml
 
-# 3. Check compilation
+# 3. Check compilation across the entire workspace
 cargo check --workspace
+
+# 4. Format Rust code
+cargo fmt --all --check
 ```
+
+### Commit Message Conventions
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) standard, referencing the specific standard ID in the scope when applicable:
+
+- `feat(STD-NAV-001): add Ctrl+W close tab invariant`
+- `fix(STD-INPUT-001): clarify release-modifier timing requirement`
+- `docs(a11y): add screen reader announcements for color picker`
+- `chore(xtask): add automatic GitHub Pages build step`
+
+### Pull Request Checklist
+When submitting a PR:
+- [ ] Frontmatter validates with `cargo xtask audit`.
+- [ ] Concrete code snippets (Rust / egui) are tested against compiler syntax.
+- [ ] RFC 2119 keywords (`MUST`, `SHOULD`, `MAY`) are used with precise semantics.
+- [ ] Edge cases (modal conflict, fast clicking, focus blur) are addressed.
+- [ ] If introducing a new standard, update the MCP server registry in `crates/craft-standards-mcp/src/main.rs` if immediate machine-readability is required.
 
 ---
 

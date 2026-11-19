@@ -272,6 +272,18 @@ fn run_html_report() {
             if let Some((id, title, category, status)) = parse_frontmatter(&content) {
                 let body = content.split("---").nth(2).unwrap_or("").trim();
                 let body_preview = body.lines().take(4).collect::<Vec<_>>().join("<br>");
+                let file_name = file.file_name().and_then(|n| n.to_str()).unwrap_or("");
+                let cat_dir = match category.as_str() {
+                    "interaction" => "01-interaction",
+                    "navigation" => "02-navigation",
+                    "accessibility" => "03-accessibility",
+                    "internationalization" => "04-internationalization",
+                    "shell" => "05-shell-and-chrome",
+                    "unified-libs" => "06-unified-libs",
+                    _ => "",
+                };
+                let github_url = format!("https://github.com/tareq-halaby/craft-standards/blob/main/standards/{cat_dir}/{file_name}");
+
                 items_html.push_str(&format!(
                     r#"<div class="card" data-category="{category}">
                         <div class="card-header">
@@ -281,6 +293,9 @@ fn run_html_report() {
                         </div>
                         <div class="card-body">
                             <p>{body_preview}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{github_url}" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div>"#
                 ));
@@ -298,6 +313,14 @@ fn run_html_report() {
         body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0E1117; color: #E1E4E8; margin: 0; padding: 32px; }}
         h1 {{ margin: 0 0 8px 0; font-size: 28px; color: #FFF; }}
         .subtitle {{ color: #8B949E; margin-bottom: 24px; font-size: 15px; }}
+        .header-wrap {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }}
+        .header-left {{ display: flex; align-items: center; gap: 16px; }}
+        .header-links {{ display: flex; gap: 12px; }}
+        .nav-link {{ color: #58A6FF; text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 12px; background: #161B22; border: 1px solid #30363D; border-radius: 6px; }}
+        .nav-link:hover {{ border-color: #58A6FF; }}
+        .spec-link {{ color: #58A6FF; text-decoration: none; font-size: 12px; font-weight: 500; display: inline-block; margin-top: 12px; }}
+        .spec-link:hover {{ text-decoration: underline; }}
+        .card-footer {{ border-top: 1px solid #21262D; margin-top: 12px; padding-top: 8px; }}
         .stats {{ display: flex; gap: 16px; margin-bottom: 32px; }}
         .stat-box {{ background: #161B22; padding: 16px 24px; border-radius: 8px; border: 1px solid #30363D; }}
         .stat-num {{ font-size: 24px; font-weight: bold; color: #58A6FF; }}
@@ -323,8 +346,19 @@ fn run_html_report() {
     </style>
 </head>
 <body>
-    <h1>ArtCraft Universal Standards Dashboard</h1>
-    <div class="subtitle">Active Ergonomic Contracts & Agent Invariants for the 20+ ArtCraft Creative Suite</div>
+    <div class="header-wrap">
+        <div class="header-left">
+            <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="48" height="48">
+            <div>
+                <h1>ArtCraft Universal Standards Dashboard</h1>
+                <div class="subtitle">Active Ergonomic Contracts & Agent Invariants for the 20+ ArtCraft Creative Suite</div>
+            </div>
+        </div>
+        <div class="header-links">
+            <a href="https://github.com/tareq-halaby/craft-standards" target="_blank" class="nav-link">GitHub Repository ↗</a>
+            <a href="https://craft.wiki" target="_blank" class="nav-link">Craft Wiki ↗</a>
+        </div>
+    </div>
     <div class="stats">
         <div class="stat-box"><div class="stat-num">{total}</div><div class="stat-label">Active Standards</div></div>
         <div class="stat-box"><div class="stat-num">20+</div><div class="stat-label">Governed Apps</div></div>

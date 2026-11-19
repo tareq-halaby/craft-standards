@@ -7,6 +7,14 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0E1117; color: #E1E4E8; margin: 0; padding: 32px; }
         h1 { margin: 0 0 8px 0; font-size: 28px; color: #FFF; }
         .subtitle { color: #8B949E; margin-bottom: 24px; font-size: 15px; }
+        .header-wrap { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .header-links { display: flex; gap: 12px; }
+        .nav-link { color: #58A6FF; text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 12px; background: #161B22; border: 1px solid #30363D; border-radius: 6px; }
+        .nav-link:hover { border-color: #58A6FF; }
+        .spec-link { color: #58A6FF; text-decoration: none; font-size: 12px; font-weight: 500; display: inline-block; margin-top: 12px; }
+        .spec-link:hover { text-decoration: underline; }
+        .card-footer { border-top: 1px solid #21262D; margin-top: 12px; padding-top: 8px; }
         .stats { display: flex; gap: 16px; margin-bottom: 32px; }
         .stat-box { background: #161B22; padding: 16px 24px; border-radius: 8px; border: 1px solid #30363D; }
         .stat-num { font-size: 24px; font-weight: bold; color: #58A6FF; }
@@ -32,8 +40,19 @@
     </style>
 </head>
 <body>
-    <h1>ArtCraft Universal Standards Dashboard</h1>
-    <div class="subtitle">Active Ergonomic Contracts & Agent Invariants for the 20+ ArtCraft Creative Suite</div>
+    <div class="header-wrap">
+        <div class="header-left">
+            <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="48" height="48">
+            <div>
+                <h1>ArtCraft Universal Standards Dashboard</h1>
+                <div class="subtitle">Active Ergonomic Contracts & Agent Invariants for the 20+ ArtCraft Creative Suite</div>
+            </div>
+        </div>
+        <div class="header-links">
+            <a href="https://github.com/tareq-halaby/craft-standards" target="_blank" class="nav-link">GitHub Repository ↗</a>
+            <a href="https://craft.wiki" target="_blank" class="nav-link">Craft Wiki ↗</a>
+        </div>
+    </div>
     <div class="stats">
         <div class="stat-box"><div class="stat-num">20</div><div class="stat-label">Active Standards</div></div>
         <div class="stat-box"><div class="stat-num">20+</div><div class="stat-label">Governed Apps</div></div>
@@ -60,6 +79,9 @@
                         <div class="card-body">
                             <p># STD-COLOR-001: Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Prepare artwork for CMYK print](https://craft.wiki/apps/vectorcraft/prepare-artwork-for-cmyk-print/), color manipulation across graphics and design apps must be consistent, color-space aware, and ergonomically rapid. This standard dictates color picker interaction gestures, hex code parsing resilience, and color management soft-proofing invariants.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-COLOR-001-color-space-and-picker-ergonomics.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="interaction">
                         <div class="card-header">
                             <span class="badge interaction">interaction</span>
@@ -68,6 +90,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-INPUT-001: Multi-Tool Toolbar Slot Cycling & Gesture Ergonomics<br><br>## 1. Abstract<br>In creative applications with nested tool slots (Photoshop, Illustrator, InDesign, After Effects), toolbar buttons often represent a group of tools. This standard specifies how users interact with multi-tool slot buttons via mouse clicks, hold gestures, and modifier keys.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-001-tool-slot-cycling.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="interaction">
                         <div class="card-header">
@@ -78,6 +103,9 @@
                         <div class="card-body">
                             <p># STD-INPUT-002: Transient and Spring-Loaded Tool Invariants<br><br>## 1. Abstract<br>Spring-loaded (transient) tools allow users to temporarily activate a navigation or inspection tool (such as Hand or Zoom) while another creative tool is active, returning immediately to the original tool upon releasing the key.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-002-transient-spring-tools.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="interaction">
                         <div class="card-header">
                             <span class="badge interaction">interaction</span>
@@ -86,6 +114,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-INPUT-003: Canvas Pan, Zoom Physics, and Viewport Invariants<br><br>## 1. Abstract<br>Specifies mouse wheel, pointer drag, and double-click behaviors for document canvas navigation.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-003-canvas-pan-zoom.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="interaction">
                         <div class="card-header">
@@ -96,6 +127,9 @@
                         <div class="card-body">
                             <p># STD-INPUT-004: Selection and Bounding Box Transform Modifiers<br><br>## 1. Abstract<br>Defines standard modifier behaviors when selecting, transforming, or duplicating objects and pixel selections on canvas.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-004-selection-modifiers.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="navigation">
                         <div class="card-header">
                             <span class="badge navigation">navigation</span>
@@ -104,6 +138,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-NAV-001: Universal Document Tab Navigation, Closure, and Lifecycle Ergonomics<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Work in several windows](https://craft.wiki/apps/vectorcraft/work-in-several-windows/), power users manage dozens of active documents across tab strips. This standard specifies universal tab switching shortcuts, closing mechanics (`Ctrl+W`), tab reopening (`Ctrl+Shift+T`), pointer gestures (middle-click to close), and contextual menu actions across all ArtCraft applications.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-001-document-tab-switching.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="navigation">
                         <div class="card-header">
@@ -114,6 +151,9 @@
                         <div class="card-body">
                             <p># STD-NAV-002: Workspace Panel Visibility and Dock Collapsing Toggles<br><br>## 1. Abstract<br>Specifies global hotkeys for clearing the workspace to focus on the document canvas.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-002-workspace-panel-toggles.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="navigation">
                         <div class="card-header">
                             <span class="badge navigation">navigation</span>
@@ -122,6 +162,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-NAV-003: Arrow-Key Value Scrubbing and Step Multipliers<br><br>## 1. Abstract<br>Specifies keyboard scrubbing rules for numeric input fields, sliders, and timeline position indicators.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-003-arrow-key-scrubbing.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="navigation">
                         <div class="card-header">
@@ -132,6 +175,9 @@
                         <div class="card-body">
                             <p># STD-TIME-001: Timeline Navigation, JKL Scrubbing, and Timecode Invariants<br><br>## 1. Abstract<br>As documented on [Craft Wiki: The Timeline](https://craft.wiki/apps/anicraft/the-timeline/), video, motion graphics, and audio suites share fundamental temporal playback conventions. This standard defines universal keyboard scrubbing chords, frame stepping, and SMPTE timecode formatting across `FilmCraft`, `EffectCraft`, `AniCraft`, and `SoundCraft`.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-TIME-001-timeline-and-timecode-navigation.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="accessibility">
                         <div class="card-header">
                             <span class="badge accessibility">accessibility</span>
@@ -140,6 +186,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-A11Y-001: AccessKit Node Tagging and Automated CI Accessibility Audit<br><br>## 1. Abstract<br>Assistive technologies (screen readers, speech input, screen magnifiers) rely on accessibility trees generated by AccessKit. Custom widgets in egui that are allocated via `ui.interact` or `allocate_exact_size` produce empty, unnamed nodes unless explicitly annotated. This standard specifies mandatory accessibility tagging and automated CI testing.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/03-accessibility/STD-A11Y-001-accesskit-naming-audit.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="accessibility">
                         <div class="card-header">
@@ -150,6 +199,9 @@
                         <div class="card-body">
                             <p># STD-A11Y-002: Keyboard Focus Rings, Contrast Ratios, and Reduced Motion<br><br>## 1. Abstract<br>Specifies visual accessibility standards including focus indicators, contrast minimums, and system preference responsiveness.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/03-accessibility/STD-A11Y-002-keyboard-focus-and-contrast.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="internationalization">
                         <div class="card-header">
                             <span class="badge internationalization">internationalization</span>
@@ -158,6 +210,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-I18N-001: Full Shell Direction Mirroring and Unicode BiDi Text Galley Shaping<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Set right-to-left and Indic type](https://craft.wiki/apps/vectorcraft/set-right-to-left-and-indic-type/), Right-to-Left (RTL) scripts (Arabic, Hebrew, Persian, Urdu) require complete layout mirroring of the desktop shell, Indic typographic panel options, and bidirectional text shaping. This standard formalizes shell mirroring, typography options, and Unicode BiDi classification.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/04-internationalization/STD-I18N-001-shell-mirroring-and-rtl.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="internationalization">
                         <div class="card-header">
@@ -168,6 +223,9 @@
                         <div class="card-body">
                             <p># STD-I18N-002: Locale-Aware Numeric Formatting, Decimal Separators, and Measurement Units<br><br>## 1. Abstract<br>Specifies input parsing and display formatting for numbers, percentages, dimensions, and measurement units across international locales.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/04-internationalization/STD-I18N-002-number-and-locale-formatting.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="shell">
                         <div class="card-header">
                             <span class="badge shell">shell</span>
@@ -176,6 +234,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-CLIP-001: Cross-Application Drag-and-Drop, Clipboard Data Interchange, and External File Ingestion<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Place linked documents](https://craft.wiki/apps/vectorcraft/place-linked-documents/), users routinely copy and drag graphical assets, type, and documents between applications (e.g. copying paths from VectorCraft into PhotoCraft as smart vectors). This standard formalizes clipboard MIME types, drop targets, and cross-suite asset exchange.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-CLIP-001-drag-drop-and-clipboard-exchange.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="shell">
                         <div class="card-header">
@@ -186,6 +247,9 @@
                         <div class="card-body">
                             <p># STD-CMD-001: Universal Application Command Taxonomy, CLI Flags, and Headless MCP Protocol<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Connect an AI Assistant](https://craft.wiki/apps/connect-ai/overview/), every ArtCraft application provides an autonomous CLI binary (`<app>-cli`, such as `photocraft-cli`, `vectorcraft-cli`, `wordcraft-cli`) implementing the Model Context Protocol (MCP). This standard specifies uniform CLI invocation flags, headless vs windowed execution lifecycles, and a standardized core command ID taxonomy.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-CMD-001-universal-command-taxonomy.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="shell">
                         <div class="card-header">
                             <span class="badge shell">shell</span>
@@ -194,6 +258,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-SHELL-001: Modal and Modeless Dialog Lifecycles, Dismissal, and Button Orders<br><br>## 1. Abstract<br>Specifies dialog behavior, keyboard escape mechanisms, and platform-compliant button ordering.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-SHELL-001-dialog-lifecycle.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="shell">
                         <div class="card-header">
@@ -204,6 +271,9 @@
                         <div class="card-body">
                             <p># STD-SHELL-002: Document Dirty State, Unsaved Changes Prompt, and Recovery Lifecycles<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Document Recovery](https://craft.wiki/apps/wordcraft/recovery/), ArtCraft applications protect user work against system crashes or abnormal termination through dirty tracking, safe close confirmation, and local journal snapshots.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-SHELL-002-document-dirty-and-autosave.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="unified-libs">
                         <div class="card-header">
                             <span class="badge unified-libs">unified-libs</span>
@@ -212,6 +282,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-LIB-001: Universal Cross-Platform Printing and Prepress Pipeline<br><br>## 1. Abstract<br>Printing across desktop operating systems involves disparate backends: Windows GDI / XPS on Windows, CUPS on Linux and FreeBSD, and CoreGraphics/NSPrintOperation on macOS. This standard dictates that all ArtCraft applications must route document output through `craft-libs::craft-print` rather than writing platform-specific print code.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-001-printing-pipeline.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div><div class="card" data-category="unified-libs">
                         <div class="card-header">
@@ -222,6 +295,9 @@
                         <div class="card-body">
                             <p># STD-LIB-002: Keymap Architecture, Platform Chord Normalization, and Overrides<br><br>## 1. Abstract<br>Specifies the canonical keymap representation used across ArtCraft applications via `craft-libs::craft-keymap`.</p>
                         </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-002-keymap-architecture.md" target="_blank" class="spec-link">View Specification ↗</a>
+                        </div>
                     </div><div class="card" data-category="unified-libs">
                         <div class="card-header">
                             <span class="badge unified-libs">unified-libs</span>
@@ -230,6 +306,9 @@
                         </div>
                         <div class="card-body">
                             <p># STD-LIB-003: UI Widget Primitives, Design Tokens, and Docking Systems<br><br>## 1. Abstract<br>Specifies core UI component contracts provided by `craft-libs::craft-ui`.</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-003-ui-widget-primitives.md" target="_blank" class="spec-link">View Specification ↗</a>
                         </div>
                     </div>
     </div>

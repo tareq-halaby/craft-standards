@@ -7,8 +7,8 @@ on:
     branches: [main, master]
 
 jobs:
-  audit:
-    name: Standards Audit & MCP Build
+  audit-and-test:
+    name: Standards Audit & Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,5 +19,8 @@ jobs:
       - name: Audit Standards Metadata
         run: cargo run --manifest-path xtask/Cargo.toml -- audit
 
-      - name: Check MCP Server
-        run: cargo check --manifest-path crates/craft-standards-mcp/Cargo.toml
+      - name: Run MCP Server Tests
+        run: cargo test --manifest-path crates/craft-standards-mcp/Cargo.toml
+
+      - name: Check Workspace
+        run: cargo check --workspace
