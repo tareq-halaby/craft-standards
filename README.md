@@ -1,9 +1,6 @@
 <p align="center">
   <a href="https://getartcraft.com/">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="docs/brand/artcraft-logo-white.svg">
-      <img alt="ArtCraft" src="docs/brand/artcraft-logo.svg" width="200">
-    </picture>
+    <img alt="ArtCraft" src="assets/artcraft-studio.svg" width="128">
   </a>
 </p>
 
