@@ -100,10 +100,13 @@ craft-standards/
 ## Active Standards Catalog
 
 > [!TIP]
-> **Explore the interactive dashboard:** Browse, search, and filter all 25 standards with direct links to specs and live AST drift detection at **[https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)**.
+> **Explore the interactive dashboard:** Browse, search, and filter all 28 standards with live interactive sandboxes, the cross-app compliance matrix, and AST drift detection at **[https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)**.
 
 | Standard ID | Title | Category | Canonical Crate |
 | :--- | :--- | :--- | :--- |
+| **`STD-META-001`** | [Standard of Standardizing & MCP Invariants](standards/00-governance/STD-META-001-standard-of-standardizing.md) | Governance | `craft-standards-mcp` |
+| **`STD-GOV-001`** | [Clean-Room & License Allowlist](standards/00-governance/STD-GOV-001-clean-room-and-licensing.md) | Governance | `craft-standards-mcp` |
+| **`STD-GOV-002`** | [Issue Claims & PR Lifecycle](standards/00-governance/STD-GOV-002-issue-claims-and-pr-lifecycle.md) | Governance | `craft-standards-mcp` |
 | **`STD-COLOR-001`** | [Color Space, Pickers & Proofing](standards/01-interaction/STD-COLOR-001-color-space-and-picker-ergonomics.md) | Interaction | `craft-libs::craft-color` |
 | **`STD-INPUT-001`** | [Multi-Tool Button Cycling](standards/01-interaction/STD-INPUT-001-tool-slot-cycling.md) | Interaction | `craft-libs::craft-ui` |
 | **`STD-INPUT-002`** | [Transient & Spring-Loaded Tools](standards/01-interaction/STD-INPUT-002-transient-spring-tools.md) | Interaction | `craft-libs::craft-ui` |
@@ -132,7 +135,7 @@ craft-standards/
 
 ---
 
-## Contributing & Auditing
+## Contributing & Developer Tooling
 
 Run the automated standards auditor locally:
 ```bash
@@ -142,4 +145,27 @@ cargo run --manifest-path xtask/Cargo.toml -- audit
 List all registered standards:
 ```bash
 cargo run --manifest-path xtask/Cargo.toml -- list
+```
+
+Scaffold standard-compliant integration tests adhering to the Keep Rule:
+```bash
+cargo run --manifest-path xtask/Cargo.toml -- testkit STD-SHELL-003
+```
+
+Rebuild the interactive portal:
+```bash
+cargo run --manifest-path xtask/Cargo.toml -- report
+```
+
+### Reusable GitHub Actions Sentinel
+Any ArtCraft application repository can integrate the standards gate into `.github/workflows/standards.yml`:
+```yaml
+name: Standards Gate
+on: [pull_request, push]
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tareq-halaby/craft-standards/actions/sentinel@main
 ```

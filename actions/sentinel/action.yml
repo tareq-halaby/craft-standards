@@ -1,0 +1,47 @@
+name: 'ArtCraft Standards Sentinel'
+description: 'Automated linter, AST drift scanner, and architectural compliance gate for the 20+ ArtCraft applications'
+author: 'Storytold'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  standards-ref:
+    description: 'Git reference or branch of craft-standards to validate against'
+    required: false
+    default: 'main'
+  strict-licensing:
+    description: 'Reject viral copyleft (GPL/AGPL) and unapproved licenses'
+    required: false
+    default: 'true'
+  strict-confinement:
+    description: 'Ensure all filesystem operations enforce STD-SHELL-003 sandboxing'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout Craft Standards Engine
+      uses: actions/checkout@v4
+      with:
+        repository: 'tareq-halaby/craft-standards'
+        ref: ${{ inputs.standards-ref }}
+        path: '.craft-standards-engine'
+
+    - name: Setup Rust Toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Execute Standards Pre-Flight Linter
+      shell: bash
+      run: |
+        echo "::group::ArtCraft Standards Sentinel Audit"
+        cargo run --manifest-path .craft-standards-engine/xtask/Cargo.toml -- audit
+        echo "::endgroup::"
+
+    - name: Execute AST Drift Scanner
+      shell: bash
+      run: |
+        echo "::group::Cross-App Ergonomic & AST Drift Scanner"
+        cargo run --manifest-path .craft-standards-engine/xtask/Cargo.toml -- drift-scan
+        echo "::endgroup::"

@@ -190,6 +190,9 @@ fn execute_list_standards(args: &Value) -> Value {
     let category = args.get("category").and_then(Value::as_str);
 
     let standards = [
+        json!({ "id": "STD-GOV-001", "title": "Clean-Room Reverse Engineering, Patent Isolation, and Dependency License Allowlist Invariants", "category": "governance", "canonical_crate": "craft-standards-mcp" }),
+        json!({ "id": "STD-GOV-002", "title": "Contributor Issue Claims, Single-Concern Commits, and Pull Request Invariants", "category": "governance", "canonical_crate": "craft-standards-mcp" }),
+        json!({ "id": "STD-META-001", "title": "Standard Specification Authoring, Machine Validation, and MCP Registry Invariants", "category": "governance", "canonical_crate": "craft-standards-mcp" }),
         json!({ "id": "STD-COLOR-001", "title": "Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics", "category": "interaction", "canonical_crate": "craft-libs::craft-color" }),
         json!({ "id": "STD-INPUT-001", "title": "Multi-Tool Toolbar Slot Cycling & Gesture Ergonomics", "category": "interaction", "canonical_crate": "craft-libs::craft-ui::ToolSlot" }),
         json!({ "id": "STD-INPUT-002", "title": "Transient and Spring-Loaded Tool Invariants", "category": "interaction", "canonical_crate": "craft-libs::craft-ui" }),
@@ -229,6 +232,36 @@ fn execute_get_standard(args: &Value) -> Value {
     let id = args.get("id").and_then(Value::as_str).unwrap_or("");
 
     match id {
+        "STD-META-001" => json!({
+            "id": "STD-META-001",
+            "title": "Standard Specification Authoring, Machine Validation, and MCP Registry Invariants",
+            "rules": [
+                "Every standard MUST contain all four mandatory sections (Abstract, Normative, Implementation, Verification).",
+                "Non-Orphan Invariant: Standard must be atomically registered in MCP server, xtask audit, and README catalog in a single PR.",
+                "AI agents must follow the canonical 6-step lifecycle when adding standards."
+            ],
+            "canonical_crate": "craft-standards-mcp"
+        }),
+        "STD-GOV-001" => json!({
+            "id": "STD-GOV-001",
+            "title": "Clean-Room Reverse Engineering, Patent Isolation, and Dependency License Allowlist Invariants",
+            "rules": [
+                "Two-Team Isolation: Analysis team documents abstract formats; Clean-Room implementation team/agents write Rust code without inspecting proprietary binaries or decompiled code.",
+                "Strict License Allowlist: Only MIT, Apache-2.0, BSD-2/3, ISC, CC0 are permitted. Viral copyleft (GPL, AGPL) is strictly prohibited.",
+                "Automated CI checking via cargo deny on all PRs."
+            ],
+            "canonical_crate": "craft-standards-mcp"
+        }),
+        "STD-GOV-002" => json!({
+            "id": "STD-GOV-002",
+            "title": "Contributor Issue Claims, Single-Concern Commits, and Pull Request Invariants",
+            "rules": [
+                "Never write code without a claimed issue (/claim command with 72h TTL).",
+                "Single-concern atomic commits with conventional commit syntax citing standards (e.g. feat(toolbar): cycle slot (STD-INPUT-001)).",
+                "PR descriptions must link tracking issues and cite verified standards."
+            ],
+            "canonical_crate": "craft-standards-mcp"
+        }),
         "STD-COLOR-001" => json!({
             "id": "STD-COLOR-001",
             "title": "Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics",
@@ -432,6 +465,25 @@ fn execute_verify_component(args: &Value) -> Value {
                 "message": "Direct cloud state mutation without delta journal or version vector tracking. May cause irreversible merge conflicts."
             }));
         }
+    } else if component_kind == "licensing" {
+        if code.contains("GPL") || code.contains("AGPL") || code.contains("SSPL") || code.contains("BSL") {
+            violations.push(json!({
+                "rule": "STD-GOV-001",
+                "severity": "error",
+                "message": "Prohibited viral or restricted license detected (GPL/AGPL/SSPL). Only permissive licenses (MIT, Apache-2.0, BSD, ISC) are permitted."
+            }));
+            recommendations.push("Replace viral dependency with an Apache-2.0 / MIT approved alternative or re-implement clean-room.");
+        }
+    } else if component_kind == "meta" {
+        for req_heading in &["## 1. Abstract", "## 2. Normative", "## 3. Implementation", "## 4. Verification"] {
+            if !code.contains(req_heading) {
+                violations.push(json!({
+                    "rule": "STD-META-001",
+                    "severity": "error",
+                    "message": format!("Missing mandatory standard section: '{req_heading}'")
+                }));
+            }
+        }
     }
 
     if violations.is_empty() {
@@ -595,6 +647,7 @@ fn execute_resolve_library_primitive(args: &Value) -> Value {
         "gpu" | "rendering" | "shaders" => json!({ "crate": "craft-gpu", "path": "craft-libs/crates/gpu", "description": "Universal GPU device lifecycle, device loss recovery, shader compilation caches, and fallback contexts (STD-LIB-006 / RFC-0022)." }),
         "cloud" | "sync" | "crdt" => json!({ "crate": "craft-cloud", "path": "craft-libs/crates/cloud", "description": "Delta journals, conflict resolution lifecycles, and causal CRDT sync pipelines (STD-SHELL-004 / RFC-0024)." }),
         "color" | "icc" | "proofing" => json!({ "crate": "craft-color", "path": "craft-libs/crates/color", "description": "Universal color spaces, hex parsing, CMYK/sRGB proofing (STD-COLOR-001)." }),
+        "governance" | "meta" | "licensing" => json!({ "crate": "craft-standards-mcp", "path": "crates/craft-standards-mcp", "description": "Metamodel specification authoring, Clean-Room reverse engineering, and licensing invariants (STD-META-001, STD-GOV-001)." }),
         _ => json!({ "error": format!("No standard library mapped for domain: '{domain}'. Consider proposing one.") }),
     }
 }
@@ -607,7 +660,7 @@ mod tests {
     fn test_list_standards_all() {
         let res = execute_list_standards(&json!({}));
         let list = res["standards"].as_array().expect("array of standards");
-        assert_eq!(list.len(), 25);
+        assert_eq!(list.len(), 28);
     }
 
     #[test]
@@ -629,6 +682,10 @@ mod tests {
         let res_shell = execute_get_standard(&json!({ "id": "STD-SHELL-003" }));
         assert_eq!(res_shell["id"], "STD-SHELL-003");
         assert_eq!(res_shell["canonical_crate"], "craft-libs::craft-confine");
+
+        let res_meta = execute_get_standard(&json!({ "id": "STD-META-001" }));
+        assert_eq!(res_meta["id"], "STD-META-001");
+        assert_eq!(res_meta["canonical_crate"], "craft-standards-mcp");
     }
 
     #[test]
@@ -645,6 +702,18 @@ mod tests {
         assert_eq!(res["status"], "violations_found");
         let violations = res["violations"].as_array().unwrap();
         assert!(violations.len() >= 2);
+    }
+
+    #[test]
+    fn test_verify_component_licensing_violation() {
+        let viral_license = "license = \"GPL-3.0\"";
+        let res = execute_verify_component(&json!({
+            "component_kind": "licensing",
+            "code_snippet": viral_license
+        }));
+        assert_eq!(res["status"], "violations_found");
+        let violations = res["violations"].as_array().unwrap();
+        assert_eq!(violations[0]["rule"], "STD-GOV-001");
     }
 
     #[test]
@@ -711,5 +780,8 @@ mod tests {
 
         let res_font = execute_resolve_library_primitive(&json!({ "domain": "fonts" }));
         assert_eq!(res_font["crate"], "craft-font-store");
+
+        let res_gov = execute_resolve_library_primitive(&json!({ "domain": "governance" }));
+        assert_eq!(res_gov["crate"], "craft-standards-mcp");
     }
 }

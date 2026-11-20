@@ -12,13 +12,15 @@ fn main() {
         "list" => run_list(),
         "drift-scan" => run_drift_scan(),
         "report" => run_html_report(),
+        "testkit" => run_testkit(args.get(2).map(String::as_str)),
         "help" | "--help" | "-h" => {
             println!("craft-standards xtask CLI");
-            println!("Usage: cargo xtask [audit | list | drift-scan | report]");
-            println!("  audit       - Validates all standards documents, frontmatter, and schemas");
-            println!("  list        - Lists all registered standards in a terminal table");
-            println!("  drift-scan  - Scans sibling application codebases for UX/ergonomic drift");
-            println!("  report      - Generates an interactive HTML standards dashboard");
+            println!("Usage: cargo xtask [audit | list | drift-scan | report | testkit <STD-ID>]");
+            println!("  audit            - Validates all standards documents, frontmatter, and schemas");
+            println!("  list             - Lists all registered standards in a terminal table");
+            println!("  drift-scan       - Scans sibling application codebases for UX/ergonomic drift");
+            println!("  report           - Generates an interactive HTML standards dashboard");
+            println!("  testkit <STD-ID> - Scaffolds standard-compliant integration tests adhering to STD-LIB-005 Keep Rule");
         }
         unknown => {
             eprintln!("Unknown command: '{unknown}'. Run 'cargo xtask help' for available commands.");
@@ -109,7 +111,7 @@ fn run_audit() {
                     eprintln!("Duplicate standard ID: '{}' in {:?}", id, file.file_name());
                     errors += 1;
                 }
-                if !["interaction", "navigation", "accessibility", "internationalization", "shell", "unified-libs"].contains(&category.as_str()) {
+                if !["interaction", "navigation", "accessibility", "internationalization", "shell", "unified-libs", "governance"].contains(&category.as_str()) {
                     eprintln!("Invalid category '{}' in {:?}", category, file.file_name());
                     errors += 1;
                 }
@@ -418,5 +420,114 @@ fn run_html_report() {
         eprintln!("Failed to write dashboard: {e}");
     } else {
         println!("✅ Interactive HTML report generated at: {:?}", output_path);
+    }
+}
+
+fn run_testkit(std_id: Option<&str>) {
+    match std_id {
+        Some("STD-SHELL-003") => {
+            println!("// ===========================================================================");
+            println!("// tests/it/compliance_std_shell_003.rs");
+            println!("// Compliance Test Suite for STD-SHELL-003: Confined File Access");
+            println!("// ===========================================================================");
+            println!("{}", r#"use craft_libs::craft_confine::PathConfine;
+use std::path::PathBuf;
+
+#[test]
+fn test_std_shell_003_rejects_parent_traversal() {
+    // 1. Invariant: Resolving '..' escaping sandbox root must fail with PermissionDenied.
+    // 2. Plausible Breaking Change: A naive join(untrusted) allowing access to parent directories.
+    // 3. Only This Test: Specifically guards path confinement root boundary.
+    let root = tempfile::tempdir().unwrap();
+    let confine = PathConfine::new(root.path());
+    let hostile = PathBuf::from("../escaped-secret.txt");
+
+    let result = confine.resolve(&hostile);
+    assert!(result.is_err(), "Must reject path traversal");
+}
+
+#[test]
+fn test_std_shell_003_headless_automation_requires_roots() {
+    // 1. Invariant: Headless/automation CLI without --automation-read-root must refuse execution.
+    // 2. Plausible Breaking Change: Forgetting check in main() allows unrestricted host access.
+    // 3. Only This Test: Verifies CLI startup gate.
+    let status = std::process::Command::new(env!("CARGO_BIN_EXE_app"))
+        .arg("mcp")
+        .status()
+        .expect("Failed to launch CLI");
+    assert_eq!(status.code(), Some(64), "Must exit with EX_USAGE (64)");
+}"#);
+        }
+        Some("STD-INPUT-001") => {
+            println!("// ===========================================================================");
+            println!("// tests/it/compliance_std_input_001.rs");
+            println!("// Compliance Test Suite for STD-INPUT-001: Multi-Tool Slot Cycling");
+            println!("// ===========================================================================");
+            println!("{}", r#"use craft_libs::craft_ui::ToolSlot;
+
+#[test]
+fn test_std_input_001_alt_click_cycles_and_shields_double_click() {
+    // 1. Invariant: Rapid Alt-clicks must cycle slot and NOT trigger double-click modal dialogs.
+    // 2. Plausible Breaking Change: Relying on egui's default double_clicked() without modifier shielding.
+    // 3. Only This Test: Guards the rapid modified click state machine.
+    let mut slot = ToolSlot::new(vec!["select", "direct_select", "group_select"]);
+    assert_eq!(slot.active_tool(), "select");
+
+    // Simulate Alt-Click 1
+    slot.handle_pointer_release(true);
+    assert_eq!(slot.active_tool(), "direct_select");
+
+    // Simulate rapid Alt-Click 2 within 250ms
+    slot.handle_pointer_release(true);
+    assert_eq!(slot.active_tool(), "group_select");
+    assert!(!slot.should_open_tool_options(), "Double click must be shielded during modified cycle");
+}"#);
+        }
+        Some("STD-LIB-005") => {
+            println!("// ===========================================================================");
+            println!("// tests/it/compliance_std_lib_005.rs");
+            println!("// Compliance Test Suite for STD-LIB-005: The Keep Rule & Hostile Sweeps");
+            println!("// ===========================================================================");
+            println!("{}", r#"use craft_libs::craft_testkit::hostile;
+
+#[test]
+fn test_std_lib_005_decoder_zero_panic_guarantee() {
+    // 1. Invariant: The Keep Rule - corrupt byte payloads must return Err, NEVER panic.
+    // 2. Plausible Breaking Change: unwrap() on invalid chunk lengths or out-of-bounds slice.
+    // 3. Only This Test: Subject decoder to hostile bit-flip and truncation fuzzer sweeps.
+    let valid_doc = include_bytes!("../fixtures/sample.crft");
+    
+    hostile::hammer(valid_doc, 10_000, |corrupted_bytes| {
+        let result = std::panic::catch_unwind(|| {
+            let _ = app::decode_document(corrupted_bytes);
+        });
+        assert!(result.is_ok(), "Decoder panicked on corrupted input! Keep Rule violation.");
+    });
+}"#);
+        }
+        Some(other) => {
+            println!("Scaffolding standard-compliant test skeleton for '{other}':\n");
+            println!(r#"#[test]
+fn test_{}_compliance() {{
+    // 1. Invariant: [State what behavioral contract this test guards]
+    // 2. Plausible Breaking Change: [Identify plausible accidental mutation]
+    // 3. Only This Test: [Confirm no other test catches this breaking change]
+    
+    // Arrange
+    
+    // Act
+    
+    // Assert
+}}"#, other.to_lowercase().replace('-', "_"));
+        }
+        None => {
+            println!("Scaffold standard-compliant integration tests adhering to STD-LIB-005 Keep Rule.");
+            println!("Usage: cargo xtask testkit <STD-ID>\n");
+            println!("Available pre-configured testkits:");
+            println!("  • STD-SHELL-003  - Confined File Access & Path Traversal Guards");
+            println!("  • STD-INPUT-001  - Multi-Tool Toolbar Slot Alt-Cycling & Double-Click Shield");
+            println!("  • STD-LIB-005    - The Keep Rule & Hostile Input Hammer Fuzzing");
+            println!("  • <ANY-STD-ID>   - Generate Keep-Rule compliant test harness template");
+        }
     }
 }
