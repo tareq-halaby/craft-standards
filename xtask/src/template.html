@@ -27,21 +27,40 @@ __STYLE__
     <!-- a11y: Polite screen reader live region -->
     <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- HEADER -->
+    <!-- HEADER (Responsive, Mobile-First, Segmented Control) -->
     <header class="wiki-header" role="banner">
-        <a class="wiki-brand" href="#" onclick="showDashboard(event)" aria-label="ArtCraft Standards Home">
-            <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="32" height="32">
-            <span>ArtCraft <em id="i18n-brand-sub">Standards</em></span>
-            <span class="wiki-brand-badge">portal</span>
-        </a>
-        <nav class="wiki-header-nav" role="navigation" aria-label="Main Navigation">
-            <button class="nav-view-btn active" id="nav-btn-catalog" onclick="showDashboard(event)">
-                <span id="i18n-nav-catalog">Catalog</span>
+        <div class="wiki-header-start">
+            <a class="wiki-brand" href="#" onclick="showDashboard(event)" aria-label="ArtCraft Standards Home">
+                <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="28" height="28">
+                <span class="wiki-brand-text">ArtCraft <em id="i18n-brand-sub">Standards</em></span>
+                <span class="wiki-brand-badge">portal</span>
+            </a>
+            <!-- Responsive Segmented View Switcher -->
+            <div class="nav-segmented-toggle" role="tablist" aria-label="Portal View Switcher">
+                <button class="nav-view-btn active" id="nav-btn-catalog" onclick="showDashboard(event)" role="tab" aria-selected="true" title="Specifications Catalog">
+                    <span id="i18n-nav-catalog">Catalog</span>
+                </button>
+                <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)" role="tab" aria-selected="false" title="Suite Compliance Matrix">
+                    <span id="i18n-nav-matrix">Matrix</span>
+                    <span class="nav-badge">95.8%</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="wiki-header-end">
+            <!-- Quick Command Palette Trigger (Ctrl+K) -->
+            <button class="nav-icon-action-btn cmd-btn" onclick="openCommandPalette()" title="Command Palette &amp; Quick Finder (Ctrl+K)" aria-label="Open Command Palette (Ctrl+K)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span class="cmd-pill"><kbd>⌘K</kbd></span>
             </button>
-            <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)">
-                <span id="i18n-nav-matrix">Compliance Matrix</span>
-                <span class="nav-badge">95.8%</span>
+
+            <!-- Agent & MCP Hub Trigger -->
+            <button class="nav-icon-action-btn agent-hub-btn" onclick="openAgentHub()" title="AI Agent Directives &amp; AutoCraft MCP Hub" aria-label="Open AI Agent &amp; AutoCraft MCP Hub">
+                <span class="agent-sparkle">⚡</span>
+                <span class="agent-btn-text">Agent &amp; MCP</span>
             </button>
+
+            <!-- Language Selector -->
             <div class="lang-picker" id="lang-picker-container">
                 <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
                     <span id="current-lang-flag">🇺🇸</span>
@@ -52,21 +71,60 @@ __STYLE__
                     <!-- Populated dynamically from LOCALES -->
                 </div>
             </div>
-            <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                <span class="link-text">Wiki</span>
-            </a>
-            <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community" aria-label="ArtCraft Discord Community">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
-            </a>
-            <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository" aria-label="GitHub Repository">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                <span class="link-text">GitHub</span>
-            </a>
-            <a class="wiki-header-cta" href="https://getartcraft.com" target="_blank">
-                Studio
-            </a>
-        </nav>
+
+            <!-- Desktop-Only Secondary Links (Auto-hidden on mobile screens to prevent horizontal overflow) -->
+            <div class="desktop-nav-links">
+                <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                    <span class="link-text">Wiki</span>
+                </a>
+                <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community" aria-label="ArtCraft Discord Community">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
+                    <span class="link-text">Discord</span>
+                </a>
+                <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository" aria-label="GitHub Repository">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    <span class="link-text">GitHub</span>
+                </a>
+                <a class="wiki-header-cta" href="https://artcraft.dev" target="_blank" title="Open ArtCraft Studio">
+                    <span>Studio</span> ↗
+                </a>
+            </div>
+
+            <!-- Mobile Overflow Menu Button (< 860px) -->
+            <div class="mobile-menu-container">
+                <button class="nav-icon-action-btn mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open More Options Menu" aria-expanded="false" id="mobile-menu-trigger">
+                    <span>⋮</span>
+                </button>
+                <div class="mobile-dropdown-menu" id="mobile-dropdown-menu" role="menu">
+                    <a class="mobile-dropdown-item" href="#" onclick="openAgentHub(); closeMobileMenu(); return false;">
+                        <span>⚡ AI Agent &amp; AutoCraft Hub</span>
+                    </a>
+                    <a class="mobile-dropdown-item" href="#" onclick="openCommandPalette(); closeMobileMenu(); return false;">
+                        <span>⌘ Quick Command Finder (Ctrl+K)</span>
+                    </a>
+                    <a class="mobile-dropdown-item" href="#" onclick="openBadgeModal(); closeMobileMenu(); return false;">
+                        <span>🛡️ Contributor README Badges</span>
+                    </a>
+                    <hr class="mobile-dropdown-sep">
+                    <a class="mobile-dropdown-item" href="https://github.com/storytold/autocraft/blob/main/docs/pipeline.md" target="_blank">
+                        <span>🔄 AutoCraft Pipeline Guide ↗</span>
+                    </a>
+                    <a class="mobile-dropdown-item" href="https://craft.wiki" target="_blank">
+                        <span>📖 Craft Wiki ↗</span>
+                    </a>
+                    <a class="mobile-dropdown-item" href="https://discord.gg/artcraft" target="_blank">
+                        <span>💬 Community Discord ↗</span>
+                    </a>
+                    <a class="mobile-dropdown-item" href="https://github.com/tareq-halaby/craft-standards" target="_blank">
+                        <span>🐙 Standards GitHub Repo ↗</span>
+                    </a>
+                    <a class="mobile-dropdown-item highlight" href="https://artcraft.dev" target="_blank">
+                        <span>🎨 ArtCraft Studio ↗</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- DASHBOARD VIEW -->
@@ -386,6 +444,11 @@ __ITEMS__
             <!-- Interactive In-Browser Ergonomic Sandbox Slot -->
             <div id="interactive-sandbox-slot"></div>
 
+            <!-- Interactive Rust Implementation Snippet Lab -->
+            <div id="spec-snippet-lab" class="snippet-lab-card" style="display:none;" role="region" aria-label="Compliant Rust Boilerplate Generator">
+                <!-- Populated dynamically -->
+            </div>
+
             <!-- Rendered Markdown Body -->
             <article id="spec-content" class="markdown-body" aria-label="Specification Content"></article>
 
@@ -445,6 +508,228 @@ __ITEMS__
             </div>
         </div>
     </footer>
+
+    <!-- COMMAND PALETTE MODAL (Ctrl+K) -->
+    <div id="cmd-palette-modal" class="portal-modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Command Palette">
+        <div class="cmd-palette-box">
+            <div class="cmd-palette-search-row">
+                <span class="cmd-search-icon">🔍</span>
+                <input type="search" id="cmd-palette-input" class="cmd-input" placeholder="Search standards, shortcuts (Ctrl+Tab), crates, actions..." oninput="handleCmdSearch(this.value)" autocomplete="off" spellcheck="false" aria-label="Command search">
+                <kbd class="kbd-hint">ESC</kbd>
+            </div>
+            <div class="cmd-palette-results" id="cmd-palette-results" role="listbox">
+                <!-- Populated dynamically -->
+            </div>
+            <div class="cmd-palette-footer">
+                <span>Navigate <kbd>↑</kbd> <kbd>↓</kbd></span>
+                <span>Select <kbd>↵</kbd></span>
+                <span>Close <kbd>ESC</kbd></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI AGENT DIRECTIVES & AUTOCRAFT PIPELINE HUB MODAL -->
+    <div id="agent-hub-modal" class="portal-modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="AI Agent Directives and AutoCraft Pipeline Hub">
+        <div class="agent-hub-dialog">
+            <header class="agent-hub-header">
+                <div>
+                    <div class="agent-hub-eyebrow">
+                        <span>⚡ Autonomous Agent &amp; MCP Infrastructure</span>
+                        <span class="eyebrow-tag">v0.2.0 Gateway</span>
+                    </div>
+                    <h2 class="agent-hub-title">AI Agent Directives &amp; AutoCraft Pipeline Hub</h2>
+                    <p class="agent-hub-desc">
+                        Empower 6,000+ contributors and AI coding agents (Claude Code, Cursor, Antigravity) with zero AST-drift contracts and direct integration into Storytold's 9-stage AutoCraft backlog pipeline.
+                    </p>
+                </div>
+                <button class="modal-close-btn" onclick="closeAgentHub()" aria-label="Close Agent Hub">✕</button>
+            </header>
+
+            <nav class="agent-hub-tabs" role="tablist">
+                <button class="agent-hub-tab active" id="hub-tab-pipeline" onclick="switchAgentHubTab('pipeline', this)" role="tab" aria-selected="true">
+                    🔄 AutoCraft Pipeline Integration
+                </button>
+                <button class="agent-hub-tab" id="hub-tab-rules" onclick="switchAgentHubTab('rules', this)" role="tab" aria-selected="false">
+                    📋 One-Click Agent Rules (CLAUDE.md / .cursorrules)
+                </button>
+                <button class="agent-hub-tab" id="hub-tab-playground" onclick="switchAgentHubTab('playground', this)" role="tab" aria-selected="false">
+                    🧪 Interactive MCP Tool Playground
+                </button>
+            </nav>
+
+            <div class="agent-hub-body">
+                <!-- Panel 1: AutoCraft Pipeline -->
+                <div class="hub-panel active" id="hub-panel-pipeline" role="tabpanel">
+                    <div class="pipeline-guide-card">
+                        <h3 style="color:#FFF;font-size:16px;margin:0 0 8px 0;">How AutoCraft's 9-Stage Pipeline Enforces Craft Standards</h3>
+                        <p style="color:var(--sl-color-text-muted);font-size:13px;line-height:1.5;margin:0 0 16px 0;">Based on <a href="https://github.com/storytold/autocraft/blob/main/docs/pipeline.md" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">storytold/autocraft/docs/pipeline.md</a>, Storytold's backlog harness runs automated agent stages where human maintainer judgment is the primary bottleneck. <code>craft-standards-mcp</code> serves as the authoritative ground-truth rule provider:</p>
+                        
+                        <div class="pipeline-stages-grid">
+                            <div class="pipeline-stage-step">
+                                <div class="step-num">Stage 5: Fix</div>
+                                <div class="step-title">Agent Code Synthesis</div>
+                                <div class="step-desc">Claude/Opus agents invoke <code>get_standard</code> and <code>generate_compliant_code</code> to write fixes with zero architectural guesswork.</div>
+                            </div>
+                            <div class="pipeline-stage-step">
+                                <div class="step-num">Stage 6: Review</div>
+                                <div class="step-title">Invariant Audit</div>
+                                <div class="step-desc">Referee model audits diffs against the 28 architectural standards, checking licensing, safety, and component boundaries.</div>
+                            </div>
+                            <div class="pipeline-stage-step highlight">
+                                <div class="step-num">Stage 7: Verify</div>
+                                <div class="step-title">Zero AST Drift CI</div>
+                                <div class="step-desc">Runs <code>cargo craft-standards audit</code> &amp; automated test suites. PRs violating sandboxing or The Keep Rule are safely blocked.</div>
+                            </div>
+                            <div class="pipeline-stage-step">
+                                <div class="step-num">Stage 9: Post-Merge</div>
+                                <div class="step-title">Defect Follow-ups</div>
+                                <div class="step-desc">Opus monitors landed commits to detect subtle regressions and auto-files structured follow-up issues for the team.</div>
+                            </div>
+                        </div>
+
+                        <div class="pipeline-config-box">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                <span style="font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--sl-color-accent);">AutoCraft MCP Plugin Config</span>
+                                <button class="copy-code-btn" onclick="copySnippet('autocraft-cfg', this)">Copy JSON Config</button>
+                            </div>
+                            <pre><code id="autocraft-cfg">{
+  "mcpServers": {
+    "craft-standards": {
+      "command": "cargo",
+      "args": ["run", "--manifest-path", "crates/craft-standards-mcp/Cargo.toml", "--", "serve"],
+      "env": {
+        "CRAFT_STANDARDS_STRICT": "true",
+        "AUTOCRAFT_PIPELINE_VERIFY": "true"
+      }
+    }
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Agent Rules -->
+                <div class="hub-panel" id="hub-panel-rules" role="tabpanel" style="display:none;">
+                    <div class="agent-rules-grid">
+                        <div class="agent-rule-card">
+                            <div class="rule-card-header">
+                                <div>
+                                    <h4 style="margin:0 0 4px 0;color:#FFF;font-size:14px;">Claude Code &amp; AutoCraft (<code>CLAUDE.md</code>)</h4>
+                                    <p style="margin:0;font-size:11.5px;color:var(--sl-color-text-muted);">Authoritative instruction prompt for Anthropic Claude CLI and AutoCraft harness.</p>
+                                </div>
+                                <button class="copy-code-btn" onclick="copySnippet('claude-rules', this)">Copy CLAUDE.md</button>
+                            </div>
+                            <pre><code id="claude-rules"># Storytold Craft Creative Suite Contributor &amp; Agent Guidelines
+- Monorepo Architectural Ground Truth: https://tareq-halaby.github.io/craft-standards/
+- Invariant Testing: All new UI features MUST comply with the 28 Craft Standards.
+- Crate Boundaries: Respect 'The Keep Rule' (STD-LIB-005). Never write app-specific code in core crates.
+- ToolSlot Ergonomics: Multi-tool buttons MUST shield against rapid double-clicks (STD-INPUT-001).
+- Filesystem: App code must NEVER access `std::fs` directly; route through `craft-fs` sandboxing (STD-SHELL-003).
+- Accessibility: Every widget MUST register AccessKit nodes with explicit role, label, and AAA contrast (STD-A11Y-001).
+- BiDi / RTL: Full shell direction mirroring is mandatory. Never hardcode Left/Right padding (STD-I18N-001).</code></pre>
+                        </div>
+
+                        <div class="agent-rule-card">
+                            <div class="rule-card-header">
+                                <div>
+                                    <h4 style="margin:0 0 4px 0;color:#FFF;font-size:14px;">Cursor IDE (<code>.cursorrules</code>)</h4>
+                                    <p style="margin:0;font-size:11.5px;color:var(--sl-color-text-muted);">Optimized prompt rules for Cursor AI editor across all 20 Craft apps.</p>
+                                </div>
+                                <button class="copy-code-btn" onclick="copySnippet('cursor-rules', this)">Copy .cursorrules</button>
+                            </div>
+                            <pre><code id="cursor-rules"># Cursor Rules for ArtCraft Rust Suite
+You are an expert Rust graphics &amp; desktop engineer working on the ArtCraft 20+ app monorepo.
+Always adhere strictly to the 28 Craft Standards (https://tareq-halaby.github.io/craft-standards/):
+1. UI framework is egui with wgpu backend. Use `craft-widgets` design tokens.
+2. Ensure AccessKit accessibility trees are built for all custom widgets.
+3. Use `cosmic-text` and `craft-text` for BiDi RTL galley shaping.
+4. Normalize key chords using `craft-keymap` (Cmd on macOS, Ctrl on Win/Linux).
+5. Never bypass confined sandboxing. Use `craft-fs`.</code></pre>
+                        </div>
+
+                        <div class="agent-rule-card">
+                            <div class="rule-card-header">
+                                <div>
+                                    <h4 style="margin:0 0 4px 0;color:#FFF;font-size:14px;">Google Antigravity &amp; Open Skills (<code>SKILL.md</code>)</h4>
+                                    <p style="margin:0;font-size:11.5px;color:var(--sl-color-text-muted);">Antigravity skill definition for autonomous agent pairing.</p>
+                                </div>
+                                <button class="copy-code-btn" onclick="copySnippet('antigravity-rules', this)">Copy SKILL.md</button>
+                            </div>
+                            <pre><code id="antigravity-rules">---
+name: craft-standards
+description: Enforce ArtCraft Suite architectural standards, invariant contracts, and MCP validation
+---
+# ArtCraft Standards Agent Skill
+When generating or auditing Rust code for any of the 20+ Storytold Craft applications:
+- Verify multi-tool slot cycling prevents unwanted dialog triggers (STD-INPUT-001).
+- Ensure modal dialogs follow Cancel-on-Left / Confirm-on-Right button order (STD-SHELL-001).
+- Check that all filesystem I/O uses `craft-fs` automation root isolation (STD-SHELL-003).
+- Check compliance telemetry at https://tareq-halaby.github.io/craft-standards/#matrix</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 3: Interactive MCP Playground -->
+                <div class="hub-panel" id="hub-panel-playground" role="tabpanel" style="display:none;">
+                    <div class="mcp-playground-layout">
+                        <div class="mcp-tool-selector">
+                            <label for="mcp-tool-select" style="font-size:12.5px;font-weight:600;color:#FFF;">Select MCP Tool to Test:</label>
+                            <select id="mcp-tool-select" class="drilldown-select" onchange="loadMcpToolForm(this.value)">
+                                <option value="verify_component">verify_component (Audit AST code against standards)</option>
+                                <option value="get_standard">get_standard (Inspect invariant schema by ID)</option>
+                                <option value="generate_compliant_code">generate_compliant_code (Generate Rust boilerplate)</option>
+                                <option value="resolve_library_primitive">resolve_library_primitive (Look up canonical crate)</option>
+                            </select>
+                        </div>
+
+                        <div class="mcp-stage-box" id="mcp-stage-box">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <div class="mcp-output-box">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                                <span style="font-family:var(--font-mono);font-size:11px;color:var(--sl-color-text-muted);">JSON-RPC 2.0 Telemetry Response</span>
+                                <span id="mcp-status-pill" class="app-cat-pill ok">200 OK</span>
+                            </div>
+                            <pre><code id="mcp-output-code">// Run an MCP tool above to see live JSON-RPC telemetry output</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTRIBUTOR README BADGES MODAL -->
+    <div id="badge-modal" class="portal-modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Contributor README Badges Generator">
+        <div class="cmd-palette-box" style="max-width:640px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--sl-color-border);">
+                <div>
+                    <h3 style="margin:0;font-family:var(--font-display);font-size:16px;color:#FFF;">🛡️ Monorepo Contributor Shields &amp; Badges</h3>
+                    <p style="margin:2px 0 0 0;font-size:12px;color:var(--sl-color-text-muted);">Embed verified compliance telemetry in your repository README</p>
+                </div>
+                <button class="modal-close-btn" onclick="closeBadgeModal()" aria-label="Close Badges Modal">✕</button>
+            </div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:16px;">
+                <div>
+                    <label for="badge-app-select" style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:6px;">Select Governed Application:</label>
+                    <select id="badge-app-select" class="drilldown-select" onchange="updateBadgePreview(this.value)" style="width:100%;">
+                        <!-- Populated dynamically from APPS_COMPLIANCE -->
+                    </select>
+                </div>
+                <div style="background:#11141D;border:1px solid var(--sl-color-border);border-radius:8px;padding:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                    <div>
+                        <div style="font-size:11px;color:var(--sl-color-text-muted);margin-bottom:6px;">Live Badge Preview:</div>
+                        <img id="badge-preview-img" src="https://img.shields.io/badge/ArtCraft_Standards-100%25_Verified-3fb950?style=flat-square&logo=rust" alt="Standards Badge Preview">
+                    </div>
+                    <button class="reader-btn primary" onclick="copyBadgeMarkdown()">Copy Markdown</button>
+                </div>
+                <div style="background:#161B22;border:1px solid var(--sl-color-border);border-radius:8px;padding:12px 14px;">
+                    <div style="font-size:11px;font-family:var(--font-mono);color:var(--sl-color-text-muted);margin-bottom:4px;">Markdown Embed Code:</div>
+                    <code id="badge-markdown-code" style="font-size:11.5px;color:var(--sl-color-accent);word-break:break-all;"></code>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script id="specs-data" type="application/json">
 __SPECS_JSON__

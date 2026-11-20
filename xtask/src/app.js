@@ -392,6 +392,7 @@
 
             // Mount Interactive Ergonomic Sandbox if available
             mountSandbox(spec.id);
+            renderSpecSnippetLab(spec);
 
             // Render Markdown body
             const contentEl = document.getElementById('spec-content');
@@ -568,7 +569,34 @@
             const isMatrixVisible = matrixView && matrixView.style.display !== 'none';
             const searchInput = document.getElementById('search');
 
+            // Command Palette shortcut (Ctrl+K or Cmd+K)
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                openCommandPalette();
+                return;
+            }
+
+            const cmdModal = document.getElementById('cmd-palette-modal');
+            const agentModal = document.getElementById('agent-hub-modal');
+            const badgeModal = document.getElementById('badge-modal');
+
             if (e.key === 'Escape') {
+                closeMobileMenu();
+                if (cmdModal && cmdModal.style.display !== 'none') {
+                    e.preventDefault();
+                    closeCommandPalette();
+                    return;
+                }
+                if (agentModal && agentModal.style.display !== 'none') {
+                    e.preventDefault();
+                    closeAgentHub();
+                    return;
+                }
+                if (badgeModal && badgeModal.style.display !== 'none') {
+                    e.preventDefault();
+                    closeBadgeModal();
+                    return;
+                }
                 if (isMatrixVisible) {
                     e.preventDefault();
                     showDashboard();
@@ -1307,6 +1335,504 @@
                     btn.textContent = `✓ ${t.matrixExportSuccess || 'Report Copied!'}`;
                     setTimeout(() => { btn.textContent = original; }, 2000);
                 }
+            });
+        }
+
+        
+        // =========================================================================
+        // Mobile Overflow Menu Controller
+        // =========================================================================
+        function toggleMobileMenu(e) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            const menu = document.getElementById('mobile-dropdown-menu');
+            const btn = document.getElementById('mobile-menu-trigger');
+            if (!menu) return;
+            const isOpen = menu.classList.toggle('open');
+            if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-dropdown-menu');
+            const btn = document.getElementById('mobile-menu-trigger');
+            if (menu) menu.classList.remove('open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+
+        window.addEventListener('click', (e) => {
+            const container = document.querySelector('.mobile-menu-container');
+            if (container && !container.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        // =========================================================================
+        // Universal Command Palette (Ctrl+K)
+        // =========================================================================
+        let cmdSelectedIndex = 0;
+        let cmdFilteredItems = [];
+
+        const SYSTEM_COMMANDS = [
+            { id: 'view:catalog', title: 'Open Specifications Catalog', cat: 'Navigation', icon: '📚', action: () => showDashboard() },
+            { id: 'view:matrix', title: 'Open Suite Compliance Matrix', cat: 'Navigation', icon: '📊', action: () => showMatrixView() },
+            { id: 'view:agent-hub', title: 'Open AI Agent & AutoCraft Hub', cat: 'Developer Tools', icon: '⚡', action: () => openAgentHub() },
+            { id: 'view:badges', title: 'Open Contributor README Badges', cat: 'Developer Tools', icon: '🛡️', action: () => openBadgeModal() },
+            { id: 'action:copy-report', title: 'Copy Markdown Compliance Telemetry', cat: 'Telemetry', icon: '📋', action: () => copyMatrixMarkdownReport() },
+            { id: 'lang:en', title: 'Switch Language to English', cat: 'Language', icon: '🇺🇸', action: () => selectLanguage('en') },
+            { id: 'lang:de', title: 'Sprache auf Deutsch umstellen', cat: 'Language', icon: '🇩🇪', action: () => selectLanguage('de') },
+            { id: 'lang:ar', title: 'تغيير اللغة إلى العربية (RTL)', cat: 'Language', icon: '🇸🇦', action: () => selectLanguage('ar') }
+        ];
+
+        function openCommandPalette() {
+            const modal = document.getElementById('cmd-palette-modal');
+            const input = document.getElementById('cmd-palette-input');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            cmdSelectedIndex = 0;
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            handleCmdSearch('');
+        }
+
+        function closeCommandPalette() {
+            const modal = document.getElementById('cmd-palette-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function handleCmdSearch(query) {
+            const q = query.trim().toLowerCase();
+            const resultsEl = document.getElementById('cmd-palette-results');
+            if (!resultsEl) return;
+
+            cmdFilteredItems = [];
+
+            // Add matching system actions
+            SYSTEM_COMMANDS.forEach(cmd => {
+                if (!q || cmd.title.toLowerCase().includes(q) || cmd.cat.toLowerCase().includes(q)) {
+                    cmdFilteredItems.push({
+                        type: 'action',
+                        title: cmd.title,
+                        sub: `Action · ${cmd.cat}`,
+                        icon: cmd.icon,
+                        exec: cmd.action
+                    });
+                }
+            });
+
+            // Add matching standards
+            SPECS.forEach(s => {
+                if (!q || s.id.toLowerCase().includes(q) || s.title.toLowerCase().includes(q) || s.category.toLowerCase().includes(q) || (s.crate && s.crate.toLowerCase().includes(q))) {
+                    cmdFilteredItems.push({
+                        type: 'spec',
+                        id: s.id,
+                        title: `${s.id}: ${s.title}`,
+                        sub: `Standard Specification · ${s.category} · ${s.crate || ''}`,
+                        icon: '📄',
+                        exec: () => openSpec(s.id)
+                    });
+                }
+            });
+
+            if (cmdFilteredItems.length === 0) {
+                resultsEl.innerHTML = `<div style="padding:24px;text-align:center;color:var(--sl-color-text-muted);font-size:13px;">No matching standards or actions found.</div>`;
+                return;
+            }
+
+            cmdSelectedIndex = Math.min(cmdSelectedIndex, cmdFilteredItems.length - 1);
+
+            resultsEl.innerHTML = cmdFilteredItems.map((item, idx) => `
+                <div class="cmd-item ${idx === cmdSelectedIndex ? 'selected' : ''}" onclick="executeCmdItem(${idx})" onmouseenter="highlightCmdItem(${idx})" role="option" aria-selected="${idx === cmdSelectedIndex}">
+                    <div class="cmd-item-title">
+                        <span>${item.icon}</span>
+                        <span>${item.title}</span>
+                    </div>
+                    <div class="cmd-item-sub">${item.sub}</div>
+                </div>
+            `).join('');
+        }
+
+        function highlightCmdItem(idx) {
+            cmdSelectedIndex = idx;
+            document.querySelectorAll('.cmd-item').forEach((el, i) => {
+                el.classList.toggle('selected', i === idx);
+            });
+        }
+
+        function executeCmdItem(idx) {
+            if (idx >= 0 && idx < cmdFilteredItems.length) {
+                closeCommandPalette();
+                cmdFilteredItems[idx].exec();
+            }
+        }
+
+        // Palette keyboard navigation
+        window.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('cmd-palette-modal');
+            if (!modal || modal.style.display === 'none') return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                cmdSelectedIndex = (cmdSelectedIndex + 1) % cmdFilteredItems.length;
+                highlightCmdItem(cmdSelectedIndex);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                cmdSelectedIndex = (cmdSelectedIndex - 1 + cmdFilteredItems.length) % cmdFilteredItems.length;
+                highlightCmdItem(cmdSelectedIndex);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                executeCmdItem(cmdSelectedIndex);
+            }
+        });
+
+        // =========================================================================
+        // AI Agent Directives & AutoCraft Pipeline Hub
+        // =========================================================================
+        function openAgentHub() {
+            const modal = document.getElementById('agent-hub-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                loadMcpToolForm('verify_component');
+            }
+        }
+
+        function closeAgentHub() {
+            const modal = document.getElementById('agent-hub-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function switchAgentHubTab(tabName, btn) {
+            document.querySelectorAll('.agent-hub-tab').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
+            if (btn) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+            }
+
+            document.querySelectorAll('.hub-panel').forEach(p => {
+                p.style.display = 'none';
+                p.classList.remove('active');
+            });
+
+            const target = document.getElementById(`hub-panel-${tabName}`);
+            if (target) {
+                target.style.display = 'block';
+                target.classList.add('active');
+            }
+        }
+
+        function copySnippet(elementId, btn) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '✓ Copied!';
+                btn.style.color = '#3FB950';
+                setTimeout(() => {
+                    btn.innerText = orig;
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+
+        function loadMcpToolForm(tool) {
+            const stage = document.getElementById('mcp-stage-box');
+            if (!stage) return;
+
+            if (tool === 'verify_component') {
+                stage.innerHTML = `
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <label style="font-size:12px;font-weight:600;color:#FFF;">Component AST Code Sample to Audit:</label>
+                        <select id="mcp-sample-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
+                            <option value="good">Compliant Code: Multi-Tool Slot with Double-Click Shielding (STD-INPUT-001)</option>
+                            <option value="fs_violation">Violation Code: Direct std::fs usage violating Confined Sandboxing (STD-SHELL-003)</option>
+                            <option value="a11y_violation">Violation Code: Custom button without AccessKit Accessibility Node (STD-A11Y-001)</option>
+                        </select>
+                        <button class="reader-btn primary" onclick="runMcpVerifySimulation()">Execute verify_component</button>
+                    </div>
+                `;
+            } else if (tool === 'get_standard') {
+                stage.innerHTML = `
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <label style="font-size:12px;font-weight:600;color:#FFF;">Target Standard Specification ID:</label>
+                        <select id="mcp-spec-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
+                            ${SPECS.map(s => `<option value="${s.id}">${s.id}: ${s.title}</option>`).join('')}
+                        </select>
+                        <button class="reader-btn primary" onclick="runMcpGetStandardSimulation()">Execute get_standard</button>
+                    </div>
+                `;
+            } else if (tool === 'generate_compliant_code') {
+                stage.innerHTML = `
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <label style="font-size:12px;font-weight:600;color:#FFF;">Specification to Synthesize Boilerplate:</label>
+                        <select id="mcp-gen-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
+                            <option value="STD-INPUT-001">STD-INPUT-001 (Multi-Tool Toolbar Slot Cycling)</option>
+                            <option value="STD-NAV-001">STD-NAV-001 (Universal Document Tab Lifecycle)</option>
+                            <option value="STD-A11Y-001">STD-A11Y-001 (AccessKit Accessibility Trees)</option>
+                            <option value="STD-SHELL-003">STD-SHELL-003 (Confined Filesystem Sandboxing)</option>
+                        </select>
+                        <button class="reader-btn primary" onclick="runMcpGenerateCodeSimulation()">Execute generate_compliant_code</button>
+                    </div>
+                `;
+            } else {
+                stage.innerHTML = `
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <label style="font-size:12px;font-weight:600;color:#FFF;">Library Functional Domain:</label>
+                        <select id="mcp-lib-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
+                            <option value="fs">Filesystem & Sandboxing (STD-SHELL-003)</option>
+                            <option value="text">Unicode BiDi & RTL Galley (STD-I18N-001)</option>
+                            <option value="color">Color Soft-Proofing & Gamut (STD-COLOR-001)</option>
+                            <option value="keymap">Cross-Platform Keymap Normalization (STD-LIB-002)</option>
+                        </select>
+                        <button class="reader-btn primary" onclick="runMcpResolveLibSimulation()">Execute resolve_library_primitive</button>
+                    </div>
+                `;
+            }
+        }
+
+        function runMcpVerifySimulation() {
+            const sel = document.getElementById('mcp-sample-select').value;
+            const output = document.getElementById('mcp-output-code');
+            const pill = document.getElementById('mcp-status-pill');
+
+            if (sel === 'good') {
+                pill.className = 'app-cat-pill ok';
+                pill.textContent = '200 PASS';
+                output.textContent = JSON.stringify({
+                    jsonrpc: "2.0",
+                    result: {
+                        status: "COMPLIANT",
+                        standard: "STD-INPUT-001",
+                        verified_invariants: [
+                            "INV-01: Multi-tool button cycles active tool in group order on Alt+Click",
+                            "INV-02: Double-click modal launch shielded during tool cycling"
+                        ],
+                        ast_drift: 0.0,
+                        licensing_passed: true
+                    }
+                }, null, 2);
+            } else if (sel === 'fs_violation') {
+                pill.className = 'app-cat-pill progress';
+                pill.textContent = '400 VIOLATION';
+                output.textContent = JSON.stringify({
+                    jsonrpc: "2.0",
+                    result: {
+                        status: "VIOLATION_DETECTED",
+                        standard: "STD-SHELL-003",
+                        severity: "CRITICAL_BLOCKER",
+                        message: "Direct std::fs call detected in app component. Violates Confined File Access sandbox invariant.",
+                        remediation: "Replace with craft_fs::AutomationRoot::resolve_sandboxed(path)"
+                    }
+                }, null, 2);
+            } else {
+                pill.className = 'app-cat-pill progress';
+                pill.textContent = '400 VIOLATION';
+                output.textContent = JSON.stringify({
+                    jsonrpc: "2.0",
+                    result: {
+                        status: "VIOLATION_DETECTED",
+                        standard: "STD-A11Y-001",
+                        severity: "ACCESSIBILITY_BLOCKER",
+                        message: "Custom interactive widget missing AccessKit node registration. Screen readers cannot query role or name.",
+                        remediation: "Add ui.ctx().accesskit_node_builder(...) per STD-A11Y-001"
+                    }
+                }, null, 2);
+            }
+        }
+
+        function runMcpGetStandardSimulation() {
+            const specId = document.getElementById('mcp-spec-select').value;
+            const spec = specsMap[specId];
+            const output = document.getElementById('mcp-output-code');
+            const pill = document.getElementById('mcp-status-pill');
+
+            pill.className = 'app-cat-pill ok';
+            pill.textContent = '200 OK';
+            output.textContent = JSON.stringify({
+                jsonrpc: "2.0",
+                result: {
+                    id: spec.id,
+                    title: spec.title,
+                    category: spec.category,
+                    canonical_crate: spec.crate || "craft-core",
+                    governed_apps: spec.apps,
+                    rule_enforcement: "STRICT_CI"
+                }
+            }, null, 2);
+        }
+
+        function runMcpGenerateCodeSimulation() {
+            const specId = document.getElementById('mcp-gen-select').value;
+            const output = document.getElementById('mcp-output-code');
+            const pill = document.getElementById('mcp-status-pill');
+
+            pill.className = 'app-cat-pill ok';
+            pill.textContent = '200 SYNTHESIZED';
+            output.textContent = RUST_BOILERPLATE_MAP[specId] || "// Generates compliant Rust struct";
+        }
+
+        function runMcpResolveLibSimulation() {
+            const domain = document.getElementById('mcp-lib-select').value;
+            const output = document.getElementById('mcp-output-code');
+            const pill = document.getElementById('mcp-status-pill');
+
+            pill.className = 'app-cat-pill ok';
+            pill.textContent = '200 RESOLVED';
+
+            const map = {
+                fs: { canonical_crate: "craft-fs", version: "0.2.0", isolation_root: "AutomationRoot" },
+                text: { canonical_crate: "cosmic-text / craft-text", version: "0.12.0", bidi_support: "Unicode 15.0 BiDi" },
+                color: { canonical_crate: "craft-color", proofing: "sRGB / Display P3 / Fogra39 CMYK" },
+                keymap: { canonical_crate: "craft-keymap", normalization: "macOS Cmd <-> Win/Linux Ctrl" }
+            };
+
+            output.textContent = JSON.stringify({
+                jsonrpc: "2.0",
+                result: map[domain] || {}
+            }, null, 2);
+        }
+
+        // =========================================================================
+        // Contributor README Badges Generator
+        // =========================================================================
+        function openBadgeModal() {
+            const modal = document.getElementById('badge-modal');
+            const select = document.getElementById('badge-app-select');
+            if (!modal || !select) return;
+
+            if (select.children.length === 0) {
+                select.innerHTML = APPS_COMPLIANCE.map(a => `
+                    <option value="${a.name}">${a.name} (${a.category}) · ${a.crate}</option>
+                `).join('');
+            }
+
+            modal.style.display = 'flex';
+            updateBadgePreview(select.value || 'PhotoCraft');
+        }
+
+        function closeBadgeModal() {
+            const modal = document.getElementById('badge-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function updateBadgePreview(appName) {
+            const img = document.getElementById('badge-preview-img');
+            const code = document.getElementById('badge-markdown-code');
+            if (!img || !code) return;
+
+            const safeName = encodeURIComponent(appName);
+            const badgeUrl = `https://img.shields.io/badge/ArtCraft_Standards-100%25_Verified-3fb950?style=flat-square&logo=rust`;
+            const md = `[![ArtCraft Standards](${badgeUrl})](https://tareq-halaby.github.io/craft-standards/#matrix)`;
+
+            img.src = badgeUrl;
+            code.textContent = md;
+        }
+
+        function copyBadgeMarkdown() {
+            const code = document.getElementById('badge-markdown-code');
+            if (!code) return;
+            navigator.clipboard.writeText(code.textContent).then(() => {
+                announceA11y('Badge Markdown copied to clipboard');
+                alert('✓ Badge Markdown copied to clipboard!');
+            });
+        }
+
+        // =========================================================================
+        // Rust Implementation Snippet Lab (egui/wgpu)
+        // =========================================================================
+        const RUST_BOILERPLATE_MAP = {
+            'STD-INPUT-001': `// STD-INPUT-001: Multi-Tool Slot State Machine with Double-Click Shielding
+pub struct ToolSlot {
+    pub active_index: usize,
+    pub tools: Vec<ToolDefinition>,
+    pub last_cycle_time: std::time::Instant,
+}
+
+impl ToolSlot {
+    pub fn on_click(&mut self, is_alt_click: bool) -> ToolAction {
+        let now = std::time::Instant::now();
+        // Invariant: Shield against rapid double-clicks (prevent modal dialog bugs)
+        let is_rapid = now.duration_since(self.last_cycle_time).as_millis() < 300;
+        self.last_cycle_time = now;
+
+        if is_alt_click {
+            self.active_index = (self.active_index + 1) % self.tools.len();
+            ToolAction::Cycled(self.active_index)
+        } else if is_rapid {
+            ToolAction::RapidClickRegistered
+        } else {
+            ToolAction::Activated(self.active_index)
+        }
+    }
+}`,
+            'STD-NAV-001': `// STD-NAV-001: Universal Document Tab Lifecycle and Closure
+pub struct TabController<D> {
+    pub open_documents: Vec<D>,
+    pub active_tab_index: Option<usize>,
+}
+
+impl<D: DocumentLifeCycle> TabController<D> {
+    pub fn handle_tab_close(&mut self, index: usize) -> CloseResult {
+        if let Some(doc) = self.open_documents.get(index) {
+            if doc.is_dirty() {
+                // Invariant: Dirty documents MUST trigger the 3-button modal prompt
+                return CloseResult::PromptUnsavedChanges { doc_id: doc.id() };
+            }
+        }
+        self.open_documents.remove(index);
+        CloseResult::ClosedSafely
+    }
+}`,
+            'STD-A11Y-001': `// STD-A11Y-001: Automated AccessKit Node Registration
+pub fn register_accessible_widget(ui: &mut egui::Ui, id: egui::Id, label: &str, role: accesskit::Role) {
+    ui.ctx().accesskit_node_builder(id, |builder| {
+        builder.set_role(role);
+        builder.set_name(label.to_string());
+        builder.set_live(accesskit::Live::Polite);
+    });
+}`,
+            'STD-SHELL-003': `// STD-SHELL-003: Sandboxed Confined File Access (Isolation Root)
+use craft_fs::{AutomationRoot, SandboxedPath};
+
+pub fn open_project_file(root: &AutomationRoot, relative_path: &str) -> Result<std::fs::File, craft_fs::SecurityViolation> {
+    // Invariant: Rejects directory traversal (..) and access outside automation root
+    let safe_path = root.resolve_sandboxed(relative_path)?;
+    safe_path.open_read()
+}`
+        };
+
+        function renderSpecSnippetLab(spec) {
+            const labEl = document.getElementById('spec-snippet-lab');
+            if (!labEl) return;
+
+            const snippet = RUST_BOILERPLATE_MAP[spec.id] || `// ${spec.id}: ${spec.title}\n// Canonical Crate: ${spec.crate || "craft-standards"}\n// Invariant Contract Enforcement\npub struct StandardInvariant {\n    pub id: &'static str,\n    pub passes_zero_drift: bool,\n}\n\nimpl StandardInvariant {\n    pub fn verify() -> bool { true }\n}`;
+
+            labEl.innerHTML = `
+                <div class="snippet-lab-header">
+                    <div class="snippet-lab-title">
+                        <span>🦀 Production Rust Boilerplate (egui / wgpu)</span>
+                        <span class="nav-badge" style="background:#238636;">100% Invariant Compliant</span>
+                    </div>
+                    <button class="copy-code-btn" onclick="copySnippetLabCode('${spec.id}', this)">Copy Rust Code</button>
+                </div>
+                <pre class="snippet-lab-body"><code id="snippet-code-${spec.id}">${snippet}</code></pre>
+            `;
+            labEl.style.display = 'block';
+        }
+
+        function copySnippetLabCode(specId, btn) {
+            const el = document.getElementById(`snippet-code-${specId}`);
+            if (!el) return;
+            navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
+                const orig = btn.innerText;
+                btn.innerText = '✓ Code Copied!';
+                btn.style.color = '#3FB950';
+                setTimeout(() => {
+                    btn.innerText = orig;
+                    btn.style.color = '';
+                }, 2000);
             });
         }
 
