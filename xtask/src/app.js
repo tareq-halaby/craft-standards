@@ -8,7 +8,20 @@
         function initLanguages() {
             const menu = document.getElementById('lang-dropdown-menu');
             if (!menu) return;
-            menu.innerHTML = Object.keys(LOCALES).map(code => {
+            // Sorting order: EN, AR, DE, ES then the rest and JP at the end
+            const priority = ['en', 'ar', 'de', 'es'];
+            const sortedCodes = Object.keys(LOCALES).sort((a, b) => {
+                if (a === 'ja') return 1;
+                if (b === 'ja') return -1;
+                const idxA = priority.indexOf(a);
+                const idxB = priority.indexOf(b);
+                if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                if (idxA !== -1) return -1;
+                if (idxB !== -1) return 1;
+                return a.localeCompare(b);
+            });
+
+            menu.innerHTML = sortedCodes.map(code => {
                 const loc = LOCALES[code];
                 const isActive = code === currentLang ? ' active' : '';
                 return `<button class="lang-option${isActive}" onclick="selectLanguage('${code}')" role="option" aria-selected="${code === currentLang}">
@@ -456,12 +469,16 @@
             document.getElementById('dashboard-view').style.display = 'none';
             const matrixView = document.getElementById('matrix-view');
             if (matrixView) matrixView.style.display = 'none';
+            const faqView = document.getElementById('faq-view');
+            if (faqView) faqView.style.display = 'none';
             document.getElementById('spec-view').style.display = 'block';
 
             const navCatalog = document.getElementById('nav-btn-catalog');
             const navMatrix = document.getElementById('nav-btn-matrix');
+            const navFaq = document.getElementById('nav-btn-faq');
             if (navCatalog) navCatalog.classList.remove('active');
             if (navMatrix) navMatrix.classList.remove('active');
+            if (navFaq) navFaq.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -482,12 +499,16 @@
             document.getElementById('spec-view').style.display = 'none';
             const matrixView = document.getElementById('matrix-view');
             if (matrixView) matrixView.style.display = 'none';
+            const faqView = document.getElementById('faq-view');
+            if (faqView) faqView.style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
 
             const navCatalog = document.getElementById('nav-btn-catalog');
             const navMatrix = document.getElementById('nav-btn-matrix');
+            const navFaq = document.getElementById('nav-btn-faq');
             if (navCatalog) navCatalog.classList.add('active');
             if (navMatrix) navMatrix.classList.remove('active');
+            if (navFaq) navFaq.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -509,13 +530,17 @@
             }
             document.getElementById('spec-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'none';
+            const faqView = document.getElementById('faq-view');
+            if (faqView) faqView.style.display = 'none';
             const matrixView = document.getElementById('matrix-view');
             if (matrixView) matrixView.style.display = 'block';
 
             const navCatalog = document.getElementById('nav-btn-catalog');
             const navMatrix = document.getElementById('nav-btn-matrix');
+            const navFaq = document.getElementById('nav-btn-faq');
             if (navCatalog) navCatalog.classList.remove('active');
             if (navMatrix) navMatrix.classList.add('active');
+            if (navFaq) navFaq.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
             renderMatrixView();
@@ -556,6 +581,8 @@
             const hash = window.location.hash.replace(/^#\/?/, '').trim();
             if (hash === 'matrix') {
                 showMatrixView();
+            } else if (hash === 'faq') {
+                showFaqView();
             } else if (hash && specsMap[hash]) {
                 openSpec(hash, false);
             } else {
@@ -1051,7 +1078,69 @@
 
         function handleMatrixSearch(val) {
             matrixSearchQuery = val.trim().toLowerCase();
+            const clearBtn = document.getElementById('matrix-search-clear-btn');
+            if (clearBtn) {
+                clearBtn.style.display = matrixSearchQuery ? 'inline-block' : 'none';
+            }
+            updateMatrixSearchFeedback();
             renderMatrixView();
+        }
+
+        function clearMatrixSearch() {
+            const input = document.getElementById('matrix-search-input');
+            if (input) input.value = '';
+            handleMatrixSearch('');
+        }
+
+        function clearMatrixSearchAndFilters() {
+            const input = document.getElementById('matrix-search-input');
+            if (input) input.value = '';
+            matrixSearchQuery = '';
+            matrixActiveCategory = 'all';
+            document.querySelectorAll('.matrix-cat-chip').forEach(b => b.classList.remove('active'));
+            const allChip = document.getElementById('domain-chip-all');
+            if (allChip) allChip.classList.add('active');
+            const clearBtn = document.getElementById('matrix-search-clear-btn');
+            if (clearBtn) clearBtn.style.display = 'none';
+            updateMatrixSearchFeedback();
+            renderMatrixView();
+        }
+
+        function updateMatrixSearchFeedback() {
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+            const countEl = document.getElementById('matrix-visible-count');
+            const clearLink = document.getElementById('matrix-clear-search-link');
+            const emptyCard = document.getElementById('matrix-empty-state-card');
+            const emptyDesc = document.getElementById('matrix-empty-desc');
+            const apps = getFilteredApps();
+
+            if (countEl) {
+                if (matrixSearchQuery) {
+                    countEl.textContent = (t.matrixFoundCount || 'Found {count} applications matching "{query}"')
+                        .replace('{count}', apps.length)
+                        .replace('{query}', matrixSearchQuery);
+                } else {
+                    countEl.textContent = (t.matrixShowingCount || 'Showing {count} of {total} applications')
+                        .replace('{count}', apps.length)
+                        .replace('{total}', APPS_COMPLIANCE.length);
+                }
+            }
+
+            if (clearLink) {
+                clearLink.style.display = (matrixSearchQuery || matrixActiveCategory !== 'all') ? 'inline-block' : 'none';
+            }
+
+            if (emptyCard) {
+                if (apps.length === 0) {
+                    emptyCard.style.display = 'block';
+                    if (emptyDesc) {
+                        emptyDesc.textContent = (t.matrixNoMatchesDesc || 'We couldn\'t find any applications matching "{query}".')
+                            .replace('{query}', matrixSearchQuery);
+                    }
+                } else {
+                    emptyCard.style.display = 'none';
+                }
+            }
         }
 
         function setMatrixColumnCategory(cat, btn) {
@@ -1339,6 +1428,175 @@
         }
 
         
+        
+        // =========================================================================
+        // Frequently Asked Questions (FAQ) & Contributor Knowledge Base
+        // =========================================================================
+        const FAQ_DATA = [
+            {
+                id: 'faq-1',
+                cat: 'arch',
+                tag: 'ARCHITECTURE',
+                q: 'Why does the Storytold suite require 28 shared standards across 20+ apps?',
+                a: 'Storytold operates over 20 creative and productivity desktop apps in Rust (PhotoCraft, VectorCraft, FilmCraft, CADCraft, WordCraft, etc.). Without shared invariants, each app independently re-implements toolbar slot cycling, timeline scrubbing, file saving, and keymaps, causing UI bugs (e.g. double-click dialog launches), inconsistent hotkeys, and conflicting dependencies. The 28 standards guarantee a cohesive, muscle-memory ergonomic contract across the entire suite.'
+            },
+            {
+                id: 'faq-2',
+                cat: 'autocraft',
+                tag: 'AUTOCRAFT PIPELINE',
+                q: 'How does AutoCraft (docs/pipeline.md) enforce these standards in its 9-stage pipeline?',
+                a: 'AutoCraft (<code>storytold/autocraft</code>) automates repository backlog management. In Stage 5 (<code>Fix</code>), agents query <code>get_standard</code> to synthesize compliant code. In Stage 6 (<code>Review</code>), a Claude Opus referee model audits diffs against the 28 standards. In Stage 7 (<code>Verify</code>), automated CI runs <code>cargo craft-standards audit</code> to prevent any AST drift from merging. In Stage 9 (<code>Post-Merge</code>), Opus reviews landed code to catch subtle regressions.'
+            },
+            {
+                id: 'faq-3',
+                cat: 'autocraft',
+                tag: 'AI AGENTS',
+                q: 'How do I configure my AI coding agent (Cursor, Claude Code, Antigravity) with these standards?',
+                a: 'Click the <strong>⚡ Agent &amp; MCP</strong> button in the header (or press <kbd>Ctrl+K</kbd>) to open the Agent Hub. You can 1-click copy pre-built configuration files: <code>CLAUDE.md</code> for Claude Code &amp; AutoCraft, <code>.cursorrules</code> for Cursor IDE, or <code>SKILL.md</code> for Antigravity. You can also run the <code>craft-standards-mcp</code> server locally via stdio.'
+            },
+            {
+                id: 'faq-4',
+                cat: 'arch',
+                tag: 'THE KEEP RULE',
+                q: 'What is "The Keep Rule" (STD-LIB-005) and how does it prevent monorepo bloat?',
+                a: 'The Keep Rule mandates that core shared crates (<code>craft-core</code>, <code>craft-widgets</code>, <code>craft-fs</code>, <code>craft-text</code>) must remain strictly independent of application-specific domain logic. For example, <code>craft-widgets</code> must never import <code>PhotoCraft</code> canvas types or <code>FilmCraft</code> timeline code. Any helper created for a single app must stay in that app until proven necessary in at least 3 distinct suite apps.'
+            },
+            {
+                id: 'faq-5',
+                cat: 'arch',
+                tag: 'SECURITY & SANDBOX',
+                q: 'Why is direct std::fs access strictly forbidden in application components (STD-SHELL-003)?',
+                a: 'To guarantee cross-platform sandboxing and safe automated agent scripting, apps must never call raw <code>std::fs::read</code> or <code>std::fs::write</code> directly. All I/O must route through <code>craft_fs::AutomationRoot</code>, which validates against directory traversal (<code>..</code>) attacks, manages dirty file states, and enables automated document recovery.'
+            },
+            {
+                id: 'faq-6',
+                cat: 'contrib',
+                tag: 'CONTRIBUTING',
+                q: 'How do I claim an issue and format my commits per craft-contrib conventions?',
+                a: 'Per <code>STD-GOV-002</code>, contributors claim issues by posting <code>claim: #issue-id</code> in the GitHub thread. Commits must be single-concern and adhere to Conventional Commits: <code>feat(app-name): description</code> or <code>fix(crate-name): description</code>. Never mix formatting changes or dependency bumps with feature code.'
+            },
+            {
+                id: 'faq-7',
+                cat: 'arch',
+                tag: 'ACCESSIBILITY',
+                q: 'How does automated CI audit AccessKit accessibility trees (STD-A11Y-001)?',
+                a: 'Every custom widget in <code>egui</code> must register an AccessKit node with an explicit <code>Role</code> (Button, Slider, Tab), accessible name, and AAA contrast ratio (7:1). In CI, a headless test walker inspects the node tree and fails the build if interactive elements lack accessible descriptions.'
+            },
+            {
+                id: 'faq-8',
+                cat: 'contrib',
+                tag: 'RFC PROCESS',
+                q: 'How do I propose a new standard or amend an existing contract (STD-META-001)?',
+                a: 'Open an RFC issue using the <code>New Standard Proposal</code> template on GitHub. It must include an Invariant Specification table, Canonical Rust crate, and verification criteria. Once reviewed and accepted by two suite maintainers, it is committed to <code>standards/</code> and indexed by <code>xtask</code>.'
+            },
+            {
+                id: 'faq-9',
+                cat: 'i18n',
+                tag: 'I18N & RTL',
+                q: 'How do I add a new language translation to the portal?',
+                a: 'All portal translations live in modular JSON files under <code>locales/<lang-code>.json</code>. To contribute a new language, create a new JSON file (e.g. <code>locales/it.json</code>) with the standard keys. The Rust <code>xtask</code> build automatically bundles it into the single-file dashboard on next build!'
+            }
+        ];
+
+        let faqActiveCategory = 'all';
+        let faqSearchQuery = '';
+        const faqOpenSet = new Set(['faq-1', 'faq-2']);
+
+        function showFaqView(e) {
+            if (e) e.preventDefault();
+            activeSpecId = null;
+            if (window.location.hash !== '#faq') {
+                history.pushState(null, null, '#faq');
+            }
+            document.getElementById('spec-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'none';
+            const matrixView = document.getElementById('matrix-view');
+            if (matrixView) matrixView.style.display = 'none';
+            const faqView = document.getElementById('faq-view');
+            if (faqView) faqView.style.display = 'block';
+
+            const navCatalog = document.getElementById('nav-btn-catalog');
+            const navMatrix = document.getElementById('nav-btn-matrix');
+            const navFaq = document.getElementById('nav-btn-faq');
+            if (navCatalog) navCatalog.classList.remove('active');
+            if (navMatrix) navMatrix.classList.remove('active');
+            if (navFaq) navFaq.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            renderFaqView();
+            announceA11y('Viewing Frequently Asked Questions and Contributor Guide');
+        }
+
+        function toggleFaqItem(id) {
+            if (faqOpenSet.has(id)) {
+                faqOpenSet.delete(id);
+            } else {
+                faqOpenSet.add(id);
+            }
+            renderFaqView();
+        }
+
+        function filterFaqCategory(cat, btn) {
+            faqActiveCategory = cat;
+            document.querySelectorAll('#faq-category-chips .matrix-cat-chip').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderFaqView();
+        }
+
+        function handleFaqSearch(val) {
+            faqSearchQuery = val.trim().toLowerCase();
+            const clearBtn = document.getElementById('faq-search-clear-btn');
+            if (clearBtn) clearBtn.style.display = faqSearchQuery ? 'inline-block' : 'none';
+            renderFaqView();
+        }
+
+        function clearFaqSearch() {
+            const input = document.getElementById('faq-search-input');
+            if (input) input.value = '';
+            handleFaqSearch('');
+        }
+
+        function renderFaqView() {
+            const container = document.getElementById('faq-accordion-container');
+            if (!container) return;
+
+            const filtered = FAQ_DATA.filter(item => {
+                const matchesCat = faqActiveCategory === 'all' || item.cat === faqActiveCategory;
+                const matchesSearch = !faqSearchQuery || item.q.toLowerCase().includes(faqSearchQuery) || item.a.toLowerCase().includes(faqSearchQuery) || item.tag.toLowerCase().includes(faqSearchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state-card" style="display:block;margin-top:20px;">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No matching questions found</h3>
+                        <p>Try searching with different terms or select 'All FAQs'.</p>
+                        <button class="reader-btn primary" onclick="clearFaqSearch(); filterFaqCategory('all', document.getElementById('faq-cat-all'));" style="margin-top:8px;">Reset FAQ search</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => {
+                const isOpen = faqOpenSet.has(item.id);
+                return `
+                    <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}">
+                        <button class="faq-question-btn" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}">
+                            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+                                <span class="faq-tag">${item.tag}</span>
+                                <span>${item.q}</span>
+                            </div>
+                            <span class="faq-toggle-icon" aria-hidden="true">▾</span>
+                        </button>
+                        <div class="faq-answer">
+                            ${item.a}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         // =========================================================================
         // Mobile Overflow Menu Controller
         // =========================================================================

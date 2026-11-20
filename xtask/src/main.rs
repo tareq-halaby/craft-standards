@@ -412,7 +412,7 @@ fn run_html_report() {
                 <h3 class="tile-title">{title}</h3>
                 <div class="tile-desc">{body_preview}</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <div class="tile-read-btn"><span class="read-spec-text">Read specification</span> <span class="arrow-icon">→</span></div>
                     <a href="{gh}" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of {id} on GitHub">GitHub ↗</a>
                 </div>
             </article>"#
