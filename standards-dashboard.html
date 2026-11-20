@@ -1274,36 +1274,59 @@
         .matrix-kpi-bar {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 14px 24px;
-            background: rgba(255, 255, 255, 0.02);
-            border-bottom: 1px solid var(--sl-color-border);
+            gap: 12px;
+            padding: 0;
+            background: transparent;
+            border: none;
+            margin-bottom: 28px;
         }
         @media (min-width: 768px) {
             .matrix-kpi-bar {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 12px;
-                padding: 14px 24px;
+                gap: 16px;
+                padding: 0;
+                margin-bottom: 32px;
             }
         }
         .matrix-kpi-card {
             background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
-            border-radius: 8px;
-            padding: 10px 14px;
+            border-radius: 12px;
+            padding: 16px 18px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        @media (min-width: 768px) {
+            .matrix-kpi-card {
+                padding: 20px 22px;
+            }
+        }
+        .matrix-kpi-card:hover {
+            border-color: rgba(56, 139, 253, 0.4);
+            transform: translateY(-2px);
+            background: var(--sl-color-card-hover);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
         .matrix-kpi-val {
             font-family: var(--font-display);
-            font-size: 18px;
+            font-size: 22px;
             font-weight: 700;
             color: #FFF;
+            line-height: 1.2;
+        }
+        @media (min-width: 768px) {
+            .matrix-kpi-val {
+                font-size: 26px;
+            }
         }
         .matrix-kpi-val.highlight { color: #3FB950; }
         .matrix-kpi-lbl {
-            font-size: 10.5px;
+            font-size: 12px;
             color: var(--sl-color-text-muted);
-            margin-top: 2px;
+            margin-top: 6px;
             font-family: var(--font-mono);
+            letter-spacing: -0.01em;
         }
 
         /* Matrix Controls Toolbar */
@@ -2545,40 +2568,43 @@
         .matrix-view-switcher-bar {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
         .matrix-pivot-modes {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
             background: #11141D;
             border: 1px solid var(--sl-color-border);
-            padding: 4px;
-            border-radius: 8px;
+            padding: 5px;
+            border-radius: 10px;
         }
         .matrix-pivot-btn {
             background: transparent;
             border: none;
             color: var(--sl-color-text-muted);
-            padding: 7px 14px;
-            border-radius: 6px;
-            font-size: 12.5px;
+            padding: 8px 16px;
+            border-radius: 7px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.15s;
-            font-family: var(--font-sans);
+            transition: all 0.15s ease;
+            font-family: inherit;
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
-        .matrix-pivot-btn:hover { color: #FFF; }
+        .matrix-pivot-btn:hover {
+            color: #FFF;
+            background: rgba(255, 255, 255, 0.05);
+        }
         .matrix-pivot-btn.active {
             background: #1F6FEB;
             color: #FFF;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgba(31, 111, 235, 0.4);
         }
 
         /* Sub-view 1: App Scorecards */
