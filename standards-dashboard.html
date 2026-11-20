@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -44,6 +44,7 @@
             margin: 0;
             padding: 0;
         }
+
         html, body {
             width: 100%;
             max-width: 100%;
@@ -57,7 +58,64 @@
             text-rendering: optimizeLegibility;
         }
 
-        /* Global Header (Mobile-First) */
+        /* a11y: Screen reader only utility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* a11y: Skip to content link conforming to STD-A11Y-002 */
+        .skip-to-content {
+            position: absolute;
+            top: -60px;
+            inset-inline-start: 16px;
+            background: #1F6FEB;
+            color: #FFF;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            z-index: 1000;
+            transition: top 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+        .skip-to-content:focus {
+            top: 12px;
+            outline: 2px solid #FFF;
+            outline-offset: 2px;
+        }
+
+        /* a11y: Standardized visible focus rings conforming to STD-A11Y-002 */
+        :focus-visible {
+            outline: 2px solid var(--sl-color-accent);
+            outline-offset: 2px;
+        }
+
+        /* i18n RTL Support conforming to STD-I18N-001 */
+        [dir="rtl"] {
+            text-align: right;
+        }
+        [dir="rtl"] .arrow-icon,
+        [dir="rtl"] .tile-read-btn span,
+        [dir="rtl"] .pagination-arrow {
+            transform: scaleX(-1);
+        }
+        [dir="rtl"] .search-icon {
+            left: auto;
+            right: 12px;
+        }
+        [dir="rtl"] .search-input {
+            padding: 0 38px 0 16px;
+        }
+
+        /* Global Header (Mobile-First, a11y, i18n) */
         .wiki-header {
             position: sticky;
             top: 0;
@@ -88,6 +146,7 @@
             font-size: 16px;
             letter-spacing: -0.01em;
             flex-shrink: 0;
+            border-radius: 6px;
         }
         @media (min-width: 768px) {
             .wiki-brand { font-size: 18px; gap: 12px; }
@@ -96,7 +155,7 @@
         @media (min-width: 768px) {
             .wiki-brand img { width: 32px; height: 32px; }
         }
-        .wiki-brand span { color: var(--sl-color-accent); font-weight: 400; margin-left: 2px; }
+        .wiki-brand span { color: var(--sl-color-accent); font-weight: 400; margin-inline-start: 2px; }
         .wiki-brand-badge {
             font-size: 10px;
             font-family: var(--font-mono);
@@ -116,10 +175,35 @@
         .wiki-header-nav {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         @media (min-width: 768px) {
-            .wiki-header-nav { gap: 14px; }
+            .wiki-header-nav { gap: 12px; }
+        }
+
+        /* i18n Language Selector Toggle */
+        .lang-picker {
+            position: relative;
+            display: inline-block;
+        }
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--sl-color-border);
+            color: var(--sl-color-white);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+        }
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--sl-color-accent);
         }
 
         .wiki-header-link {
@@ -274,7 +358,7 @@
             .wiki-stat-label { font-size: 12px; }
         }
 
-        /* Controls Bar (Mobile-first responsive search & horizontally scrolling filters) */
+        /* Controls Bar (Search + Horizontally Scrollable Filters) */
         .controls-bar {
             display: flex;
             flex-direction: column;
@@ -319,14 +403,14 @@
         }
         .search-icon {
             position: absolute;
-            left: 12px;
+            inset-inline-start: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--sl-color-text-muted);
             pointer-events: none;
         }
 
-        /* Filter Chips: Mobile Horizontally Scrollable Strip */
+        /* Filter Chips Strip */
         .filter-group {
             display: flex;
             flex-wrap: nowrap;
@@ -334,16 +418,15 @@
             -webkit-overflow-scrolling: touch;
             gap: 8px;
             padding-bottom: 4px;
-            margin: 0 -16px;
-            padding-left: 16px;
-            padding-right: 16px;
+            margin-inline: -16px;
+            padding-inline: 16px;
             scrollbar-width: none;
         }
         .filter-group::-webkit-scrollbar { display: none; }
         @media (min-width: 900px) {
             .filter-group {
-                margin: 0;
-                padding: 0;
+                margin-inline: 0;
+                padding-inline: 0;
                 flex-wrap: wrap;
                 overflow-x: visible;
             }
@@ -373,6 +456,7 @@
             color: var(--sl-color-white);
             background: var(--sl-color-card);
         }
+        .filter-chip[aria-pressed="true"],
         .filter-chip.active {
             background: var(--sl-color-white);
             color: var(--sl-color-bg);
@@ -544,7 +628,7 @@
         }
         .tile-gh-link:hover { color: var(--sl-color-white); }
 
-        /* Specification Reader View (Full Mobile-First Layout) */
+        /* Specification Reader View (Full a11y, i18n, Mobile-First) */
         #spec-view { display: none; }
         
         .reader-breadcrumb-bar {
@@ -574,7 +658,7 @@
         .reader-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             width: 100%;
         }
         @media (min-width: 768px) {
@@ -585,7 +669,7 @@
             background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
             color: var(--sl-color-text);
-            padding: 6px 12px;
+            padding: 7px 14px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 500;
@@ -594,7 +678,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
             transition: all 0.15s;
             white-space: nowrap;
         }
@@ -611,6 +695,7 @@
         }
         .reader-btn.primary:hover { background: #388BFD; }
 
+        /* W3C Accessible Breadcrumbs Pattern */
         .reader-breadcrumbs {
             display: flex;
             align-items: center;
@@ -627,13 +712,30 @@
         @media (min-width: 768px) {
             .reader-breadcrumbs { font-size: 13px; gap: 8px; order: 1; overflow-x: visible; }
         }
+        .reader-breadcrumbs ol {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 6px;
+            padding: 0;
+            margin: 0;
+        }
+        .reader-breadcrumbs li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
         .reader-breadcrumbs a {
             color: var(--sl-color-accent);
             text-decoration: none;
+            border-radius: 3px;
         }
         .reader-breadcrumbs a:hover { text-decoration: underline; }
         .reader-breadcrumbs .sep { color: var(--sl-color-text-muted); }
-        .reader-breadcrumbs .current { color: var(--sl-color-white); font-weight: 600; }
+        .reader-breadcrumbs [aria-current="page"] {
+            color: var(--sl-color-white);
+            font-weight: 600;
+        }
 
         .reader-wrapper {
             width: 100%;
@@ -671,6 +773,7 @@
             line-height: 1.25;
             margin-bottom: 16px;
             word-wrap: break-word;
+            outline: none;
         }
         .reader-tags-grid {
             display: flex;
@@ -690,7 +793,7 @@
         @media (min-width: 768px) {
             .reader-pill { font-size: 12px; padding: 6px 12px; }
         }
-        .reader-pill strong { color: var(--sl-color-text-muted); margin-right: 4px; font-weight: 500; }
+        .reader-pill strong { color: var(--sl-color-text-muted); margin-inline-end: 4px; font-weight: 500; }
         .reader-pill code { font-family: var(--font-mono); color: #58A6FF; font-size: 11px; word-break: break-all; }
         .app-badge {
             display: inline-block;
@@ -737,11 +840,11 @@
             .markdown-body h3 { font-size: 17px; }
         }
         .markdown-body p, .markdown-body ul, .markdown-body ol { margin-bottom: 16px; }
-        .markdown-body ul, .markdown-body ol { padding-left: 20px; }
+        .markdown-body ul, .markdown-body ol { padding-inline-start: 20px; }
         .markdown-body li { margin-bottom: 4px; }
         .markdown-body hr { border: 0; border-top: 1px solid var(--sl-color-border); margin: 24px 0; }
         
-        /* Code blocks: mobile scrollable and responsive */
+        /* Code blocks */
         .markdown-body pre {
             position: relative;
             background: #06080C;
@@ -784,7 +887,7 @@
         .markdown-body th, .markdown-body td {
             border: 1px solid var(--sl-color-border);
             padding: 8px 10px;
-            text-align: left;
+            text-align: start;
             white-space: nowrap;
         }
         @media (min-width: 768px) {
@@ -798,7 +901,7 @@
         .markdown-body tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
 
         .markdown-body blockquote {
-            border-left: 3px solid var(--sl-color-accent);
+            border-inline-start: 3px solid var(--sl-color-accent);
             padding: 8px 14px;
             margin: 16px 0;
             background: var(--sl-color-accent-soft);
@@ -820,41 +923,140 @@
         .code-copy-btn {
             position: absolute;
             top: 6px;
-            right: 6px;
+            inset-inline-end: 6px;
             background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
             color: var(--sl-color-text-muted);
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 4px;
-            font-size: 10px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.15s;
         }
         .code-copy-btn:hover { color: #FFF; border-color: var(--sl-color-accent); }
 
-        /* Reader footer navigation (Stacked on phone, row on desktop) */
-        .reader-footer-nav {
+        /* Next / Prev & Back To Catalog Component (World-Class UI/UX/a11y/i18n) */
+        .reader-nav-section {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--sl-color-border);
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            border-top: 1px solid var(--sl-color-border);
-            margin-top: 36px;
-            padding-top: 20px;
+            gap: 20px;
+        }
+
+        /* Center Return Action */
+        .return-catalog-row {
+            display: flex;
+            justify-content: center;
+        }
+        .return-catalog-btn {
+            background: var(--sl-color-card);
+            border: 1px solid var(--sl-color-border);
+            color: var(--sl-color-text);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .return-catalog-btn:hover {
+            background: var(--sl-color-card-hover);
+            border-color: var(--sl-color-accent);
+            color: var(--sl-color-white);
+            transform: translateY(-1px);
+        }
+        .kbd-hint {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 1px 5px;
+            border-radius: 4px;
+            color: var(--sl-color-text-muted);
+        }
+
+        /* Dual Rich Pagination Cards (Like Astro Starlight / VitePress) */
+        .reader-pagination {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
         @media (min-width: 600px) {
-            .reader-footer-nav {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 56px;
-                padding-top: 28px;
+            .reader-pagination {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
             }
         }
-        .reader-footer-nav .reader-btn {
-            width: 100%;
+
+        .pag-card {
+            background: var(--sl-color-card);
+            border: 1px solid var(--sl-color-border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+            position: relative;
+            min-width: 0;
         }
-        @media (min-width: 600px) {
-            .reader-footer-nav .reader-btn { width: auto; }
+        .pag-card:hover {
+            border-color: rgba(255, 255, 255, 0.25);
+            background: var(--sl-color-card-hover);
+            transform: translateY(-2px);
+        }
+        .pag-card.prev-card {
+            text-align: start;
+        }
+        .pag-card.next-card {
+            text-align: end;
+        }
+        .pag-label {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--sl-color-text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pag-card.next-card .pag-label {
+            justify-content: flex-end;
+        }
+        .pag-title {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--sl-color-white);
+            line-height: 1.35;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pagination-arrow {
+            font-size: 14px;
+            transition: transform 0.15s;
+        }
+        .pag-card.prev-card:hover .pagination-arrow {
+            transform: translateX(-3px);
+        }
+        .pag-card.next-card:hover .pagination-arrow {
+            transform: translateX(3px);
+        }
+        .pag-card[aria-disabled="true"] {
+            opacity: 0.35;
+            pointer-events: none;
+            cursor: default;
         }
 
         /* Site Footer */
@@ -934,23 +1136,34 @@
     </style>
 </head>
 <body>
+    <!-- a11y: Skip to main content -->
+    <a href="#main-content" class="skip-to-content" id="skip-link">Skip to main content</a>
+
+    <!-- a11y: Polite screen reader live region -->
+    <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
     <!-- HEADER -->
-    <header class="wiki-header">
-        <a class="wiki-brand" href="#" onclick="showDashboard(event)">
-            <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo">
-            <span>ArtCraft <em>Standards</em></span>
+    <header class="wiki-header" role="banner">
+        <a class="wiki-brand" href="#" onclick="showDashboard(event)" aria-label="ArtCraft Standards Home">
+            <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="32" height="32">
+            <span>ArtCraft <em id="i18n-brand-sub">Standards</em></span>
             <span class="wiki-brand-badge">portal</span>
         </a>
-        <nav class="wiki-header-nav">
+        <nav class="wiki-header-nav" role="navigation" aria-label="Main Navigation">
+            <div class="lang-picker">
+                <button class="lang-btn" onclick="toggleLanguage()" aria-label="Change Language" id="lang-toggle-btn">
+                    <span id="current-lang-code">EN</span>
+                </button>
+            </div>
             <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                 <span class="link-text">Wiki</span>
             </a>
-            <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
+            <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community" aria-label="ArtCraft Discord Community">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
             </a>
-            <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository" aria-label="GitHub Repository">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
                 <span class="link-text">GitHub</span>
             </a>
             <a class="wiki-header-cta" href="https://getartcraft.com" target="_blank">
@@ -960,62 +1173,62 @@
     </header>
 
     <!-- DASHBOARD VIEW -->
-    <main id="dashboard-view" class="main-container">
+    <main id="dashboard-view" class="main-container" role="main">
         <!-- Hero Section -->
-        <section class="wiki-hero">
-            <div class="wiki-eyebrow">Universal UX Invariants &amp; Ergonomic Contracts</div>
-            <h1 class="wiki-title">Standards for the <em>20+ ArtCraft</em> Creative Suite</h1>
-            <p class="wiki-desc">
+        <section class="wiki-hero" aria-labelledby="hero-title" id="main-content" tabindex="-1">
+            <div class="wiki-eyebrow" id="i18n-hero-eyebrow">Universal UX Invariants &amp; Ergonomic Contracts</div>
+            <h1 class="wiki-title" id="hero-title">Standards for the <em id="i18n-hero-em">20+ ArtCraft</em> Creative Suite</h1>
+            <p class="wiki-desc" id="i18n-hero-desc">
                 Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.
             </p>
         </section>
 
         <!-- Stats Bar -->
-        <div class="wiki-stats-bar">
+        <section class="wiki-stats-bar" aria-label="Ecosystem Metrics">
             <div class="wiki-stat-card">
                 <div class="wiki-stat-num">20</div>
-                <div class="wiki-stat-label">Active Standards</div>
+                <div class="wiki-stat-label" id="i18n-stat-standards">Active Standards</div>
             </div>
             <div class="wiki-stat-card">
                 <div class="wiki-stat-num">20+</div>
-                <div class="wiki-stat-label">Governed Apps</div>
+                <div class="wiki-stat-label" id="i18n-stat-apps">Governed Apps</div>
             </div>
             <div class="wiki-stat-card">
                 <div class="wiki-stat-num">100%</div>
-                <div class="wiki-stat-label">CI Verification</div>
+                <div class="wiki-stat-label" id="i18n-stat-ci">CI Verification</div>
             </div>
             <div class="wiki-stat-card">
                 <div class="wiki-stat-num">Active</div>
-                <div class="wiki-stat-label">AutoCraft MCP</div>
+                <div class="wiki-stat-label" id="i18n-stat-mcp">AutoCraft MCP</div>
             </div>
-        </div>
+        </section>
 
         <!-- Controls Bar -->
-        <div class="controls-bar">
+        <section class="controls-bar" aria-label="Catalog Filtering & Search" role="search">
             <div class="search-wrapper">
-                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="search" class="search-input" placeholder="Search standards, shortcuts, crates..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="search" id="search" class="search-input" placeholder="Search standards, shortcuts, crates..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="searchbox" aria-label="Search specifications" aria-controls="grid" aria-describedby="visible-count">
             </div>
-            <div class="filter-group">
-                <button class="filter-chip active" onclick="filterCategory('all', this)">All Standards</button>
-                <button class="filter-chip" onclick="filterCategory('interaction', this)">Interaction</button>
-                <button class="filter-chip" onclick="filterCategory('navigation', this)">Navigation</button>
-                <button class="filter-chip" onclick="filterCategory('accessibility', this)">Accessibility</button>
-                <button class="filter-chip" onclick="filterCategory('internationalization', this)">i18n / RTL</button>
-                <button class="filter-chip" onclick="filterCategory('shell', this)">Shell &amp; Chrome</button>
-                <button class="filter-chip" onclick="filterCategory('unified-libs', this)">Unified Libs</button>
+            <div class="filter-group" role="toolbar" aria-label="Filter standards by category">
+                <button class="filter-chip active" onclick="filterCategory('all', this)" aria-pressed="true" id="chip-all">All Standards</button>
+                <button class="filter-chip" onclick="filterCategory('interaction', this)" aria-pressed="false" id="chip-interaction">Interaction</button>
+                <button class="filter-chip" onclick="filterCategory('navigation', this)" aria-pressed="false" id="chip-navigation">Navigation</button>
+                <button class="filter-chip" onclick="filterCategory('accessibility', this)" aria-pressed="false" id="chip-accessibility">Accessibility</button>
+                <button class="filter-chip" onclick="filterCategory('internationalization', this)" aria-pressed="false" id="chip-i18n">i18n / RTL</button>
+                <button class="filter-chip" onclick="filterCategory('shell', this)" aria-pressed="false" id="chip-shell">Shell &amp; Chrome</button>
+                <button class="filter-chip" onclick="filterCategory('unified-libs', this)" aria-pressed="false" id="chip-libs">Unified Libs</button>
             </div>
-        </div>
+        </section>
 
         <!-- Section Heading -->
         <div class="wiki-section-heading">
-            <h2>Specifications Catalog</h2>
+            <h2 id="i18n-cat-heading">Specifications Catalog</h2>
             <span class="count" id="visible-count">Showing 20 specifications</span>
         </div>
 
         <!-- Standards Grid -->
-        <div class="standards-grid" id="grid">
-<article class="standard-tile" data-category="accessibility" onclick="openSpec('STD-A11Y-001')">
+        <div class="standards-grid" id="grid" role="region" aria-label="Specifications List">
+<article class="standard-tile" data-category="accessibility" tabindex="0" role="button" aria-label="Specification STD-A11Y-001: AccessKit Node Tagging and Automated CI Accessibility Audit" onclick="openSpec('STD-A11Y-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-A11Y-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-A11Y-001</span>
                     <span class="tile-cat-badge cat-accessibility">accessibility</span>
@@ -1023,10 +1236,10 @@
                 <h3 class="tile-title">AccessKit Node Tagging and Automated CI Accessibility Audit</h3>
                 <div class="tile-desc"># STD-A11Y-001: AccessKit Node Tagging and Automated CI Accessibility Audit<br><br>## 1. Abstract<br>Assistive technologies (screen readers, speech input, screen magnifiers) rely on accessibility trees generated by AccessKit. Custom widgets in egui that are allocated via `ui.interact` or `allocate_exact_size` produce empty, unnamed nodes unless explicitly annotated. This standard specifies mandatory accessibility tagging and automated CI testing.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/03-accessibility/STD-A11Y-001-accesskit-naming-audit.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/03-accessibility/STD-A11Y-001-accesskit-naming-audit.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-A11Y-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="accessibility" onclick="openSpec('STD-A11Y-002')">
+            </article><article class="standard-tile" data-category="accessibility" tabindex="0" role="button" aria-label="Specification STD-A11Y-002: Keyboard Focus Rings, Contrast Ratios, and Reduced Motion" onclick="openSpec('STD-A11Y-002')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-A11Y-002');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-A11Y-002</span>
                     <span class="tile-cat-badge cat-accessibility">accessibility</span>
@@ -1034,10 +1247,10 @@
                 <h3 class="tile-title">Keyboard Focus Rings, Contrast Ratios, and Reduced Motion</h3>
                 <div class="tile-desc"># STD-A11Y-002: Keyboard Focus Rings, Contrast Ratios, and Reduced Motion<br><br>## 1. Abstract<br>Specifies visual accessibility standards including focus indicators, contrast minimums, and system preference responsiveness.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/03-accessibility/STD-A11Y-002-keyboard-focus-and-contrast.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/03-accessibility/STD-A11Y-002-keyboard-focus-and-contrast.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-A11Y-002 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="shell" onclick="openSpec('STD-CLIP-001')">
+            </article><article class="standard-tile" data-category="shell" tabindex="0" role="button" aria-label="Specification STD-CLIP-001: Cross-Application Drag-and-Drop, Clipboard Data Interchange, and External File Ingestion" onclick="openSpec('STD-CLIP-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-CLIP-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-CLIP-001</span>
                     <span class="tile-cat-badge cat-shell">shell</span>
@@ -1045,10 +1258,10 @@
                 <h3 class="tile-title">Cross-Application Drag-and-Drop, Clipboard Data Interchange, and External File Ingestion</h3>
                 <div class="tile-desc"># STD-CLIP-001: Cross-Application Drag-and-Drop, Clipboard Data Interchange, and External File Ingestion<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Place linked documents](https://craft.wiki/apps/vectorcraft/place-linked-documents/), users routinely copy and drag graphical assets, type, and documents between applications (e.g. copying paths from VectorCraft into PhotoCraft as smart vectors). This standard formalizes clipboard MIME types, drop targets, and cross-suite asset exchange.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-CLIP-001-drag-drop-and-clipboard-exchange.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-CLIP-001-drag-drop-and-clipboard-exchange.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-CLIP-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="shell" onclick="openSpec('STD-CMD-001')">
+            </article><article class="standard-tile" data-category="shell" tabindex="0" role="button" aria-label="Specification STD-CMD-001: Universal Application Command Taxonomy, CLI Flags, and Headless MCP Protocol" onclick="openSpec('STD-CMD-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-CMD-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-CMD-001</span>
                     <span class="tile-cat-badge cat-shell">shell</span>
@@ -1056,10 +1269,10 @@
                 <h3 class="tile-title">Universal Application Command Taxonomy, CLI Flags, and Headless MCP Protocol</h3>
                 <div class="tile-desc"># STD-CMD-001: Universal Application Command Taxonomy, CLI Flags, and Headless MCP Protocol<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Connect an AI Assistant](https://craft.wiki/apps/connect-ai/overview/), every ArtCraft application provides an autonomous CLI binary (`<app>-cli`, such as `photocraft-cli`, `vectorcraft-cli`, `wordcraft-cli`) implementing the Model Context Protocol (MCP). This standard specifies uniform CLI invocation flags, headless vs windowed execution lifecycles, and a standardized core command ID taxonomy.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-CMD-001-universal-command-taxonomy.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-CMD-001-universal-command-taxonomy.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-CMD-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="interaction" onclick="openSpec('STD-COLOR-001')">
+            </article><article class="standard-tile" data-category="interaction" tabindex="0" role="button" aria-label="Specification STD-COLOR-001: Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics" onclick="openSpec('STD-COLOR-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-COLOR-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-COLOR-001</span>
                     <span class="tile-cat-badge cat-interaction">interaction</span>
@@ -1067,10 +1280,10 @@
                 <h3 class="tile-title">Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics</h3>
                 <div class="tile-desc"># STD-COLOR-001: Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Prepare artwork for CMYK print](https://craft.wiki/apps/vectorcraft/prepare-artwork-for-cmyk-print/), color manipulation across graphics and design apps must be consistent, color-space aware, and ergonomically rapid. This standard dictates color picker interaction gestures, hex code parsing resilience, and color management soft-proofing invariants.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-COLOR-001-color-space-and-picker-ergonomics.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-COLOR-001-color-space-and-picker-ergonomics.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-COLOR-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="internationalization" onclick="openSpec('STD-I18N-001')">
+            </article><article class="standard-tile" data-category="internationalization" tabindex="0" role="button" aria-label="Specification STD-I18N-001: Full Shell Direction Mirroring and Unicode BiDi Text Galley Shaping" onclick="openSpec('STD-I18N-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-I18N-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-I18N-001</span>
                     <span class="tile-cat-badge cat-internationalization">internationalization</span>
@@ -1078,10 +1291,10 @@
                 <h3 class="tile-title">Full Shell Direction Mirroring and Unicode BiDi Text Galley Shaping</h3>
                 <div class="tile-desc"># STD-I18N-001: Full Shell Direction Mirroring and Unicode BiDi Text Galley Shaping<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Set right-to-left and Indic type](https://craft.wiki/apps/vectorcraft/set-right-to-left-and-indic-type/), Right-to-Left (RTL) scripts (Arabic, Hebrew, Persian, Urdu) require complete layout mirroring of the desktop shell, Indic typographic panel options, and bidirectional text shaping. This standard formalizes shell mirroring, typography options, and Unicode BiDi classification.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/04-internationalization/STD-I18N-001-shell-mirroring-and-rtl.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/04-internationalization/STD-I18N-001-shell-mirroring-and-rtl.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-I18N-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="internationalization" onclick="openSpec('STD-I18N-002')">
+            </article><article class="standard-tile" data-category="internationalization" tabindex="0" role="button" aria-label="Specification STD-I18N-002: Locale-Aware Numeric Formatting, Decimal Separators, and Measurement Units" onclick="openSpec('STD-I18N-002')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-I18N-002');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-I18N-002</span>
                     <span class="tile-cat-badge cat-internationalization">internationalization</span>
@@ -1089,10 +1302,10 @@
                 <h3 class="tile-title">Locale-Aware Numeric Formatting, Decimal Separators, and Measurement Units</h3>
                 <div class="tile-desc"># STD-I18N-002: Locale-Aware Numeric Formatting, Decimal Separators, and Measurement Units<br><br>## 1. Abstract<br>Specifies input parsing and display formatting for numbers, percentages, dimensions, and measurement units across international locales.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/04-internationalization/STD-I18N-002-number-and-locale-formatting.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/04-internationalization/STD-I18N-002-number-and-locale-formatting.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-I18N-002 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="interaction" onclick="openSpec('STD-INPUT-001')">
+            </article><article class="standard-tile" data-category="interaction" tabindex="0" role="button" aria-label="Specification STD-INPUT-001: Multi-Tool Toolbar Slot Cycling & Gesture Ergonomics" onclick="openSpec('STD-INPUT-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-INPUT-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-INPUT-001</span>
                     <span class="tile-cat-badge cat-interaction">interaction</span>
@@ -1100,10 +1313,10 @@
                 <h3 class="tile-title">Multi-Tool Toolbar Slot Cycling & Gesture Ergonomics</h3>
                 <div class="tile-desc"># STD-INPUT-001: Multi-Tool Toolbar Slot Cycling & Gesture Ergonomics<br><br>## 1. Abstract<br>In creative applications with nested tool slots (Photoshop, Illustrator, InDesign, After Effects), toolbar buttons often represent a group of tools. This standard specifies how users interact with multi-tool slot buttons via mouse clicks, hold gestures, and modifier keys.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-001-tool-slot-cycling.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-001-tool-slot-cycling.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-INPUT-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="interaction" onclick="openSpec('STD-INPUT-002')">
+            </article><article class="standard-tile" data-category="interaction" tabindex="0" role="button" aria-label="Specification STD-INPUT-002: Transient and Spring-Loaded Tool Invariants" onclick="openSpec('STD-INPUT-002')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-INPUT-002');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-INPUT-002</span>
                     <span class="tile-cat-badge cat-interaction">interaction</span>
@@ -1111,10 +1324,10 @@
                 <h3 class="tile-title">Transient and Spring-Loaded Tool Invariants</h3>
                 <div class="tile-desc"># STD-INPUT-002: Transient and Spring-Loaded Tool Invariants<br><br>## 1. Abstract<br>Spring-loaded (transient) tools allow users to temporarily activate a navigation or inspection tool (such as Hand or Zoom) while another creative tool is active, returning immediately to the original tool upon releasing the key.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-002-transient-spring-tools.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-002-transient-spring-tools.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-INPUT-002 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="interaction" onclick="openSpec('STD-INPUT-003')">
+            </article><article class="standard-tile" data-category="interaction" tabindex="0" role="button" aria-label="Specification STD-INPUT-003: Canvas Pan, Zoom Physics, and Viewport Invariants" onclick="openSpec('STD-INPUT-003')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-INPUT-003');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-INPUT-003</span>
                     <span class="tile-cat-badge cat-interaction">interaction</span>
@@ -1122,10 +1335,10 @@
                 <h3 class="tile-title">Canvas Pan, Zoom Physics, and Viewport Invariants</h3>
                 <div class="tile-desc"># STD-INPUT-003: Canvas Pan, Zoom Physics, and Viewport Invariants<br><br>## 1. Abstract<br>Specifies mouse wheel, pointer drag, and double-click behaviors for document canvas navigation.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-003-canvas-pan-zoom.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-003-canvas-pan-zoom.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-INPUT-003 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="interaction" onclick="openSpec('STD-INPUT-004')">
+            </article><article class="standard-tile" data-category="interaction" tabindex="0" role="button" aria-label="Specification STD-INPUT-004: Selection and Bounding Box Transform Modifiers" onclick="openSpec('STD-INPUT-004')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-INPUT-004');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-INPUT-004</span>
                     <span class="tile-cat-badge cat-interaction">interaction</span>
@@ -1133,10 +1346,10 @@
                 <h3 class="tile-title">Selection and Bounding Box Transform Modifiers</h3>
                 <div class="tile-desc"># STD-INPUT-004: Selection and Bounding Box Transform Modifiers<br><br>## 1. Abstract<br>Defines standard modifier behaviors when selecting, transforming, or duplicating objects and pixel selections on canvas.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-004-selection-modifiers.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/01-interaction/STD-INPUT-004-selection-modifiers.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-INPUT-004 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="unified-libs" onclick="openSpec('STD-LIB-001')">
+            </article><article class="standard-tile" data-category="unified-libs" tabindex="0" role="button" aria-label="Specification STD-LIB-001: Universal Cross-Platform Printing and Prepress Pipeline" onclick="openSpec('STD-LIB-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-LIB-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-LIB-001</span>
                     <span class="tile-cat-badge cat-unified-libs">unified-libs</span>
@@ -1144,10 +1357,10 @@
                 <h3 class="tile-title">Universal Cross-Platform Printing and Prepress Pipeline</h3>
                 <div class="tile-desc"># STD-LIB-001: Universal Cross-Platform Printing and Prepress Pipeline<br><br>## 1. Abstract<br>Printing across desktop operating systems involves disparate backends: Windows GDI / XPS on Windows, CUPS on Linux and FreeBSD, and CoreGraphics/NSPrintOperation on macOS. This standard dictates that all ArtCraft applications must route document output through `craft-libs::craft-print` rather than writing platform-specific print code.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-001-printing-pipeline.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-001-printing-pipeline.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-LIB-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="unified-libs" onclick="openSpec('STD-LIB-002')">
+            </article><article class="standard-tile" data-category="unified-libs" tabindex="0" role="button" aria-label="Specification STD-LIB-002: Keymap Architecture, Platform Chord Normalization, and Overrides" onclick="openSpec('STD-LIB-002')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-LIB-002');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-LIB-002</span>
                     <span class="tile-cat-badge cat-unified-libs">unified-libs</span>
@@ -1155,10 +1368,10 @@
                 <h3 class="tile-title">Keymap Architecture, Platform Chord Normalization, and Overrides</h3>
                 <div class="tile-desc"># STD-LIB-002: Keymap Architecture, Platform Chord Normalization, and Overrides<br><br>## 1. Abstract<br>Specifies the canonical keymap representation used across ArtCraft applications via `craft-libs::craft-keymap`.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-002-keymap-architecture.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-002-keymap-architecture.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-LIB-002 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="unified-libs" onclick="openSpec('STD-LIB-003')">
+            </article><article class="standard-tile" data-category="unified-libs" tabindex="0" role="button" aria-label="Specification STD-LIB-003: UI Widget Primitives, Design Tokens, and Docking Systems" onclick="openSpec('STD-LIB-003')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-LIB-003');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-LIB-003</span>
                     <span class="tile-cat-badge cat-unified-libs">unified-libs</span>
@@ -1166,10 +1379,10 @@
                 <h3 class="tile-title">UI Widget Primitives, Design Tokens, and Docking Systems</h3>
                 <div class="tile-desc"># STD-LIB-003: UI Widget Primitives, Design Tokens, and Docking Systems<br><br>## 1. Abstract<br>Specifies core UI component contracts provided by `craft-libs::craft-ui`.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-003-ui-widget-primitives.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/06-unified-libs/STD-LIB-003-ui-widget-primitives.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-LIB-003 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="navigation" onclick="openSpec('STD-NAV-001')">
+            </article><article class="standard-tile" data-category="navigation" tabindex="0" role="button" aria-label="Specification STD-NAV-001: Universal Document Tab Navigation, Closure, and Lifecycle Ergonomics" onclick="openSpec('STD-NAV-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-NAV-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-NAV-001</span>
                     <span class="tile-cat-badge cat-navigation">navigation</span>
@@ -1177,10 +1390,10 @@
                 <h3 class="tile-title">Universal Document Tab Navigation, Closure, and Lifecycle Ergonomics</h3>
                 <div class="tile-desc"># STD-NAV-001: Universal Document Tab Navigation, Closure, and Lifecycle Ergonomics<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Work in several windows](https://craft.wiki/apps/vectorcraft/work-in-several-windows/), power users manage dozens of active documents across tab strips. This standard specifies universal tab switching shortcuts, closing mechanics (`Ctrl+W`), tab reopening (`Ctrl+Shift+T`), pointer gestures (middle-click to close), and contextual menu actions across all ArtCraft applications.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-001-document-tab-switching.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-001-document-tab-switching.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-NAV-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="navigation" onclick="openSpec('STD-NAV-002')">
+            </article><article class="standard-tile" data-category="navigation" tabindex="0" role="button" aria-label="Specification STD-NAV-002: Workspace Panel Visibility and Dock Collapsing Toggles" onclick="openSpec('STD-NAV-002')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-NAV-002');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-NAV-002</span>
                     <span class="tile-cat-badge cat-navigation">navigation</span>
@@ -1188,10 +1401,10 @@
                 <h3 class="tile-title">Workspace Panel Visibility and Dock Collapsing Toggles</h3>
                 <div class="tile-desc"># STD-NAV-002: Workspace Panel Visibility and Dock Collapsing Toggles<br><br>## 1. Abstract<br>Specifies global hotkeys for clearing the workspace to focus on the document canvas.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-002-workspace-panel-toggles.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-002-workspace-panel-toggles.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-NAV-002 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="navigation" onclick="openSpec('STD-NAV-003')">
+            </article><article class="standard-tile" data-category="navigation" tabindex="0" role="button" aria-label="Specification STD-NAV-003: Arrow-Key Value Scrubbing and Step Multipliers" onclick="openSpec('STD-NAV-003')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-NAV-003');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-NAV-003</span>
                     <span class="tile-cat-badge cat-navigation">navigation</span>
@@ -1199,10 +1412,10 @@
                 <h3 class="tile-title">Arrow-Key Value Scrubbing and Step Multipliers</h3>
                 <div class="tile-desc"># STD-NAV-003: Arrow-Key Value Scrubbing and Step Multipliers<br><br>## 1. Abstract<br>Specifies keyboard scrubbing rules for numeric input fields, sliders, and timeline position indicators.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-003-arrow-key-scrubbing.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-NAV-003-arrow-key-scrubbing.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-NAV-003 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="shell" onclick="openSpec('STD-SHELL-001')">
+            </article><article class="standard-tile" data-category="shell" tabindex="0" role="button" aria-label="Specification STD-SHELL-001: Modal and Modeless Dialog Lifecycles, Dismissal, and Button Orders" onclick="openSpec('STD-SHELL-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-SHELL-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-SHELL-001</span>
                     <span class="tile-cat-badge cat-shell">shell</span>
@@ -1210,10 +1423,10 @@
                 <h3 class="tile-title">Modal and Modeless Dialog Lifecycles, Dismissal, and Button Orders</h3>
                 <div class="tile-desc"># STD-SHELL-001: Modal and Modeless Dialog Lifecycles, Dismissal, and Button Orders<br><br>## 1. Abstract<br>Specifies dialog behavior, keyboard escape mechanisms, and platform-compliant button ordering.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-SHELL-001-dialog-lifecycle.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-SHELL-001-dialog-lifecycle.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-SHELL-001 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="shell" onclick="openSpec('STD-SHELL-002')">
+            </article><article class="standard-tile" data-category="shell" tabindex="0" role="button" aria-label="Specification STD-SHELL-002: Document Dirty State, Unsaved Changes Prompt, and Recovery Lifecycles" onclick="openSpec('STD-SHELL-002')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-SHELL-002');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-SHELL-002</span>
                     <span class="tile-cat-badge cat-shell">shell</span>
@@ -1221,10 +1434,10 @@
                 <h3 class="tile-title">Document Dirty State, Unsaved Changes Prompt, and Recovery Lifecycles</h3>
                 <div class="tile-desc"># STD-SHELL-002: Document Dirty State, Unsaved Changes Prompt, and Recovery Lifecycles<br><br>## 1. Abstract<br>As documented on [Craft Wiki: Document Recovery](https://craft.wiki/apps/wordcraft/recovery/), ArtCraft applications protect user work against system crashes or abnormal termination through dirty tracking, safe close confirmation, and local journal snapshots.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-SHELL-002-document-dirty-and-autosave.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/05-shell-and-chrome/STD-SHELL-002-document-dirty-and-autosave.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-SHELL-002 on GitHub">GitHub ↗</a>
                 </div>
-            </article><article class="standard-tile" data-category="navigation" onclick="openSpec('STD-TIME-001')">
+            </article><article class="standard-tile" data-category="navigation" tabindex="0" role="button" aria-label="Specification STD-TIME-001: Timeline Navigation, JKL Scrubbing, and Timecode Invariants" onclick="openSpec('STD-TIME-001')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpec('STD-TIME-001');}">
                 <div class="tile-meta">
                     <span class="tile-id">STD-TIME-001</span>
                     <span class="tile-cat-badge cat-navigation">navigation</span>
@@ -1232,66 +1445,98 @@
                 <h3 class="tile-title">Timeline Navigation, JKL Scrubbing, and Timecode Invariants</h3>
                 <div class="tile-desc"># STD-TIME-001: Timeline Navigation, JKL Scrubbing, and Timecode Invariants<br><br>## 1. Abstract<br>As documented on [Craft Wiki: The Timeline](https://craft.wiki/apps/anicraft/the-timeline/), video, motion graphics, and audio suites share fundamental temporal playback conventions. This standard defines universal keyboard scrubbing chords, frame stepping, and SMPTE timecode formatting across `FilmCraft`, `EffectCraft`, `AniCraft`, and `SoundCraft`.</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-TIME-001-timeline-and-timecode-navigation.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-TIME-001-timeline-and-timecode-navigation.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-TIME-001 on GitHub">GitHub ↗</a>
                 </div>
             </article>
         </div>
     </main>
 
     <!-- SPECIFICATION VIEWER -->
-    <div id="spec-view">
-        <div class="reader-breadcrumb-bar">
+    <div id="spec-view" role="region" aria-label="Specification Document">
+        <!-- W3C Breadcrumb Pattern -->
+        <nav class="reader-breadcrumb-bar" aria-label="Breadcrumb navigation">
             <div class="reader-actions">
-                <button class="reader-btn primary" onclick="showDashboard(event)">← Catalog</button>
-                <button class="reader-btn" id="copy-link-btn" onclick="copyCurrentLink()">Copy Link 🔗</button>
-                <a href="#" id="spec-gh-link" target="_blank" class="reader-btn">GitHub ↗</a>
+                <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
+                    <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Catalog</span>
+                </button>
+                <button class="reader-btn" id="copy-link-btn" onclick="copyCurrentLink()" aria-label="Copy direct specification link to clipboard">
+                    <span id="i18n-copy-text">Copy Link</span> 🔗
+                </button>
+                <a href="#" id="spec-gh-link" target="_blank" class="reader-btn" aria-label="View source file on GitHub (Opens in new window)">
+                    GitHub ↗
+                </a>
             </div>
             <div class="reader-breadcrumbs">
-                <a href="#" onclick="showDashboard(event)">craft-standards</a>
-                <span class="sep">/</span>
-                <a href="#" onclick="showDashboard(event)">standards</a>
-                <span class="sep">/</span>
-                <a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a>
-                <span class="sep">/</span>
-                <span class="current" id="bc-file">STD-LIB-002-keymap-architecture.md</span>
+                <ol>
+                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                    <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
+                    <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
+                    <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
+                </ol>
             </div>
-        </div>
+        </nav>
 
         <div class="reader-wrapper">
-            <div class="reader-meta-header">
+            <!-- Specification Meta Card -->
+            <header class="reader-meta-header">
                 <div class="reader-meta-top">
                     <span id="spec-id-badge" class="tile-id"></span>
                     <span id="spec-cat-badge" class="tile-cat-badge"></span>
                     <span id="spec-status-badge" class="tile-cat-badge cat-accessibility">ACTIVE</span>
                 </div>
-                <h1 id="spec-title" class="reader-title"></h1>
+                <h1 id="spec-title" class="reader-title" tabindex="-1"></h1>
                 <div class="reader-tags-grid">
-                    <div class="reader-pill" id="spec-crate-pill"><strong>Canonical Crate:</strong> <code id="spec-crate"></code></div>
-                    <div class="reader-pill" id="spec-apps-pill"><strong>Governed Apps:</strong> <span id="spec-apps"></span></div>
-                    <div class="reader-pill" id="spec-wiki-pill" style="display:none;"><strong>Craft Wiki Guide:</strong> <a id="spec-wiki-link" href="#" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">Open Reference ↗</a></div>
+                    <div class="reader-pill" id="spec-crate-pill"><strong id="i18n-crate-label">Canonical Crate:</strong> <code id="spec-crate"></code></div>
+                    <div class="reader-pill" id="spec-apps-pill"><strong id="i18n-apps-label">Governed Apps:</strong> <span id="spec-apps"></span></div>
+                    <div class="reader-pill" id="spec-wiki-pill" style="display:none;"><strong id="i18n-wiki-label">Craft Wiki Guide:</strong> <a id="spec-wiki-link" href="#" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">Open Reference ↗</a></div>
                 </div>
-            </div>
+            </header>
 
-            <article id="spec-content" class="markdown-body"></article>
+            <!-- Rendered Markdown Body -->
+            <article id="spec-content" class="markdown-body" aria-label="Specification Content"></article>
 
-            <div class="reader-footer-nav">
-                <button class="reader-btn" id="prev-spec-btn" onclick="navigateSpec(-1)">← Previous Standard</button>
-                <button class="reader-btn primary" onclick="showDashboard(event)">Back to Catalog</button>
-                <button class="reader-btn" id="next-spec-btn" onclick="navigateSpec(1)">Next Standard →</button>
-            </div>
+            <!-- Rich Pagination & Back to Catalog Component (Enhanced UI/UX/a11y/i18n) -->
+            <nav class="reader-nav-section" aria-label="Document pagination and navigation">
+                <!-- Center Prominent Back to Catalog Button with Shortcut Hint -->
+                <div class="return-catalog-row">
+                    <button class="return-catalog-btn" onclick="showDashboard(event)" aria-label="Return to full catalog (Shortcut: Escape)">
+                        <span class="arrow-icon">↑</span>
+                        <span id="i18n-return-catalog">Back to All Specifications</span>
+                        <kbd class="kbd-hint">Esc</kbd>
+                    </button>
+                </div>
+
+                <!-- Dual Rich Pagination Cards -->
+                <div class="reader-pagination">
+                    <a href="#" id="prev-pag-card" class="pag-card prev-card" onclick="navigateSpec(-1, event)" rel="prev">
+                        <span class="pag-label">
+                            <span class="pagination-arrow arrow-icon">←</span>
+                            <span id="i18n-prev-label">Previous Standard</span>
+                        </span>
+                        <span class="pag-title" id="prev-pag-title">STD-NAV-001</span>
+                    </a>
+                    <a href="#" id="next-pag-card" class="pag-card next-card" onclick="navigateSpec(1, event)" rel="next">
+                        <span class="pag-label">
+                            <span id="i18n-next-label">Next Standard</span>
+                            <span class="pagination-arrow arrow-icon">→</span>
+                        </span>
+                        <span class="pag-title" id="next-pag-title">STD-NAV-003</span>
+                    </a>
+                </div>
+            </nav>
         </div>
     </div>
 
     <!-- FOOTER -->
-    <footer class="wiki-footer">
+    <footer class="wiki-footer" role="contentinfo">
         <div class="wiki-footer-inner">
             <div class="wiki-footer-main">
                 <div class="wiki-footer-brand">
-                    <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo">
+                    <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="32" height="32">
                     <div>
-                        <strong style="color:var(--sl-color-white);font-family:var(--font-display);font-size:14px;display:block;margin-bottom:2px;">ArtCraft Universal Standards</strong>
-                        <p>The single source of truth for UX invariants, shared ergonomic contracts, and AI agent governance across the 20+ ArtCraft suite.</p>
+                        <strong style="color:var(--sl-color-white);font-family:var(--font-display);font-size:14px;display:block;margin-bottom:2px;" id="i18n-footer-title">ArtCraft Universal Standards</strong>
+                        <p id="i18n-footer-desc">The single source of truth for UX invariants, shared ergonomic contracts, and AI agent governance across the 20+ ArtCraft suite.</p>
                     </div>
                 </div>
                 <div class="wiki-footer-links">
@@ -1302,8 +1547,8 @@
                 </div>
             </div>
             <div class="wiki-footer-bottom">
-                <span>© 2026 ARTCRAFT · STORYTOLD ARCHITECTURE</span>
-                <span>FREE AND OPEN SOURCE</span>
+                <span id="i18n-copyright">© 2026 ARTCRAFT · STORYTOLD ARCHITECTURE</span>
+                <span id="i18n-foss">FREE AND OPEN SOURCE</span>
             </div>
         </div>
     </footer>
@@ -1332,6 +1577,117 @@
     </script>
 
     <script>
+        // Centralized i18n Translation Dictionary (Ready for Arabic, French, German, etc.)
+        const I18N = {
+            en: {
+                dir: 'ltr',
+                brandSub: 'Standards',
+                heroEyebrow: 'Universal UX Invariants & Ergonomic Contracts',
+                heroTitle: 'Standards for the <em>20+ ArtCraft</em> Creative Suite',
+                heroDesc: 'Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.',
+                statStandards: 'Active Standards',
+                statApps: 'Governed Apps',
+                statCI: 'CI Verification',
+                statMCP: 'AutoCraft MCP',
+                searchPlaceholder: 'Search standards, shortcuts, crates...',
+                allStandards: 'All Standards',
+                specCatalog: 'Specifications Catalog',
+                showingCount: 'Showing {count} of {total} specifications',
+                backBtn: 'Catalog',
+                copyLink: 'Copy Link',
+                copied: 'Copied! ✓',
+                canonicalCrate: 'Canonical Crate:',
+                governedApps: 'Governed Apps:',
+                craftWikiGuide: 'Craft Wiki Guide:',
+                returnCatalog: 'Back to All Specifications',
+                prevStandard: 'Previous Standard',
+                nextStandard: 'Next Standard',
+                skipLink: 'Skip to main content',
+                footerTitle: 'ArtCraft Universal Standards',
+                footerDesc: 'The single source of truth for UX invariants, shared ergonomic contracts, and AI agent governance across the 20+ ArtCraft suite.',
+                copyright: '© 2026 ARTCRAFT · STORYTOLD ARCHITECTURE',
+                foss: 'FREE AND OPEN SOURCE'
+            },
+            ar: {
+                dir: 'rtl',
+                brandSub: 'المعايير',
+                heroEyebrow: 'ثوابت تجربة المستخدم والعقود الهندسية الموحدة',
+                heroTitle: 'معايير حزمة <em>ArtCraft</em> الإبداعية (+20 تطبيق)',
+                heroDesc: 'مواصفات قياسية حاكمة لتبديل الأدوات، والتمرير الزمني، وشجرة إمكانية الوصول AccessKit، والمحاذاة الكاملة للاتجاهين BiDi/RTL، وحوكمة وكلاء الذكاء الاصطناعي عبر كافة تطبيقات ArtCraft.',
+                statStandards: 'معايير نشطة',
+                statApps: 'تطبيقات خاضعة',
+                statCI: 'فحص آلي 100%',
+                statMCP: 'خادم MCP نشط',
+                searchPlaceholder: 'ابحث في المعايير والاختصارات والحزم...',
+                allStandards: 'كافة المعايير',
+                specCatalog: 'دليل المواصفات',
+                showingCount: 'عرض {count} من أصل {total} مواصفة',
+                backBtn: 'الدليل',
+                copyLink: 'نسخ الرابط',
+                copied: 'تم النسخ! ✓',
+                canonicalCrate: 'الحزمة الأساسية:',
+                governedApps: 'التطبيقات المشمولة:',
+                craftWikiGuide: 'دليل Craft Wiki:',
+                returnCatalog: 'العودة إلى فهرس المعايير',
+                prevStandard: 'المعيار السابق',
+                nextStandard: 'المعيار التالي',
+                skipLink: 'الانتقال إلى المحتوى الرئيسي',
+                footerTitle: 'معايير ArtCraft الموحدة',
+                footerDesc: 'المصدر الموثوق الأوحد لثوابت تجربة المستخدم، والعقود الهندسية المشتركة، وحوكمة الذكاء الاصطناعي عبر حزمة ArtCraft.',
+                copyright: '© 2026 ARTCRAFT · هندسة STORYTOLD',
+                foss: 'حر ومفتوح المصدر'
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            applyLanguage(currentLang);
+        }
+
+        function applyLanguage(lang) {
+            const t = I18N[lang] || I18N.en;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = t.dir;
+            document.getElementById('current-lang-code').textContent = lang.toUpperCase();
+
+            // Translate elements
+            document.getElementById('i18n-brand-sub').textContent = t.brandSub;
+            document.getElementById('i18n-hero-eyebrow').textContent = t.heroEyebrow;
+            document.getElementById('i18n-hero-desc').textContent = t.heroDesc;
+            document.getElementById('i18n-stat-standards').textContent = t.statStandards;
+            document.getElementById('i18n-stat-apps').textContent = t.statApps;
+            document.getElementById('i18n-stat-ci').textContent = t.statCI;
+            document.getElementById('i18n-stat-mcp').textContent = t.statMCP;
+            document.getElementById('search').placeholder = t.searchPlaceholder;
+            document.getElementById('chip-all').textContent = t.allStandards;
+            document.getElementById('i18n-cat-heading').textContent = t.specCatalog;
+            document.getElementById('i18n-back-btn-text').textContent = t.backBtn;
+            document.getElementById('i18n-copy-text').textContent = t.copyLink;
+            document.getElementById('i18n-crate-label').textContent = t.canonicalCrate;
+            document.getElementById('i18n-apps-label').textContent = t.governedApps;
+            document.getElementById('i18n-wiki-label').textContent = t.craftWikiGuide;
+            document.getElementById('i18n-return-catalog').textContent = t.returnCatalog;
+            document.getElementById('i18n-prev-label').textContent = t.prevStandard;
+            document.getElementById('i18n-next-label').textContent = t.nextStandard;
+            document.getElementById('skip-link').textContent = t.skipLink;
+            document.getElementById('i18n-footer-title').textContent = t.footerTitle;
+            document.getElementById('i18n-footer-desc').textContent = t.footerDesc;
+            document.getElementById('i18n-copyright').textContent = t.copyright;
+            document.getElementById('i18n-foss').textContent = t.foss;
+
+            // Announce language change
+            announceA11y(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language switched to English');
+            applyFilters();
+        }
+
+        function announceA11y(message) {
+            const el = document.getElementById('a11y-announcer');
+            if (el) el.textContent = message;
+        }
+
+        // Data model
         const SPECS = JSON.parse(document.getElementById('specs-data').textContent);
         const specsMap = {};
         SPECS.forEach((s, idx) => {
@@ -1341,22 +1697,28 @@
 
         let currentCategory = 'all';
         let activeSpecId = null;
+        let lastFocusedElement = null;
 
         function filterCategory(cat, btn) {
             currentCategory = cat;
-            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.filter-chip').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
             if (btn) {
                 btn.classList.add('active');
-                // Auto scroll the selected chip into view on mobile
+                btn.setAttribute('aria-pressed', 'true');
                 btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
             applyFilters();
+            announceA11y(`Filtered by category: ${cat}`);
         }
 
         document.getElementById('search').addEventListener('input', applyFilters);
 
         function applyFilters() {
             const q = document.getElementById('search').value.toLowerCase().trim();
+            const t = I18N[currentLang] || I18N.en;
             let visible = 0;
             document.querySelectorAll('.standard-tile').forEach(tile => {
                 const matchesCat = currentCategory === 'all' || tile.dataset.category === currentCategory;
@@ -1365,13 +1727,18 @@
                 tile.style.display = show ? 'flex' : 'none';
                 if (show) visible++;
             });
-            document.getElementById('visible-count').textContent = `Showing ${visible} of ${SPECS.length} specifications`;
+            const text = t.showingCount.replace('{count}', visible).replace('{total}', SPECS.length);
+            document.getElementById('visible-count').textContent = text;
+            if (q) {
+                announceA11y(text);
+            }
         }
 
         function openSpec(id, updateHash = true) {
             const spec = specsMap[id];
             if (!spec) return;
             activeSpecId = id;
+            lastFocusedElement = document.activeElement;
 
             if (updateHash) {
                 window.location.hash = '#' + id;
@@ -1438,17 +1805,22 @@
                 rendered = rendered.replace(/\b(MUST NOT|SHALL NOT|MUST|SHALL|SHOULD NOT|SHOULD|RECOMMENDED|MAY|OPTIONAL)\b/g, '<span class="rfc-term">$1</span>');
                 contentEl.innerHTML = rendered;
 
-                // Highlight code blocks and add copy buttons
+                // Highlight code blocks and add accessible copy buttons
                 contentEl.querySelectorAll('pre code').forEach(block => {
                     if (window.hljs) hljs.highlightElement(block);
                     const pre = block.parentElement;
                     const btn = document.createElement('button');
                     btn.className = 'code-copy-btn';
+                    btn.setAttribute('aria-label', 'Copy code snippet to clipboard');
                     btn.textContent = 'Copy';
                     btn.onclick = () => {
                         navigator.clipboard.writeText(block.textContent);
                         btn.textContent = 'Copied!';
-                        setTimeout(() => btn.textContent = 'Copy', 1500);
+                        btn.setAttribute('aria-label', 'Code snippet copied to clipboard');
+                        setTimeout(() => {
+                            btn.textContent = 'Copy';
+                            btn.setAttribute('aria-label', 'Copy code snippet to clipboard');
+                        }, 1500);
                     };
                     pre.appendChild(btn);
                 });
@@ -1456,28 +1828,44 @@
                 contentEl.innerHTML = '<pre style="white-space: pre-wrap;">' + spec.body + '</pre>';
             }
 
-            // Prev / Next buttons
-            const prevBtn = document.getElementById('prev-spec-btn');
-            const nextBtn = document.getElementById('next-spec-btn');
+            // Update Dual Rich Pagination Cards
             const idx = spec._index;
+            const prevCard = document.getElementById('prev-pag-card');
+            const nextCard = document.getElementById('next-pag-card');
 
             if (idx > 0) {
-                prevBtn.style.visibility = 'visible';
-                prevBtn.textContent = '← ' + SPECS[idx - 1].id;
+                const prevSpec = SPECS[idx - 1];
+                prevCard.removeAttribute('aria-disabled');
+                prevCard.style.visibility = 'visible';
+                prevCard.setAttribute('aria-label', `Previous Standard: ${prevSpec.id} ${prevSpec.title}`);
+                document.getElementById('prev-pag-title').textContent = `${prevSpec.id}: ${prevSpec.title}`;
             } else {
-                prevBtn.style.visibility = 'hidden';
+                prevCard.setAttribute('aria-disabled', 'true');
+                prevCard.style.visibility = 'hidden';
             }
 
             if (idx < SPECS.length - 1) {
-                nextBtn.style.visibility = 'visible';
-                nextBtn.textContent = SPECS[idx + 1].id + ' →';
+                const nextSpec = SPECS[idx + 1];
+                nextCard.removeAttribute('aria-disabled');
+                nextCard.style.visibility = 'visible';
+                nextCard.setAttribute('aria-label', `Next Standard: ${nextSpec.id} ${nextSpec.title}`);
+                document.getElementById('next-pag-title').textContent = `${nextSpec.id}: ${nextSpec.title}`;
             } else {
-                nextBtn.style.visibility = 'hidden';
+                nextCard.setAttribute('aria-disabled', 'true');
+                nextCard.style.visibility = 'hidden';
             }
 
+            // Transition views
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('spec-view').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // a11y focus management: focus on specification header title
+            const titleEl = document.getElementById('spec-title');
+            if (titleEl) {
+                titleEl.focus();
+            }
+            announceA11y(`Now reading specification ${spec.id}: ${spec.title}`);
         }
 
         function showDashboard(e) {
@@ -1489,6 +1877,15 @@
             document.getElementById('spec-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // Restore focus for a11y
+            if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                lastFocusedElement.focus();
+            } else {
+                const searchEl = document.getElementById('search');
+                if (searchEl) searchEl.focus();
+            }
+            announceA11y('Returned to specifications catalog');
         }
 
         function filterFromBreadcrumb(e) {
@@ -1501,13 +1898,17 @@
 
         function copyCurrentLink() {
             const btn = document.getElementById('copy-link-btn');
+            const t = I18N[currentLang] || I18N.en;
             navigator.clipboard.writeText(window.location.href);
-            const original = btn.textContent;
-            btn.textContent = 'Copied! ✓';
-            setTimeout(() => btn.textContent = original, 2000);
+            btn.innerHTML = `<span>${t.copied}</span>`;
+            announceA11y('Link copied to clipboard');
+            setTimeout(() => {
+                btn.innerHTML = `<span id="i18n-copy-text">${t.copyLink}</span> 🔗`;
+            }, 2000);
         }
 
-        function navigateSpec(delta) {
+        function navigateSpec(delta, e) {
+            if (e) e.preventDefault();
             if (!activeSpecId) return;
             const current = specsMap[activeSpecId];
             if (!current) return;
@@ -1526,6 +1927,22 @@
                 document.getElementById('dashboard-view').style.display = 'block';
             }
         }
+
+        // Global Keyboard Navigation (a11y: Escape to return, Alt+Left/Right for pagination)
+        window.addEventListener('keydown', (e) => {
+            if (activeSpecId) {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    showDashboard();
+                } else if (e.altKey && e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    navigateSpec(document.documentElement.dir === 'rtl' ? 1 : -1);
+                } else if (e.altKey && e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navigateSpec(document.documentElement.dir === 'rtl' ? -1 : 1);
+                }
+            }
+        });
 
         window.addEventListener('hashchange', handleRouting);
         window.addEventListener('DOMContentLoaded', handleRouting);

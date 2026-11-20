@@ -375,7 +375,7 @@ fn run_html_report() {
         let gh = &spec.github_url;
 
         items_html.push_str(&format!(
-            r#"<article class="standard-tile" data-category="{cat}" onclick="openSpec('{id}')">
+            r#"<article class="standard-tile" data-category="{cat}" tabindex="0" role="button" aria-label="Specification {id}: {title}" onclick="openSpec('{id}')" onkeydown="if(event.key==='Enter'||event.key===' '){{event.preventDefault();openSpec('{id}');}}">
                 <div class="tile-meta">
                     <span class="tile-id">{id}</span>
                     <span class="tile-cat-badge cat-{cat}">{cat}</span>
@@ -383,8 +383,8 @@ fn run_html_report() {
                 <h3 class="tile-title">{title}</h3>
                 <div class="tile-desc">{body_preview}</div>
                 <div class="tile-footer">
-                    <div class="tile-read-btn">Read specification <span>→</span></div>
-                    <a href="{gh}" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" title="View Source on GitHub">GitHub ↗</a>
+                    <div class="tile-read-btn">Read specification <span class="arrow-icon">→</span></div>
+                    <a href="{gh}" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of {id} on GitHub">GitHub ↗</a>
                 </div>
             </article>"#
         ));
