@@ -104,9 +104,11 @@
             // Hero Section
             setTxt('i18n-hero-eyebrow', t.heroEyebrow);
             setHtml('hero-title', t.heroTitle);
+            setHtml('i18n-hero-title', t.heroTitle);
             setTxt('i18n-hero-desc', t.heroDesc);
             setTxt('i18n-hero-badge-mcp', t.heroBadgeMCP);
             setTxt('i18n-hero-badge-sim', t.heroBadgeSim);
+            setTxt('i18n-hero-badge-drift', t.heroBadgeDrift);
 
             // Ecosystem Stats
             setTxt('i18n-stat-standards', t.statStandards);

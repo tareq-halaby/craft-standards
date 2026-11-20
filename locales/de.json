@@ -178,5 +178,6 @@
       "q": "Wie kann ich Übersetzungen für neue Sprachen beisteuern?",
       "a": "Alle Übersetzungen liegen in JSON-Dateien unter <code>locales/&lt;lang-code&gt;.json</code>. Erstellen Sie eine neue Datei (z. B. <code>locales/it.json</code>) mit den Standardschlüsseln; der xtask-Build integriert sie beim nächsten Mal automatisch!"
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ Null AST-Drift-Garantie"
 }

@@ -3394,7 +3394,7 @@
                 <span id="i18n-hero-eyebrow">Universal UX Invariants &amp; Ergonomic Contracts</span>
                 <span class="eyebrow-tag">v0.2.0</span>
             </div>
-            <h1 class="wiki-title" id="hero-title">Standards for the <em id="i18n-hero-em">20+ ArtCraft</em> Creative Suite</h1>
+            <h1 class="wiki-title" id="hero-title"><span id="i18n-hero-title">Standards for the <em id="i18n-hero-em">20+ ArtCraft</em> Creative Suite</span></h1>
             <p class="wiki-desc" id="i18n-hero-desc">
                 Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.
             </p>
@@ -3406,7 +3406,7 @@
                     <span id="i18n-hero-badge-sim">🧪 Interactive Sandboxes</span>
                 </a>
                 <a href="#STD-GOV-001" class="hero-anchor-pill highlight">
-                    <span>🛡️ Zero AST Drift Guarantee</span>
+                    <span id="i18n-hero-badge-drift">🛡️ Zero AST Drift Guarantee</span>
                 </a>
             </div>
         </section>
@@ -4638,7 +4638,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "q": "كيف أساهم بترجمة المنصة إلى لغات جديدة؟",
       "a": "توجد كافة ترجمات المنصة في ملفات JSON معيارية ومستقلة داخل مجلد <code>locales/&lt;lang-code&gt;.json</code>. للمساهمة بلغة جديدة، أنشئ ملفاً جديداً (مثل <code>locales/it.json</code>) بالمفاتيح القياسية، ليقوم مُنشئ xtask بدمجه تلقائياً في التقرير عند البناء التالي."
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ ضمان انعدام الانحراف البرمجي"
 },
 "de": {
   "code": "de",
@@ -4820,7 +4821,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "q": "Wie kann ich Übersetzungen für neue Sprachen beisteuern?",
       "a": "Alle Übersetzungen liegen in JSON-Dateien unter <code>locales/&lt;lang-code&gt;.json</code>. Erstellen Sie eine neue Datei (z. B. <code>locales/it.json</code>) mit den Standardschlüsseln; der xtask-Build integriert sie beim nächsten Mal automatisch!"
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ Null AST-Drift-Garantie"
 },
 "en": {
   "code": "en",
@@ -5002,7 +5004,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "q": "How do I contribute translations for new languages?",
       "a": "All portal translations live in modular JSON files under <code>locales/&lt;lang-code&gt;.json</code>. To contribute a new language, create a new JSON file (e.g. <code>locales/it.json</code>) with the standard keys. The Rust <code>xtask</code> build automatically bundles it into the single-file dashboard on next build!"
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ Zero AST Drift Guarantee"
 },
 "es": {
   "code": "es",
@@ -5184,7 +5187,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "q": "¿Cómo contribuyo con traducciones para nuevos idiomas?",
       "a": "Todas las traducciones residen en archivos modulares en <code>locales/&lt;lang-code&gt;.json</code>. Cree un nuevo archivo (ej. <code>locales/it.json</code>) con las claves estándar y xtask lo compilará automáticamente en el portal."
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ Garantía de deriva AST cero"
 },
 "fr": {
   "code": "fr",
@@ -5366,7 +5370,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "q": "Comment contribuer des traductions pour de nouvelles langues ?",
       "a": "Toutes les traductions résident dans <code>locales/&lt;lang-code&gt;.json</code>. Créez un fichier (ex. <code>locales/it.json</code>) avec les clés standards et xtask l'intégrera automatiquement au prochain build."
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ Garantie zéro dérive AST"
 },
 "ja": {
   "code": "ja",
@@ -5548,7 +5553,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "q": "新しい言語の翻訳を提供するにはどうすればよいですか？",
       "a": "すべてのポータル翻訳は<code>locales/&lt;lang-code&gt;.json</code>に格納されています。新しい言語（例：<code>locales/it.json</code>）を追加するだけで、Rustの<code>xtask</code>ビルドが次回の単一ファイルダッシュボード生成時に自動的に取り込みます。"
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ ASTドリフトゼロ保証"
 }}
     </script>
 
@@ -5659,9 +5665,11 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             // Hero Section
             setTxt('i18n-hero-eyebrow', t.heroEyebrow);
             setHtml('hero-title', t.heroTitle);
+            setHtml('i18n-hero-title', t.heroTitle);
             setTxt('i18n-hero-desc', t.heroDesc);
             setTxt('i18n-hero-badge-mcp', t.heroBadgeMCP);
             setTxt('i18n-hero-badge-sim', t.heroBadgeSim);
+            setTxt('i18n-hero-badge-drift', t.heroBadgeDrift);
 
             // Ecosystem Stats
             setTxt('i18n-stat-standards', t.statStandards);

@@ -178,5 +178,6 @@
       "q": "新しい言語の翻訳を提供するにはどうすればよいですか？",
       "a": "すべてのポータル翻訳は<code>locales/&lt;lang-code&gt;.json</code>に格納されています。新しい言語（例：<code>locales/it.json</code>）を追加するだけで、Rustの<code>xtask</code>ビルドが次回の単一ファイルダッシュボード生成時に自動的に取り込みます。"
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ ASTドリフトゼロ保証"
 }

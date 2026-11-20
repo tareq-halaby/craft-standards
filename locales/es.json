@@ -178,5 +178,6 @@
       "q": "¿Cómo contribuyo con traducciones para nuevos idiomas?",
       "a": "Todas las traducciones residen en archivos modulares en <code>locales/&lt;lang-code&gt;.json</code>. Cree un nuevo archivo (ej. <code>locales/it.json</code>) con las claves estándar y xtask lo compilará automáticamente en el portal."
     }
-  }
+  },
+  "heroBadgeDrift": "🛡️ Garantía de deriva AST cero"
 }
