@@ -140,5 +140,43 @@
   "specNavSearchPlaceholder": "Buscar especificaciones...",
   "specNavAllSpecs": "Todas las especificaciones",
   "specNavToggleBtn": "Normas",
-  "specTocToggleBtn": "En esta página"
+  "specTocToggleBtn": "En esta página",
+  "faqQuestions": {
+    "faq-1": {
+      "q": "¿Por qué la suite Storytold requiere 28 normas comunes en más de 20 aplicaciones?",
+      "a": "Storytold opera más de 20 aplicaciones de escritorio en Rust (PhotoCraft, VectorCraft, CADCraft, etc.). Sin invariantes comunes, cada app reimplementa la alternancia de herramientas y accesibilidad por separado, provocando inconsistencias. Las 28 normas aseguran coherencia ergonómica, árboles AccessKit y verificación continua en CI."
+    },
+    "faq-2": {
+      "q": "¿Cómo se conecta el servidor AutoCraft MCP con los agentes de IA?",
+      "a": "El crate <code>craft-standards-mcp</code> implementa el Model Context Protocol (MCP) a través de stdio. Agentes como Claude Code, Cursor y AutoCraft consultan reglas, validan código con <code>verify_component</code> y generan plantillas 100% conformes."
+    },
+    "faq-3": {
+      "q": "¿Qué es la 'Regla Keep' en STD-LIB-005?",
+      "a": "La Regla Keep dictamina que cualquier prueba que evalúe casos límite o datos corruptos NUNCA debe eliminarse una vez escrita, garantizando inmunidad contra regresiones."
+    },
+    "faq-4": {
+      "q": "¿Cómo reclamo un issue y envío un PR?",
+      "a": "Según STD-GOV-002, los colaboradores deben reclamar los issues antes de trabajar para evitar duplicados. Los PR deben centrarse en un único propósito y pasar el 100% de los controles de CI."
+    },
+    "faq-5": {
+      "q": "¿Cómo funciona el reflejo BiDi y RTL en STD-I18N-001?",
+      "a": "El shell de ArtCraft invierte su disposición espacial cuando se selecciona un idioma de derecha a izquierda (como árabe o hebreo), utilizando propiedades lógicas CSS y diseño direccional en egui."
+    },
+    "faq-6": {
+      "q": "¿Por qué las aplicaciones aplican el acceso aislado a archivos de STD-SHELL-003?",
+      "a": "Las aplicaciones ArtCraft funcionan con privilegios mínimos en un sandbox. Los scripts automáticos y complementos no pueden acceder arbitrariamente al sistema de archivos; las operaciones se restringen a rutas autorizadas."
+    },
+    "faq-7": {
+      "q": "¿Cuáles son los requisitos de etiquetado AccessKit en STD-A11Y-001?",
+      "a": "Todo elemento interactivo debe exponer un nodo AccessKit con rol, nombre y marco espacial para que los lectores de pantalla funcionen sin problemas en Windows, macOS y Linux."
+    },
+    "faq-8": {
+      "q": "¿Cómo genera el comando testkit pruebas de integración?",
+      "a": "Al ejecutar <code>cargo xtask testkit &lt;STD-ID&gt;</code> se genera un archivo de pruebas en Rust listo para verificar los contratos invariantes del estándar seleccionado."
+    },
+    "faq-9": {
+      "q": "¿Cómo contribuyo con traducciones para nuevos idiomas?",
+      "a": "Todas las traducciones residen en archivos modulares en <code>locales/&lt;lang-code&gt;.json</code>. Cree un nuevo archivo (ej. <code>locales/it.json</code>) con las claves estándar y xtask lo compilará automáticamente en el portal."
+    }
+  }
 }

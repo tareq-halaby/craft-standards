@@ -140,5 +140,43 @@
   "specNavSearchPlaceholder": "Standards suchen...",
   "specNavAllSpecs": "Alle Spezifikationen",
   "specNavToggleBtn": "Standards",
-  "specTocToggleBtn": "Auf dieser Seite"
+  "specTocToggleBtn": "Auf dieser Seite",
+  "faqQuestions": {
+    "faq-1": {
+      "q": "Warum erfordert die Storytold-Suite 28 gemeinsame Standards für über 20 Apps?",
+      "a": "Storytold entwickelt über 20 Desktop-Apps in Rust (PhotoCraft, VectorCraft, CADCraft usw.). Ohne gemeinsame Invarianten implementiert jede App Werkzeugwechsel, Zeitleisten und Barrierefreiheit unabhängig neu, was zu Fragmentierung führt. Die 28 Standards gewährleisten einheitliche Ergonomie, AccessKit-Bäume und automatische CI-Überprüfung ohne AST-Drift."
+    },
+    "faq-2": {
+      "q": "Wie verbindet sich der AutoCraft MCP-Server mit KI-Agenten?",
+      "a": "Das Crate <code>craft-standards-mcp</code> implementiert das Model Context Protocol (MCP) über Stdio. KI-Programmierassistenten wie Claude Code, Cursor und AutoCraft rufen Standardregeln ab, prüfen Code mit <code>verify_component</code> und generieren 100% konformen Boilerplate."
+    },
+    "faq-3": {
+      "q": "Was ist die 'Keep-Regel' in STD-LIB-005?",
+      "a": "Die Keep-Regel besagt, dass jeder Test für Grenzfälle, Fuzz-Crashes oder fehlerhafte Eingaben nach dem Schreiben NIEMALS gelöscht werden darf. Dies garantiert Regressionsschutz bei Weiterentwicklung der Grafik-Engines (egui/wgpu)."
+    },
+    "faq-4": {
+      "q": "Wie übernehme ich ein Issue und reiche einen PR ein?",
+      "a": "Gemäß STD-GOV-002 müssen Mitwirkende Issues vor Beginn beanspruchen. PRs müssen ein einzelnes Anliegen behandeln, Tests enthalten und die CI zu 100% ohne Drift bestehen."
+    },
+    "faq-5": {
+      "q": "Wie funktioniert die BiDi- und RTL-Spiegelung in STD-I18N-001?",
+      "a": "Die ArtCraft-Shell spiegelt ihr gesamtes Layout bei Rechts-nach-Links-Sprachen (z. B. Arabisch oder Hebräisch). Werkzeugleisten, Docks und Dialoge invertieren ihre Ausrichtung über logische CSS-Eigenschaften und egui-Richtungslayouts."
+    },
+    "faq-6": {
+      "q": "Warum verlangt STD-SHELL-003 isolierten Dateizugriff?",
+      "a": "ArtCraft-Desktopanwendungen laufen nach dem Prinzip der geringsten Rechte. Skripte und Plugins dürfen nicht willkürlich auf Dateisysteme zugreifen; alle Dateizugriffe sind auf definierte Pfade beschränkt."
+    },
+    "faq-7": {
+      "q": "Welche Anforderungen stellt STD-A11Y-001 an AccessKit?",
+      "a": "Jedes interaktive Steuerelement muss einen AccessKit-Knoten mit Rolle, Name und Begrenzungsrahmen bereitstellen, damit Screenreader unter Windows, macOS und Linux einwandfrei funktionieren."
+    },
+    "faq-8": {
+      "q": "Wie generiert der testkit-Befehl Integrationstests?",
+      "a": "Der Aufruf von <code>cargo xtask testkit &lt;STD-ID&gt;</code> erzeugt eine ausführbare Rust-Integrationstestdatei, die speziell auf die Verträge des angegebenen Standards abgestimmt ist."
+    },
+    "faq-9": {
+      "q": "Wie kann ich Übersetzungen für neue Sprachen beisteuern?",
+      "a": "Alle Übersetzungen liegen in JSON-Dateien unter <code>locales/&lt;lang-code&gt;.json</code>. Erstellen Sie eine neue Datei (z. B. <code>locales/it.json</code>) mit den Standardschlüsseln; der xtask-Build integriert sie beim nächsten Mal automatisch!"
+    }
+  }
 }

@@ -140,5 +140,43 @@
   "specNavSearchPlaceholder": "Rechercher des normes...",
   "specNavAllSpecs": "Toutes les spécifications",
   "specNavToggleBtn": "Normes",
-  "specTocToggleBtn": "Sur cette page"
+  "specTocToggleBtn": "Sur cette page",
+  "faqQuestions": {
+    "faq-1": {
+      "q": "Pourquoi la suite Storytold exige-t-elle 28 normes partagées pour plus de 20 applications ?",
+      "a": "Storytold développe plus de 20 applications de bureau créatives et productives en Rust (PhotoCraft, CADCraft, WordCraft, etc.). Sans invariants partagés, chaque application réimplémente le cycle des outils et l'accessibilité de manière isolée. Les 28 normes garantissent une ergonomie unifiée, des arbres AccessKit complets et un contrôle d'intégrité strict en CI."
+    },
+    "faq-2": {
+      "q": "Comment le serveur AutoCraft MCP se connecte-t-il aux agents d'IA ?",
+      "a": "Le crate <code>craft-standards-mcp</code> implémente le Model Context Protocol (MCP) sur stdio. Des agents comme Claude Code, Cursor et AutoCraft interrogent les règles, inspectent le code avec <code>verify_component</code> et génèrent du code conforme à 100%."
+    },
+    "faq-3": {
+      "q": "Qu'est-ce que 'The Keep Rule' dans STD-LIB-005 ?",
+      "a": "La règle Keep stipule que tout test couvrant des cas limites ou des entrées corrompues ne doit JAMAIS être supprimé après écriture, assurant une immunité totale contre les régressions."
+    },
+    "faq-4": {
+      "q": "Comment réserver une issue et soumettre une PR ?",
+      "a": "Conformément à STD-GOV-002, les contributeurs doivent revendiquer une issue avant de commencer pour éviter les doublons. Les PR doivent avoir un objectif unique et valider la CI à 100%."
+    },
+    "faq-5": {
+      "q": "Comment fonctionne le miroir BiDi et RTL dans STD-I18N-001 ?",
+      "a": "Le shell ArtCraft inverse toute sa disposition spatiale lorsqu'une langue de droite à gauche (arabe, hébreu) est sélectionnée, via des propriétés logiques CSS et la mise en page directionnelle d'egui."
+    },
+    "faq-6": {
+      "q": "Pourquoi confiner les accès fichiers selon STD-SHELL-003 ?",
+      "a": "Les applications ArtCraft fonctionnent avec le moindre privilège dans un bac à sable. Les scripts et plugins ne peuvent pas accéder librement au disque hôte ; toutes les écritures sont confinées aux répertoires autorisés."
+    },
+    "faq-7": {
+      "q": "Quelles sont les exigences de balisage AccessKit dans STD-A11Y-001 ?",
+      "a": "Chaque contrôle interactif doit exposer un nœud AccessKit avec rôle, nom et boîte englobante pour assurer le support parfait des lecteurs d'écran sous Windows, macOS et Linux."
+    },
+    "faq-8": {
+      "q": "Comment la commande testkit génère-t-elle des tests d'intégration ?",
+      "a": "Exécuter <code>cargo xtask testkit &lt;STD-ID&gt;</code> crée un fichier de test d'intégration Rust prêt à l'emploi, configuré pour valider les contrats d'invariance du standard demandé."
+    },
+    "faq-9": {
+      "q": "Comment contribuer des traductions pour de nouvelles langues ?",
+      "a": "Toutes les traductions résident dans <code>locales/&lt;lang-code&gt;.json</code>. Créez un fichier (ex. <code>locales/it.json</code>) avec les clés standards et xtask l'intégrera automatiquement au prochain build."
+    }
+  }
 }

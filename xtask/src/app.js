@@ -94,13 +94,21 @@
                 if (el && val !== undefined) el.innerHTML = val;
             };
 
+            // Navbar
             setTxt('i18n-brand-sub', t.brandSub);
+            setTxt('i18n-nav-catalog', t.navCatalog);
+            setTxt('i18n-nav-matrix', t.navMatrix);
+            setTxt('i18n-nav-faq', t.navFaq);
+            setTxt('i18n-nav-agent', t.navAgent);
+
+            // Hero Section
             setTxt('i18n-hero-eyebrow', t.heroEyebrow);
-            setHtml('i18n-hero-title', t.heroTitle);
+            setHtml('hero-title', t.heroTitle);
             setTxt('i18n-hero-desc', t.heroDesc);
             setTxt('i18n-hero-badge-mcp', t.heroBadgeMCP);
-            setTxt('i18n-hero-badge-matrix', t.heroBadgeMatrix);
             setTxt('i18n-hero-badge-sim', t.heroBadgeSim);
+
+            // Ecosystem Stats
             setTxt('i18n-stat-standards', t.statStandards);
             setTxt('i18n-stat-standards-sub', t.statStandardsSub);
             setTxt('i18n-stat-apps', t.statApps);
@@ -110,21 +118,16 @@
             setTxt('i18n-stat-mcp', t.statMCP);
             setTxt('i18n-stat-mcp-sub', t.statMCPSub);
 
+            // Catalog Search & Filters
             const searchInput = document.getElementById('search');
             if (searchInput && t.searchPlaceholder) {
                 searchInput.placeholder = t.searchPlaceholder;
                 searchInput.setAttribute('aria-label', t.searchPlaceholder);
             }
-
             const searchClearBtn = document.getElementById('search-clear-btn');
             if (searchClearBtn && t.searchClearLabel) {
                 searchClearBtn.setAttribute('aria-label', t.searchClearLabel);
             }
-
-            setTxt('i18n-matrix-btn', t.complianceMatrixBtn);
-            setTxt('matrix-export-btn-text', t.matrixExportBtn);
-            const mSearch = document.getElementById('matrix-search-input');
-            if (mSearch && t.matrixSearchPlaceholder) mSearch.placeholder = t.matrixSearchPlaceholder;
             setTxt('i18n-chip-all', t.allStandards);
             setTxt('i18n-chip-interaction', t.catInteraction);
             setTxt('i18n-chip-navigation', t.catNavigation);
@@ -134,6 +137,11 @@
             setTxt('i18n-chip-libs', t.catLibs);
             setTxt('i18n-chip-governance', t.catGovernance);
             setTxt('i18n-cat-heading', t.specCatalog);
+            setTxt('i18n-empty-clear-btn', t.clearSearchBtn);
+            setTxt('empty-state-title', t.noMatchesTitle);
+            setTxt('i18n-suggestions-label', t.suggestionsLabel);
+
+            // Specification Reader View
             setTxt('i18n-back-btn-text', t.backBtn);
             setTxt('i18n-copy-text', t.copyLink);
             setTxt('i18n-crate-label', t.canonicalCrate);
@@ -142,16 +150,6 @@
             setTxt('i18n-return-catalog', t.returnCatalog);
             setTxt('i18n-prev-label', t.prevStandard);
             setTxt('i18n-next-label', t.nextStandard);
-            setTxt('skip-link', t.skipLink);
-            setTxt('matrix-title', t.matrixTitle);
-            setTxt('matrix-desc', t.matrixDesc);
-            setTxt('i18n-empty-clear-btn', t.clearSearchBtn);
-            setTxt('empty-state-title', t.noMatchesTitle);
-            setTxt('i18n-suggestions-label', t.suggestionsLabel);
-            setTxt('i18n-footer-title', t.footerTitle);
-            setTxt('i18n-footer-desc', t.footerDesc);
-            setTxt('i18n-copyright', t.copyright);
-            setTxt('i18n-foss', t.foss);
             setTxt('i18n-toc-on-this-page', t.specTocOnThisPage);
             setTxt('i18n-toc-back-to-top', t.specTocBackToTop);
             setTxt('i18n-toc-share', t.specTocShare);
@@ -165,8 +163,71 @@
                 sNavInput.setAttribute('aria-label', t.specNavSearchPlaceholder);
             }
 
+            // Compliance Matrix View
+            setTxt('i18n-matrix-eyebrow', t.matrixEyebrow);
+            setTxt('matrix-page-title', t.matrixPageTitle);
+            setTxt('matrix-page-desc', t.matrixPageDesc);
+            setTxt('i18n-matrix-back-btn', t.matrixBackBtn);
+            setTxt('matrix-export-btn-text', t.matrixExportBtn);
+            setTxt('kpi-score-lbl', t.matrixKpiScore);
+            setTxt('kpi-invariants-lbl', t.matrixKpiInvariants);
+            setTxt('kpi-governed-lbl', t.matrixKpiGoverned);
+            setTxt('kpi-guarantee-lbl', t.matrixKpiGuarantee);
+
+            // Matrix View Mode Buttons
+            setTxt('pivot-mode-scorecards', t.matrixModeScorecards);
+            setTxt('pivot-mode-grid', t.matrixModePivot);
+            setTxt('pivot-mode-drilldown', t.matrixModeDrilldown);
+
+            // Matrix Search & Empty State
+            const mSearch = document.getElementById('matrix-search-input');
+            if (mSearch && t.matrixSearchPlaceholder) mSearch.placeholder = t.matrixSearchPlaceholder;
+            setTxt('matrix-empty-title', t.matrixNoMatchesTitle);
+            setTxt('matrix-empty-desc', t.matrixNoMatchesDesc);
+            setTxt('i18n-matrix-empty-clear-btn', t.matrixClearSearchBtn);
+
+            // Matrix Domain Filter Chips
+            setTxt('domain-chip-all', t.domainAll);
+            setTxt('domain-chip-graphics', t.domainGraphics);
+            setTxt('domain-chip-video', t.domainVideo);
+            setTxt('domain-chip-audio', t.domainAudio);
+            setTxt('domain-chip-cad', t.domainCAD);
+            setTxt('domain-chip-productivity', t.domainProductivity);
+            setTxt('domain-chip-devtools', t.domainDevTools);
+
+            // FAQ View
+            setTxt('i18n-faq-eyebrow', t.faqEyebrow || t.matrixEyebrow);
+            setTxt('faq-page-title', t.faqTitle);
+            setTxt('faq-page-desc', t.faqDesc);
+            setTxt('i18n-faq-back-btn', t.matrixBackBtn || t.backBtn);
+            setTxt('faq-cat-all', t.faqCatAll);
+            setTxt('faq-cat-arch', t.faqCatArch);
+            setTxt('faq-cat-autocraft', t.faqCatAutoCraft);
+            setTxt('faq-cat-contrib', t.faqCatContrib);
+            setTxt('faq-cat-i18n', t.faqCatI18n);
+            const faqSearch = document.getElementById('faq-search-input');
+            if (faqSearch && t.faqSearchPlaceholder) faqSearch.placeholder = t.faqSearchPlaceholder;
+
+            // Footer & Metadata
+            setTxt('skip-link', t.skipLink);
+            setTxt('i18n-footer-title', t.footerTitle);
+            setTxt('i18n-footer-desc', t.footerDesc);
+            setTxt('i18n-copyright', t.copyright);
+            setTxt('i18n-foss', t.foss);
+
+            // Re-render Dynamic Components with the new language
             if (activeSpecId) {
                 populateSpecNavTree(activeSpecId);
+            }
+
+            const matrixView = document.getElementById('matrix-view');
+            if (matrixView && matrixView.style.display !== 'none') {
+                renderMatrixView();
+            }
+
+            const faqView = document.getElementById('faq-view');
+            if (faqView && faqView.style.display !== 'none') {
+                renderFaqView();
             }
 
             announceA11y(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : `Language switched to ${t.name || lang}`);
@@ -1855,17 +1916,22 @@
 
             container.innerHTML = filtered.map(item => {
                 const isOpen = faqOpenSet.has(item.id);
+                const t = LOCALES[currentLang] || LOCALES.en || {};
+                const locItem = (t.faqQuestions && t.faqQuestions[item.id]) ? t.faqQuestions[item.id] : null;
+                const qText = locItem ? locItem.q : item.q;
+                const aText = locItem ? locItem.a : item.a;
+
                 return `
                     <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}">
                         <button class="faq-question-btn" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}">
                             <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
                                 <span class="faq-tag">${item.tag}</span>
-                                <span>${item.q}</span>
+                                <span>${qText}</span>
                             </div>
                             <span class="faq-toggle-icon" aria-hidden="true">▾</span>
                         </button>
                         <div class="faq-answer">
-                            ${item.a}
+                            ${aText}
                         </div>
                     </div>
                 `;

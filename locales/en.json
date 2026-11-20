@@ -140,5 +140,43 @@
   "specNavSearchPlaceholder": "Search standards...",
   "specNavAllSpecs": "All Specifications",
   "specNavToggleBtn": "Standards",
-  "specTocToggleBtn": "On this page"
+  "specTocToggleBtn": "On this page",
+  "faqQuestions": {
+    "faq-1": {
+      "q": "Why does the Storytold suite require 28 shared standards across 20+ apps?",
+      "a": "Storytold operates over 20 creative and productivity desktop apps in Rust (PhotoCraft, VectorCraft, FilmCraft, CADCraft, WordCraft, etc.). Without shared invariants, each app independently re-implements toolbar slot cycling, timeline scrubbing, and accessibility trees, causing disjointed user experiences and code drift. The 28 standards guarantee suite-wide ergonomic coherence, accessible AccessKit trees, BiDi mirroring, and zero AST drift through automated CI enforcement."
+    },
+    "faq-2": {
+      "q": "How does the AutoCraft MCP server connect to AI agents?",
+      "a": "The <code>craft-standards-mcp</code> crate implements the Model Context Protocol (MCP) over standard I/O (stdio). AI coding agents like Claude Code, Cursor, and AutoCraft query standard rules, inspect pre-flight code snippets with <code>verify_component</code>, and generate 100% compliant boilerplate before writing any application code."
+    },
+    "faq-3": {
+      "q": "What is 'The Keep Rule' in STD-LIB-005?",
+      "a": "The Keep Rule dictates that any test exercising edge cases, fuzz crashes, or malformed inputs must NEVER be deleted or ignored once written. It ensures regression immunity as underlying rendering engines (egui/wgpu) evolve."
+    },
+    "faq-4": {
+      "q": "How do I claim an issue and submit an RFC or PR?",
+      "a": "Per STD-GOV-002, contributors must claim issues before starting work to avoid duplication. PRs must address a single concern, include reproducible unit tests, and maintain 100% clean CI runs with zero AST drift."
+    },
+    "faq-5": {
+      "q": "How does BiDi and RTL shell mirroring work in STD-I18N-001?",
+      "a": "The ArtCraft shell mirrors its full layout hierarchy when the locale is set to a right-to-left language (e.g. Arabic or Hebrew). Toolbars, sidebars, timeline scrub bars, and dialog buttons invert their spatial orientation using CSS logical properties and directional layouts in egui."
+    },
+    "faq-6": {
+      "q": "Why must applications enforce STD-SHELL-003 sandboxed file access?",
+      "a": "ArtCraft desktop applications run with least-privilege sandboxing. Automated scripts and third-party plugins cannot access arbitrary host filesystems; all file reads and writes are restricted to explicitly configured roots."
+    },
+    "faq-7": {
+      "q": "What are the AccessKit tagging requirements in STD-A11Y-001?",
+      "a": "Every interactive widget (buttons, inputs, timeline playheads, canvas viewports) must expose an AccessKit node with an explicit Role, Name, and accessibility bounding box so screen readers work flawlessly on Windows, macOS, and Linux."
+    },
+    "faq-8": {
+      "q": "How does the testkit command generate integration tests?",
+      "a": "Running <code>cargo xtask testkit &lt;STD-ID&gt;</code> produces a ready-to-run Rust integration test file targeting the specified standard's invariant contracts, pre-configured with assertion harnesses."
+    },
+    "faq-9": {
+      "q": "How do I contribute translations for new languages?",
+      "a": "All portal translations live in modular JSON files under <code>locales/&lt;lang-code&gt;.json</code>. To contribute a new language, create a new JSON file (e.g. <code>locales/it.json</code>) with the standard keys. The Rust <code>xtask</code> build automatically bundles it into the single-file dashboard on next build!"
+    }
+  }
 }
