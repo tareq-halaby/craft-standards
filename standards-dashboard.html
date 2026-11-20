@@ -3219,6 +3219,30 @@
             max-height: 360px;
         }
 
+        /* Unified Top Page Header Bar (Used by Matrix, FAQ, Overview) */
+        .page-header-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 0 18px 0;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--sl-color-border);
+            flex-wrap: wrap;
+        }
+        .page-header-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .page-header-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         /* FAQ Page and Modern Exclusive Accordion Styles */
         .faq-toolbar {
             display: flex;
@@ -3251,72 +3275,128 @@
         .faq-item {
             background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .faq-item:hover {
-            border-color: rgba(56, 139, 253, 0.45);
+            border-color: rgba(56, 139, 253, 0.5);
+            background: #111622;
         }
         .faq-item.open {
-            border-color: rgba(56, 139, 253, 0.65);
-            background: #111622;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            border-color: rgba(56, 139, 253, 0.7);
+            background: #121726;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
         }
-        .faq-question-btn {
-            width: 100%;
-            background: transparent;
-            border: none;
-            padding: 18px 20px;
-            text-align: start;
-            cursor: pointer;
+        .faq-header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            color: #FFF;
-            font-family: var(--font-display);
-            font-size: 15px;
+            padding: 18px 22px;
+            cursor: pointer;
+            user-select: none;
+            width: 100%;
+            transition: background 0.15s ease;
+        }
+        .faq-header-row:focus-visible {
+            outline: 2px solid var(--sl-color-accent);
+            outline-offset: -2px;
+        }
+        .faq-question-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        .faq-tag {
+            font-family: var(--font-mono);
+            font-size: 11px;
             font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #8B949E;
+            letter-spacing: 0.03em;
+            flex-shrink: 0;
+        }
+        .faq-item.open .faq-tag {
+            background: rgba(56, 139, 253, 0.15);
+            color: var(--sl-color-accent);
+        }
+        .faq-question-text {
+            color: #FFFFFF;
+            font-family: var(--font-display);
+            font-size: 15.5px;
+            font-weight: 600;
+            line-height: 1.4;
             transition: color 0.15s ease;
         }
-        .faq-question-btn:hover {
+        .faq-header-row:hover .faq-question-text,
+        .faq-item.open .faq-question-text {
             color: var(--sl-color-accent);
         }
-        .faq-item.open .faq-question-btn {
+        .faq-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            margin-inline-start: auto;
+        }
+        .faq-copy-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--sl-color-text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.15s ease;
+            opacity: 0.6;
+        }
+        .faq-header-row:hover .faq-copy-btn {
+            opacity: 1;
+        }
+        .faq-copy-btn:hover {
+            background: rgba(56, 139, 253, 0.2);
             color: var(--sl-color-accent);
+            transform: scale(1.05);
         }
         .faq-toggle-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.06);
             font-size: 13px;
             color: var(--sl-color-text-muted);
             transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, color 0.2s;
             flex-shrink: 0;
         }
-        .faq-item:hover .faq-toggle-icon {
-            background: rgba(56, 139, 253, 0.15);
+        .faq-header-row:hover .faq-toggle-icon {
+            background: rgba(56, 139, 253, 0.2);
             color: var(--sl-color-accent);
         }
         .faq-item.open .faq-toggle-icon {
             transform: rotate(180deg);
-            background: rgba(56, 139, 253, 0.25);
-            color: var(--sl-color-accent);
+            background: var(--sl-color-accent);
+            color: #FFF;
         }
         .faq-answer {
             display: none;
-            padding: 0 20px 20px 20px;
-            font-size: 14px;
-            line-height: 1.65;
+            padding: 0 22px 22px 22px;
+            font-size: 14.5px;
+            line-height: 1.7;
             color: #C9D1D9;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 4px;
-            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            margin-top: 0;
+            padding-top: 18px;
             animation: faqFadeSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         @keyframes faqFadeSlide {
@@ -3334,11 +3414,12 @@
         }
         .faq-answer code {
             font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--sl-color-accent);
-            background: rgba(56, 139, 253, 0.08);
-            padding: 2px 6px;
+            font-size: 12.5px;
+            color: #79C0FF;
+            background: rgba(56, 139, 253, 0.1);
+            padding: 2px 7px;
             border-radius: 4px;
+            border: 1px solid rgba(56, 139, 253, 0.2);
         }
         .faq-tag {
             font-family: var(--font-mono);
@@ -3938,23 +4019,25 @@
 
     <!-- FULL-PAGE COMPLIANCE MATRIX VIEW (First-Class Non-Modal View) -->
     <main id="matrix-view" class="main-container" style="display:none;" role="main" aria-label="Suite Compliance Telemetry">
-        <!-- Matrix Top Action Bar -->
-        <nav class="reader-breadcrumb-bar" aria-label="Matrix Navigation" style="margin-bottom:24px;">
-            <div class="reader-actions">
+        <!-- Dedicated Top Page Header Bar -->
+        <header class="page-header-nav" aria-label="Matrix Navigation">
+            <div class="page-header-nav-left">
                 <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-matrix-back-btn">Back to Catalog</span>
                 </button>
+                <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" aria-current="page">compliance-matrix</span></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="page-header-nav-right">
                 <button class="reader-btn" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Compliance Report to clipboard">
                     <span>📋</span> <span id="matrix-export-btn-text">Copy Markdown Report</span>
                 </button>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" aria-current="page">compliance-matrix</span></li>
-                </ol>
-            </div>
-        </nav>
+        </header>
 
         <!-- Matrix Page Hero -->
         <section class="wiki-hero" style="margin-bottom:28px;">
@@ -4082,20 +4165,20 @@
 
     <!-- FULL-PAGE FAQ & ARCHITECTURE GUIDE VIEW (First-Class Non-Modal View) -->
     <main id="faq-view" class="main-container" style="display:none;" role="main" aria-label="Frequently Asked Questions and Architecture Guide">
-        <!-- Top Breadcrumb Bar -->
-        <nav class="reader-breadcrumb-bar" aria-label="FAQ Navigation" style="margin-bottom:24px;">
-            <div class="reader-actions">
+        <!-- Dedicated Top Page Header Bar -->
+        <header class="page-header-nav" aria-label="FAQ Navigation">
+            <div class="page-header-nav-left">
                 <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-faq-back-btn">Back to Catalog</span>
                 </button>
+                <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" aria-current="page">faq-and-guide</span></li>
+                    </ol>
+                </nav>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" aria-current="page">faq-and-guide</span></li>
-                </ol>
-            </div>
-        </nav>
+        </header>
 
         <!-- FAQ Hero -->
         <section class="wiki-hero" style="margin-bottom:28px;">
@@ -4139,20 +4222,20 @@
 
     <!-- FULL-PAGE INTRODUCTION & ARCHITECTURE OVERVIEW (Executive Whitepaper) -->
     <main id="about-view" class="main-container" style="display:none;" role="main" aria-label="Introduction &amp; Architecture Overview">
-        <!-- Top Breadcrumb Bar -->
-        <nav class="reader-breadcrumb-bar" aria-label="Introduction Navigation" style="margin-bottom:24px;">
-            <div class="reader-actions">
+        <!-- Dedicated Top Page Header Bar -->
+        <header class="page-header-nav" aria-label="Introduction Navigation">
+            <div class="page-header-nav-left">
                 <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-about-back-btn">Back to Catalog</span>
                 </button>
+                <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" aria-current="page">introduction-and-overview</span></li>
+                    </ol>
+                </nav>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" aria-current="page">introduction-and-overview</span></li>
-                </ol>
-            </div>
-        </nav>
+        </header>
 
         <!-- Executive Hero -->
         <section class="wiki-hero" style="margin-bottom:32px;">
@@ -7966,16 +8049,16 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
 
                 return `
                     <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}" role="region" aria-labelledby="header-${item.id}">
-                        <button class="faq-question-btn" id="header-${item.id}" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}" aria-controls="content-${item.id}">
-                            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+                        <div class="faq-header-row" id="header-${item.id}" onclick="toggleFaqItem('${item.id}')" role="button" tabindex="0" aria-expanded="${isOpen}" aria-controls="content-${item.id}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaqItem('${item.id}');}">
+                            <div class="faq-question-content">
                                 <span class="faq-tag">${item.tag}</span>
-                                <span>${qText}</span>
+                                <span class="faq-question-text">${qText}</span>
                             </div>
-                            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                                <button type="button" class="faq-copy-btn" onclick="copyFaqLink(event, '${item.id}')" title="Copy direct link to question" aria-label="Copy direct link to question">🔗</button>
+                            <div class="faq-actions-right">
+                                <span class="faq-copy-btn" onclick="copyFaqLink(event, '${item.id}')" title="Copy direct link to question" aria-label="Copy direct link to question" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();copyFaqLink(event, '${item.id}');}">🔗</span>
                                 <span class="faq-toggle-icon" aria-hidden="true">▾</span>
                             </div>
-                        </button>
+                        </div>
                         <div class="faq-answer" id="content-${item.id}" role="region" aria-labelledby="header-${item.id}">
                             ${aText}
                         </div>

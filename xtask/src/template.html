@@ -277,23 +277,25 @@ __ITEMS__
 
     <!-- FULL-PAGE COMPLIANCE MATRIX VIEW (First-Class Non-Modal View) -->
     <main id="matrix-view" class="main-container" style="display:none;" role="main" aria-label="Suite Compliance Telemetry">
-        <!-- Matrix Top Action Bar -->
-        <nav class="reader-breadcrumb-bar" aria-label="Matrix Navigation" style="margin-bottom:24px;">
-            <div class="reader-actions">
+        <!-- Dedicated Top Page Header Bar -->
+        <header class="page-header-nav" aria-label="Matrix Navigation">
+            <div class="page-header-nav-left">
                 <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-matrix-back-btn">Back to Catalog</span>
                 </button>
+                <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" aria-current="page">compliance-matrix</span></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="page-header-nav-right">
                 <button class="reader-btn" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Compliance Report to clipboard">
                     <span>📋</span> <span id="matrix-export-btn-text">Copy Markdown Report</span>
                 </button>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" aria-current="page">compliance-matrix</span></li>
-                </ol>
-            </div>
-        </nav>
+        </header>
 
         <!-- Matrix Page Hero -->
         <section class="wiki-hero" style="margin-bottom:28px;">
@@ -421,20 +423,20 @@ __ITEMS__
 
     <!-- FULL-PAGE FAQ & ARCHITECTURE GUIDE VIEW (First-Class Non-Modal View) -->
     <main id="faq-view" class="main-container" style="display:none;" role="main" aria-label="Frequently Asked Questions and Architecture Guide">
-        <!-- Top Breadcrumb Bar -->
-        <nav class="reader-breadcrumb-bar" aria-label="FAQ Navigation" style="margin-bottom:24px;">
-            <div class="reader-actions">
+        <!-- Dedicated Top Page Header Bar -->
+        <header class="page-header-nav" aria-label="FAQ Navigation">
+            <div class="page-header-nav-left">
                 <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-faq-back-btn">Back to Catalog</span>
                 </button>
+                <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" aria-current="page">faq-and-guide</span></li>
+                    </ol>
+                </nav>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" aria-current="page">faq-and-guide</span></li>
-                </ol>
-            </div>
-        </nav>
+        </header>
 
         <!-- FAQ Hero -->
         <section class="wiki-hero" style="margin-bottom:28px;">
@@ -478,20 +480,20 @@ __ITEMS__
 
     <!-- FULL-PAGE INTRODUCTION & ARCHITECTURE OVERVIEW (Executive Whitepaper) -->
     <main id="about-view" class="main-container" style="display:none;" role="main" aria-label="Introduction &amp; Architecture Overview">
-        <!-- Top Breadcrumb Bar -->
-        <nav class="reader-breadcrumb-bar" aria-label="Introduction Navigation" style="margin-bottom:24px;">
-            <div class="reader-actions">
+        <!-- Dedicated Top Page Header Bar -->
+        <header class="page-header-nav" aria-label="Introduction Navigation">
+            <div class="page-header-nav-left">
                 <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-about-back-btn">Back to Catalog</span>
                 </button>
+                <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" aria-current="page">introduction-and-overview</span></li>
+                    </ol>
+                </nav>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" aria-current="page">introduction-and-overview</span></li>
-                </ol>
-            </div>
-        </nav>
+        </header>
 
         <!-- Executive Hero -->
         <section class="wiki-hero" style="margin-bottom:32px;">

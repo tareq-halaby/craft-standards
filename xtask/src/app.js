@@ -2057,16 +2057,16 @@
 
                 return `
                     <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}" role="region" aria-labelledby="header-${item.id}">
-                        <button class="faq-question-btn" id="header-${item.id}" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}" aria-controls="content-${item.id}">
-                            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+                        <div class="faq-header-row" id="header-${item.id}" onclick="toggleFaqItem('${item.id}')" role="button" tabindex="0" aria-expanded="${isOpen}" aria-controls="content-${item.id}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFaqItem('${item.id}');}">
+                            <div class="faq-question-content">
                                 <span class="faq-tag">${item.tag}</span>
-                                <span>${qText}</span>
+                                <span class="faq-question-text">${qText}</span>
                             </div>
-                            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                                <button type="button" class="faq-copy-btn" onclick="copyFaqLink(event, '${item.id}')" title="Copy direct link to question" aria-label="Copy direct link to question">🔗</button>
+                            <div class="faq-actions-right">
+                                <span class="faq-copy-btn" onclick="copyFaqLink(event, '${item.id}')" title="Copy direct link to question" aria-label="Copy direct link to question" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();copyFaqLink(event, '${item.id}');}">🔗</span>
                                 <span class="faq-toggle-icon" aria-hidden="true">▾</span>
                             </div>
-                        </button>
+                        </div>
                         <div class="faq-answer" id="content-${item.id}" role="region" aria-labelledby="header-${item.id}">
                             ${aText}
                         </div>
