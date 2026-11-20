@@ -589,9 +589,6 @@
                     return;
                 }
             }
-                    return;
-                }
-            }
 
             if (e.key === '/' && document.activeElement !== searchInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
                 e.preventDefault();
