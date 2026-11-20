@@ -352,6 +352,33 @@ fn escape_json(s: &str) -> String {
     out
 }
 
+fn locales_dir() -> PathBuf {
+    let manifest = std::env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| ".".to_string());
+    let mut path = PathBuf::from(manifest);
+    if path.file_name().and_then(|n| n.to_str()) == Some("xtask") {
+        path.pop();
+    }
+    path.join("locales")
+}
+
+fn load_locales_json() -> String {
+    let dir = locales_dir();
+    let mut map = Vec::new();
+    if let Ok(entries) = fs::read_dir(&dir) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.extension().and_then(|e| e.to_str()) == Some("json") {
+                if let Ok(content) = fs::read_to_string(&path) {
+                    if let Some(stem) = path.file_stem().and_then(|s| s.to_str()) {
+                        map.push(format!("\"{}\": {}", stem, content.trim()));
+                    }
+                }
+            }
+        }
+    }
+    format!("{{{}}}", map.join(",\n"))
+}
+
 fn run_html_report() {
     let dir = standards_dir();
     let files = collect_standards(&dir);
@@ -408,12 +435,14 @@ fn run_html_report() {
     }
 
     let specs_json = format!("[{}]", json_items.join(",\n"));
+    let locales_json = load_locales_json();
 
     const TEMPLATE: &str = include_str!("template.html");
     let html = TEMPLATE
         .replace("__TOTAL__", &specs.len().to_string())
         .replace("__ITEMS__", &items_html)
-        .replace("__SPECS_JSON__", &specs_json);
+        .replace("__SPECS_JSON__", &specs_json)
+        .replace("__LOCALES_JSON__", &locales_json);
 
     let output_path = standards_dir().parent().unwrap_or(Path::new(".")).join("standards-dashboard.html");
     if let Err(e) = fs::write(&output_path, html) {

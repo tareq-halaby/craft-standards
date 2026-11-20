@@ -181,7 +181,7 @@
             .wiki-header-nav { gap: 12px; }
         }
 
-        /* i18n Language Selector Toggle */
+        /* i18n Language Selector Dropdown (Modular & Contributor-Friendly) */
         .lang-picker {
             position: relative;
             display: inline-block;
@@ -193,17 +193,62 @@
             font-family: var(--font-mono);
             font-size: 11px;
             font-weight: 600;
-            padding: 4px 8px;
+            padding: 5px 10px;
             border-radius: 6px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             transition: all 0.15s;
         }
         .lang-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: var(--sl-color-accent);
+        }
+        .lang-arrow { font-size: 10px; opacity: 0.6; transition: transform 0.2s; }
+        .lang-btn[aria-expanded="true"] .lang-arrow { transform: rotate(180deg); }
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            inset-inline-end: 0;
+            margin-top: 6px;
+            background: #161B22;
+            border: 1px solid var(--sl-color-border);
+            border-radius: 8px;
+            padding: 6px;
+            min-width: 170px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .lang-dropdown.open { display: flex; }
+        .lang-option {
+            background: transparent;
+            border: none;
+            color: var(--sl-color-text);
+            font-size: 12.5px;
+            padding: 7px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            text-align: start;
+            transition: all 0.15s;
+            width: 100%;
+            font-family: var(--font-sans);
+        }
+        .lang-option:hover {
+            background: rgba(56, 139, 253, 0.15);
+            color: var(--sl-color-white);
+        }
+        .lang-option.active {
+            color: var(--sl-color-accent);
+            font-weight: 600;
+            background: rgba(56, 139, 253, 0.08);
         }
 
         .wiki-header-link {
@@ -278,23 +323,46 @@
             gap: 6px;
             line-height: 1.4;
         }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.8); }
+        }
+        .wiki-eyebrow {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--sl-color-accent);
+            margin-bottom: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.4;
+            background: rgba(56, 139, 253, 0.08);
+            border: 1px solid rgba(56, 139, 253, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
         .wiki-eyebrow::before {
             content: "";
             display: inline-block;
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             background: var(--sl-color-accent);
             border-radius: 50%;
             flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(56, 139, 253, 0.8);
+            animation: pulse-dot 2s infinite ease-in-out;
         }
         .wiki-title {
             font-family: var(--font-display);
-            font-size: clamp(26px, 6.5vw, 42px);
+            font-size: clamp(26px, 6.5vw, 44px);
             font-weight: 800;
             color: var(--sl-color-white);
             line-height: 1.15;
-            letter-spacing: -0.02em;
-            margin-bottom: 12px;
+            letter-spacing: -0.025em;
+            margin-bottom: 14px;
             word-wrap: break-word;
         }
         .wiki-title em {
@@ -304,21 +372,21 @@
             color: var(--sl-color-accent);
         }
         .wiki-desc {
-            font-size: 14px;
+            font-size: 14.5px;
             color: var(--sl-color-text-muted);
-            line-height: 1.55;
-            max-width: 720px;
+            line-height: 1.6;
+            max-width: 740px;
         }
         @media (min-width: 768px) {
-            .wiki-desc { font-size: 16px; line-height: 1.6; }
+            .wiki-desc { font-size: 16px; line-height: 1.65; }
         }
 
         /* Stats Bar (Mobile-first 2x2 grid, Desktop 4-col) */
         .wiki-stats-bar {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 28px;
+            gap: 10px;
+            margin-bottom: 32px;
         }
         @media (min-width: 768px) {
             .wiki-stats-bar {
@@ -330,76 +398,102 @@
         .wiki-stat-card {
             background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
-            border-radius: 8px;
-            padding: 12px 14px;
-            transition: border-color 0.2s, background 0.2s;
+            border-radius: 10px;
+            padding: 14px 16px;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
         @media (min-width: 768px) {
-            .wiki-stat-card { padding: 16px 20px; }
+            .wiki-stat-card { padding: 18px 22px; }
+        }
+        .wiki-stat-card:hover {
+            border-color: rgba(56, 139, 253, 0.4);
+            transform: translateY(-2px);
+            background: var(--sl-color-card-hover);
         }
         .wiki-stat-num {
             font-family: var(--font-display);
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--sl-color-white);
+            line-height: 1.1;
         }
         @media (min-width: 768px) {
-            .wiki-stat-num { font-size: 26px; }
+            .wiki-stat-num { font-size: 28px; }
         }
         .wiki-stat-label {
+            font-size: 11px;
+            color: var(--sl-color-text);
+            margin-top: 4px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            font-family: var(--font-sans);
+        }
+        .wiki-stat-sub {
             font-size: 10px;
             color: var(--sl-color-text-muted);
             margin-top: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             font-family: var(--font-mono);
         }
+
+        /* Modernized Two-Row Controls Container */
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--sl-color-border);
+        }
         @media (min-width: 768px) {
-            .wiki-stat-label { font-size: 12px; }
+            .controls-container {
+                margin-bottom: 36px;
+                padding-bottom: 24px;
+                gap: 18px;
+            }
         }
 
-        /* Controls Bar (Search + Horizontally Scrollable Filters) */
-        .controls-bar {
+        /* Row 1: Search + Actions */
+        .controls-top-row {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--sl-color-border);
         }
-        @media (min-width: 900px) {
-            .controls-bar {
+        @media (min-width: 640px) {
+            .controls-top-row {
                 flex-direction: row;
                 align-items: center;
                 justify-content: space-between;
                 gap: 16px;
-                margin-bottom: 32px;
-                padding-bottom: 24px;
             }
         }
-        .search-wrapper {
+
+        .search-box {
             position: relative;
-            width: 100%;
-        }
-        @media (min-width: 900px) {
-            .search-wrapper { width: 300px; }
+            flex: 1;
+            max-width: 640px;
         }
         .search-input {
             width: 100%;
-            height: 42px;
+            height: 44px;
             background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
             border-radius: 8px;
-            padding: 0 16px 0 38px;
+            padding: 0 76px 0 38px;
             color: var(--sl-color-white);
             font-size: 14px;
             font-family: var(--font-sans);
             outline: none;
-            transition: border-color 0.15s, background 0.15s;
+            transition: all 0.15s;
+        }
+        [dir="rtl"] .search-input {
+            padding: 0 38px 0 76px;
         }
         .search-input:focus {
             border-color: var(--sl-color-accent);
             background: #161B26;
+            box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.18);
         }
         .search-icon {
             position: absolute;
@@ -409,36 +503,122 @@
             color: var(--sl-color-text-muted);
             pointer-events: none;
         }
+        .search-clear-btn {
+            position: absolute;
+            inset-inline-end: 36px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: var(--sl-color-text-muted);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .search-clear-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #FFF;
+        }
+        .search-shortcut-badge {
+            position: absolute;
+            inset-inline-end: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        .search-shortcut-badge kbd {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--sl-color-text-muted);
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
 
-        /* Filter Chips Strip */
-        .filter-group {
+        /* Matrix Action Button */
+        .controls-actions {
             display: flex;
-            flex-wrap: nowrap;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .action-btn {
+            background: var(--sl-color-card);
+            border: 1px solid var(--sl-color-border);
+            color: var(--sl-color-white);
+            height: 44px;
+            padding: 0 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: var(--font-sans);
+            white-space: nowrap;
+        }
+        .action-btn:hover {
+            border-color: #58A6FF;
+            background: #1F2430;
+            transform: translateY(-1px);
+        }
+        .matrix-action-btn {
+            border-color: rgba(56, 139, 253, 0.4);
+            background: rgba(56, 139, 253, 0.08);
+        }
+        .action-btn-badge {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            background: rgba(56, 139, 253, 0.2);
+            color: #58A6FF;
+            padding: 2px 7px;
+            border-radius: 10px;
+            border: 1px solid rgba(56, 139, 253, 0.3);
+        }
+
+        /* Row 2: Category Filter Strip */
+        .filter-strip-wrapper {
+            width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            gap: 8px;
-            padding-bottom: 4px;
+            scrollbar-width: none;
             margin-inline: -16px;
             padding-inline: 16px;
-            scrollbar-width: none;
         }
-        .filter-group::-webkit-scrollbar { display: none; }
-        @media (min-width: 900px) {
-            .filter-group {
+        .filter-strip-wrapper::-webkit-scrollbar { display: none; }
+        @media (min-width: 1024px) {
+            .filter-strip-wrapper {
                 margin-inline: 0;
                 padding-inline: 0;
-                flex-wrap: wrap;
                 overflow-x: visible;
             }
+        }
+        .filter-strip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+        @media (min-width: 1024px) {
+            .filter-strip { flex-wrap: wrap; gap: 8px; }
         }
         .filter-chip {
             flex-shrink: 0;
             white-space: nowrap;
             height: 34px;
-            background: transparent;
+            background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
             color: var(--sl-color-text-muted);
-            padding: 0 14px;
+            padding: 0 12px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 500;
@@ -447,14 +627,15 @@
             font-family: var(--font-sans);
             display: inline-flex;
             align-items: center;
+            gap: 6px;
         }
         @media (min-width: 768px) {
-            .filter-chip { font-size: 13px; height: 36px; padding: 0 16px; }
+            .filter-chip { font-size: 12.5px; height: 35px; padding: 0 14px; }
         }
         .filter-chip:hover {
             border-color: var(--sl-color-border-hover);
             color: var(--sl-color-white);
-            background: var(--sl-color-card);
+            background: var(--sl-color-card-hover);
         }
         .filter-chip[aria-pressed="true"],
         .filter-chip.active {
@@ -462,6 +643,96 @@
             color: var(--sl-color-bg);
             border-color: var(--sl-color-white);
             font-weight: 600;
+        }
+        .chip-count {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: inherit;
+            padding: 1px 6px;
+            border-radius: 10px;
+        }
+        .filter-chip.active .chip-count {
+            background: rgba(0, 0, 0, 0.18);
+            color: var(--sl-color-bg);
+        }
+
+        /* Results Status & Empty State */
+        .catalog-status-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .results-feedback {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--sl-color-text-muted);
+        }
+        .clear-search-link {
+            background: transparent;
+            border: none;
+            color: var(--sl-color-accent);
+            font-size: 11px;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+        .empty-state-card {
+            background: var(--sl-color-card);
+            border: 1px dashed var(--sl-color-border);
+            border-radius: 12px;
+            padding: 48px 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .empty-state-icon { font-size: 36px; margin-bottom: 4px; }
+        .empty-state-card h3 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            color: var(--sl-color-white);
+            margin: 0;
+        }
+        .empty-state-card p {
+            font-size: 14px;
+            color: var(--sl-color-text-muted);
+            max-width: 440px;
+            margin: 0;
+        }
+        .empty-state-suggestions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--sl-color-text-muted);
+        }
+        .suggestion-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--sl-color-border);
+            color: var(--sl-color-text);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .suggestion-chip:hover {
+            border-color: var(--sl-color-accent);
+            color: var(--sl-color-white);
         }
 
         /* Section Headings */
@@ -1297,10 +1568,15 @@
             <span class="wiki-brand-badge">portal</span>
         </a>
         <nav class="wiki-header-nav" role="navigation" aria-label="Main Navigation">
-            <div class="lang-picker">
-                <button class="lang-btn" onclick="toggleLanguage()" aria-label="Change Language" id="lang-toggle-btn">
+            <div class="lang-picker" id="lang-picker-container">
+                <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
+                    <span id="current-lang-flag">🇺🇸</span>
                     <span id="current-lang-code">EN</span>
+                    <span class="lang-arrow" aria-hidden="true">▾</span>
                 </button>
+                <div class="lang-dropdown" id="lang-dropdown-menu" role="listbox" aria-label="Language Selector">
+                    <!-- Populated dynamically from LOCALES -->
+                </div>
             </div>
             <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
@@ -1335,44 +1611,108 @@
             <div class="wiki-stat-card">
                 <div class="wiki-stat-num">__TOTAL__</div>
                 <div class="wiki-stat-label" id="i18n-stat-standards">Active Standards</div>
+                <div class="wiki-stat-sub" id="i18n-stat-standards-sub">Executable specs &amp; MCP</div>
             </div>
             <div class="wiki-stat-card">
                 <div class="wiki-stat-num">20+</div>
                 <div class="wiki-stat-label" id="i18n-stat-apps">Governed Apps</div>
+                <div class="wiki-stat-sub" id="i18n-stat-apps-sub">PhotoCraft, CADCraft, FilmCraft...</div>
             </div>
             <div class="wiki-stat-card">
                 <div class="wiki-stat-num">100%</div>
                 <div class="wiki-stat-label" id="i18n-stat-ci">CI Verification</div>
+                <div class="wiki-stat-sub" id="i18n-stat-ci-sub">Zero AST drift</div>
             </div>
             <div class="wiki-stat-card">
-                <div class="wiki-stat-num">Active</div>
+                <div class="wiki-stat-num">v0.2.0</div>
                 <div class="wiki-stat-label" id="i18n-stat-mcp">AutoCraft MCP</div>
+                <div class="wiki-stat-sub" id="i18n-stat-mcp-sub">Universal stdio gateway</div>
             </div>
         </section>
 
-        <!-- Controls Bar -->
-        <section class="controls-bar" aria-label="Catalog Filtering & Search" role="search">
-            <div class="search-wrapper">
-                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="search" id="search" class="search-input" placeholder="Search standards, shortcuts, crates..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="searchbox" aria-label="Search specifications" aria-controls="grid" aria-describedby="visible-count">
+        <!-- Modernized Two-Row Controls Container -->
+        <section class="controls-container" aria-label="Catalog Filtering &amp; Search" role="search">
+            <!-- Row 1: Search Box + Action Buttons -->
+            <div class="controls-top-row">
+                <div class="search-box">
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="search" id="search" class="search-input" placeholder="Search standards, shortcuts (Ctrl+Tab), crates..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="searchbox" aria-label="Search specifications" aria-controls="grid" aria-describedby="visible-count">
+                    <button id="search-clear-btn" class="search-clear-btn" onclick="clearSearch()" aria-label="Clear search input" title="Clear search">✕</button>
+                    <div class="search-shortcut-badge" aria-hidden="true"><kbd>/</kbd></div>
+                </div>
+
+                <div class="controls-actions">
+                    <button class="action-btn matrix-action-btn" onclick="openComplianceMatrix()" aria-label="Open Suite Compliance Matrix">
+                        <span class="btn-icon">📊</span>
+                        <span id="i18n-matrix-btn">Compliance Matrix</span>
+                        <span class="action-btn-badge">20 Apps</span>
+                    </button>
+                </div>
             </div>
-            <div class="filter-group" role="toolbar" aria-label="Filter standards by category">
-                <button class="filter-chip active" onclick="filterCategory('all', this)" aria-pressed="true" id="chip-all">All Standards</button>
-                <button class="filter-chip" onclick="filterCategory('interaction', this)" aria-pressed="false" id="chip-interaction">Interaction</button>
-                <button class="filter-chip" onclick="filterCategory('navigation', this)" aria-pressed="false" id="chip-navigation">Navigation</button>
-                <button class="filter-chip" onclick="filterCategory('accessibility', this)" aria-pressed="false" id="chip-accessibility">Accessibility</button>
-                <button class="filter-chip" onclick="filterCategory('internationalization', this)" aria-pressed="false" id="chip-i18n">i18n / RTL</button>
-                <button class="filter-chip" onclick="filterCategory('shell', this)" aria-pressed="false" id="chip-shell">Shell &amp; Chrome</button>
-                <button class="filter-chip" onclick="filterCategory('unified-libs', this)" aria-pressed="false" id="chip-libs">Unified Libs</button>
-                <button class="filter-chip" onclick="filterCategory('governance', this)" aria-pressed="false" id="chip-governance">Governance</button>
-                <button class="filter-chip" onclick="openComplianceMatrix()" id="chip-matrix" style="border-color:#388BFD;color:#58A6FF;background:rgba(56,139,253,0.12);font-weight:600;">📊 Compliance Matrix</button>
+
+            <!-- Row 2: Category Filter Strip with Count Badges -->
+            <div class="filter-strip-wrapper">
+                <div class="filter-strip" role="toolbar" aria-label="Filter standards by category">
+                    <button class="filter-chip active" onclick="filterCategory('all', this)" aria-pressed="true" id="chip-all">
+                        <span class="chip-label" id="i18n-chip-all">All Standards</span>
+                        <span class="chip-count" id="count-all">28</span>
+                    </button>
+                    <button class="filter-chip" onclick="filterCategory('interaction', this)" aria-pressed="false" id="chip-interaction">
+                        <span class="chip-label" id="i18n-chip-interaction">Interaction</span>
+                        <span class="chip-count" id="count-interaction">5</span>
+                    </button>
+                    <button class="filter-chip" onclick="filterCategory('navigation', this)" aria-pressed="false" id="chip-navigation">
+                        <span class="chip-label" id="i18n-chip-navigation">Navigation</span>
+                        <span class="chip-count" id="count-navigation">4</span>
+                    </button>
+                    <button class="filter-chip" onclick="filterCategory('accessibility', this)" aria-pressed="false" id="chip-accessibility">
+                        <span class="chip-label" id="i18n-chip-accessibility">Accessibility</span>
+                        <span class="chip-count" id="count-accessibility">2</span>
+                    </button>
+                    <button class="filter-chip" onclick="filterCategory('internationalization', this)" aria-pressed="false" id="chip-i18n">
+                        <span class="chip-label" id="i18n-chip-i18n">i18n / RTL</span>
+                        <span class="chip-count" id="count-internationalization">2</span>
+                    </button>
+                    <button class="filter-chip" onclick="filterCategory('shell', this)" aria-pressed="false" id="chip-shell">
+                        <span class="chip-label" id="i18n-chip-shell">Shell &amp; Chrome</span>
+                        <span class="chip-count" id="count-shell">4</span>
+                    </button>
+                    <button class="filter-chip" onclick="filterCategory('unified-libs', this)" aria-pressed="false" id="chip-libs">
+                        <span class="chip-label" id="i18n-chip-libs">Unified Libs</span>
+                        <span class="chip-count" id="count-unified-libs">6</span>
+                    </button>
+                    <button class="filter-chip" onclick="filterCategory('governance', this)" aria-pressed="false" id="chip-governance">
+                        <span class="chip-label" id="i18n-chip-governance">Governance</span>
+                        <span class="chip-count" id="count-governance">3</span>
+                    </button>
+                </div>
             </div>
         </section>
 
-        <!-- Section Heading -->
-        <div class="wiki-section-heading">
-            <h2 id="i18n-cat-heading">Specifications Catalog</h2>
-            <span class="count" id="visible-count">Showing __TOTAL__ specifications</span>
+        <!-- Status & Results Heading Bar -->
+        <div class="catalog-status-bar" id="status-bar">
+            <h2 id="i18n-cat-heading" style="font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--sl-color-white);text-transform:uppercase;letter-spacing:0.05em;margin:0;">Specifications Catalog</h2>
+            <div class="results-feedback" id="results-feedback">
+                <span id="visible-count">Showing 28 specifications</span>
+                <button id="clear-search-link" class="clear-search-link" onclick="clearSearchAndFilters()" style="display:none;" aria-label="Clear active search">Clear search ✕</button>
+            </div>
+        </div>
+
+        <!-- Empty State (When search has 0 matches) -->
+        <div id="empty-state-card" class="empty-state-card" style="display:none;" role="status">
+            <div class="empty-state-icon">🔍</div>
+            <h3 id="empty-state-title">No matching specifications found</h3>
+            <p id="empty-state-desc">We couldn't find any standards matching your search.</p>
+            <button class="reader-btn primary" onclick="clearSearchAndFilters()" id="i18n-empty-clear-btn" style="margin-top:8px;">Clear search and filters</button>
+            <div class="empty-state-suggestions">
+                <span id="i18n-suggestions-label">Try searching by:</span>
+                <button class="suggestion-chip" onclick="applySuggestion('Ctrl+Tab')">Ctrl+Tab</button>
+                <button class="suggestion-chip" onclick="applySuggestion('AccessKit')">AccessKit</button>
+                <button class="suggestion-chip" onclick="applySuggestion('confine')">confine</button>
+                <button class="suggestion-chip" onclick="applySuggestion('wgpu')">wgpu</button>
+                <button class="suggestion-chip" onclick="applySuggestion('Keep Rule')">Keep Rule</button>
+                <button class="suggestion-chip" onclick="applySuggestion('STD-SHELL')">STD-SHELL</button>
+            </div>
         </div>
 
         <!-- Standards Grid -->
@@ -1488,110 +1828,148 @@ __ITEMS__
     <script id="specs-data" type="application/json">
 __SPECS_JSON__
     </script>
+    <script id="locales-data" type="application/json">
+__LOCALES_JSON__
+    </script>
 
     <script>
-        // Centralized i18n Translation Dictionary (Ready for Arabic, French, German, etc.)
-        const I18N = {
-            en: {
-                dir: 'ltr',
-                brandSub: 'Standards',
-                heroEyebrow: 'Universal UX Invariants & Ergonomic Contracts',
-                heroTitle: 'Standards for the <em>20+ ArtCraft</em> Creative Suite',
-                heroDesc: 'Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.',
-                statStandards: 'Active Standards',
-                statApps: 'Governed Apps',
-                statCI: 'CI Verification',
-                statMCP: 'AutoCraft MCP',
-                searchPlaceholder: 'Search standards, shortcuts, crates...',
-                allStandards: 'All Standards',
-                specCatalog: 'Specifications Catalog',
-                showingCount: 'Showing {count} of {total} specifications',
-                backBtn: 'Catalog',
-                copyLink: 'Copy Link',
-                copied: 'Copied! ✓',
-                canonicalCrate: 'Canonical Crate:',
-                governedApps: 'Governed Apps:',
-                craftWikiGuide: 'Craft Wiki Guide:',
-                returnCatalog: 'Back to All Specifications',
-                prevStandard: 'Previous Standard',
-                nextStandard: 'Next Standard',
-                skipLink: 'Skip to main content',
-                footerTitle: 'ArtCraft Universal Standards',
-                footerDesc: 'The single source of truth for UX invariants, shared ergonomic contracts, and AI agent governance across the 20+ ArtCraft suite.',
-                copyright: '© 2026 ARTCRAFT · STORYTOLD ARCHITECTURE',
-                foss: 'FREE AND OPEN SOURCE'
-            },
-            ar: {
-                dir: 'rtl',
-                brandSub: 'المعايير',
-                heroEyebrow: 'ثوابت تجربة المستخدم والعقود الهندسية الموحدة',
-                heroTitle: 'معايير حزمة <em>ArtCraft</em> الإبداعية (+20 تطبيق)',
-                heroDesc: 'مواصفات قياسية حاكمة لتبديل الأدوات، والتمرير الزمني، وشجرة إمكانية الوصول AccessKit، والمحاذاة الكاملة للاتجاهين BiDi/RTL، وحوكمة وكلاء الذكاء الاصطناعي عبر كافة تطبيقات ArtCraft.',
-                statStandards: 'معايير نشطة',
-                statApps: 'تطبيقات خاضعة',
-                statCI: 'فحص آلي 100%',
-                statMCP: 'خادم MCP نشط',
-                searchPlaceholder: 'ابحث في المعايير والاختصارات والحزم...',
-                allStandards: 'كافة المعايير',
-                specCatalog: 'دليل المواصفات',
-                showingCount: 'عرض {count} من أصل {total} مواصفة',
-                backBtn: 'الدليل',
-                copyLink: 'نسخ الرابط',
-                copied: 'تم النسخ! ✓',
-                canonicalCrate: 'الحزمة الأساسية:',
-                governedApps: 'التطبيقات المشمولة:',
-                craftWikiGuide: 'دليل Craft Wiki:',
-                returnCatalog: 'العودة إلى فهرس المعايير',
-                prevStandard: 'المعيار السابق',
-                nextStandard: 'المعيار التالي',
-                skipLink: 'الانتقال إلى المحتوى الرئيسي',
-                footerTitle: 'معايير ArtCraft الموحدة',
-                footerDesc: 'المصدر الموثوق الأوحد لثوابت تجربة المستخدم، والعقود الهندسية المشتركة، وحوكمة الذكاء الاصطناعي عبر حزمة ArtCraft.',
-                copyright: '© 2026 ARTCRAFT · هندسة STORYTOLD',
-                foss: 'حر ومفتوح المصدر'
+        // =========================================================================
+        // Modular i18n Translation Engine (Contributed via locales/*.json)
+        // =========================================================================
+        const LOCALES = JSON.parse(document.getElementById('locales-data').textContent);
+        let currentLang = localStorage.getItem('artcraft-lang') || 'en';
+        if (!LOCALES[currentLang]) currentLang = 'en';
+
+        function initLanguages() {
+            const menu = document.getElementById('lang-dropdown-menu');
+            if (!menu) return;
+            menu.innerHTML = Object.keys(LOCALES).map(code => {
+                const loc = LOCALES[code];
+                const isActive = code === currentLang ? ' active' : '';
+                return `<button class="lang-option${isActive}" onclick="selectLanguage('${code}')" role="option" aria-selected="${code === currentLang}">
+                    <span>${loc.flag} ${loc.name}</span>
+                    <span style="font-family:var(--font-mono);font-size:10px;opacity:0.6;">${code.toUpperCase()}</span>
+                </button>`;
+            }).join('');
+        }
+
+        function toggleLangDropdown(e) {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('lang-dropdown-menu');
+            const btn = document.getElementById('lang-menu-btn');
+            if (!menu || !btn) return;
+            const isOpen = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+
+        function selectLanguage(code) {
+            if (!LOCALES[code]) return;
+            currentLang = code;
+            localStorage.setItem('artcraft-lang', code);
+            const menu = document.getElementById('lang-dropdown-menu');
+            const btn = document.getElementById('lang-menu-btn');
+            if (menu) menu.classList.remove('open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+            initLanguages();
+            applyLanguage(code);
+        }
+
+        window.addEventListener('click', (e) => {
+            const container = document.getElementById('lang-picker-container');
+            const menu = document.getElementById('lang-dropdown-menu');
+            const btn = document.getElementById('lang-menu-btn');
+            if (container && !container.contains(e.target)) {
+                if (menu) menu.classList.remove('open');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
             }
-        };
+        });
 
-        let currentLang = 'en';
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'ar' : 'en';
-            applyLanguage(currentLang);
+        function getCategoryName(cat, t) {
+            switch(cat) {
+                case 'interaction': return t.catInteraction || 'Interaction';
+                case 'navigation': return t.catNavigation || 'Navigation';
+                case 'accessibility': return t.catAccessibility || 'Accessibility';
+                case 'internationalization': return t.cati18n || 'i18n / RTL';
+                case 'shell': return t.catShell || 'Shell & Chrome';
+                case 'unified-libs': return t.catLibs || 'Unified Libs';
+                case 'governance': return t.catGovernance || 'Governance';
+                default: return cat;
+            }
         }
 
         function applyLanguage(lang) {
-            const t = I18N[lang] || I18N.en;
+            const t = LOCALES[lang] || LOCALES.en || {};
             document.documentElement.lang = lang;
-            document.documentElement.dir = t.dir;
-            document.getElementById('current-lang-code').textContent = lang.toUpperCase();
+            document.documentElement.dir = t.dir || 'ltr';
 
-            // Translate elements
-            document.getElementById('i18n-brand-sub').textContent = t.brandSub;
-            document.getElementById('i18n-hero-eyebrow').textContent = t.heroEyebrow;
-            document.getElementById('i18n-hero-desc').textContent = t.heroDesc;
-            document.getElementById('i18n-stat-standards').textContent = t.statStandards;
-            document.getElementById('i18n-stat-apps').textContent = t.statApps;
-            document.getElementById('i18n-stat-ci').textContent = t.statCI;
-            document.getElementById('i18n-stat-mcp').textContent = t.statMCP;
-            document.getElementById('search').placeholder = t.searchPlaceholder;
-            document.getElementById('chip-all').textContent = t.allStandards;
-            document.getElementById('i18n-cat-heading').textContent = t.specCatalog;
-            document.getElementById('i18n-back-btn-text').textContent = t.backBtn;
-            document.getElementById('i18n-copy-text').textContent = t.copyLink;
-            document.getElementById('i18n-crate-label').textContent = t.canonicalCrate;
-            document.getElementById('i18n-apps-label').textContent = t.governedApps;
-            document.getElementById('i18n-wiki-label').textContent = t.craftWikiGuide;
-            document.getElementById('i18n-return-catalog').textContent = t.returnCatalog;
-            document.getElementById('i18n-prev-label').textContent = t.prevStandard;
-            document.getElementById('i18n-next-label').textContent = t.nextStandard;
-            document.getElementById('skip-link').textContent = t.skipLink;
-            document.getElementById('i18n-footer-title').textContent = t.footerTitle;
-            document.getElementById('i18n-footer-desc').textContent = t.footerDesc;
-            document.getElementById('i18n-copyright').textContent = t.copyright;
-            document.getElementById('i18n-foss').textContent = t.foss;
+            const langCodeEl = document.getElementById('current-lang-code');
+            const langFlagEl = document.getElementById('current-lang-flag');
+            if (langCodeEl) langCodeEl.textContent = (t.code || lang).toUpperCase();
+            if (langFlagEl) langFlagEl.textContent = t.flag || '🌐';
 
-            // Announce language change
-            announceA11y(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language switched to English');
+            const setTxt = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && val !== undefined) el.textContent = val;
+            };
+            const setHtml = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && val !== undefined) el.innerHTML = val;
+            };
+
+            setTxt('i18n-brand-sub', t.brandSub);
+            setTxt('i18n-hero-eyebrow', t.heroEyebrow);
+            setHtml('i18n-hero-title', t.heroTitle);
+            setTxt('i18n-hero-desc', t.heroDesc);
+            setTxt('i18n-stat-standards', t.statStandards);
+            setTxt('i18n-stat-standards-sub', t.statStandardsSub);
+            setTxt('i18n-stat-apps', t.statApps);
+            setTxt('i18n-stat-apps-sub', t.statAppsSub);
+            setTxt('i18n-stat-ci', t.statCI);
+            setTxt('i18n-stat-ci-sub', t.statCISub);
+            setTxt('i18n-stat-mcp', t.statMCP);
+            setTxt('i18n-stat-mcp-sub', t.statMCPSub);
+
+            const searchInput = document.getElementById('search');
+            if (searchInput && t.searchPlaceholder) {
+                searchInput.placeholder = t.searchPlaceholder;
+                searchInput.setAttribute('aria-label', t.searchPlaceholder);
+            }
+
+            const searchClearBtn = document.getElementById('search-clear-btn');
+            if (searchClearBtn && t.searchClearLabel) {
+                searchClearBtn.setAttribute('aria-label', t.searchClearLabel);
+            }
+
+            setTxt('i18n-matrix-btn', t.complianceMatrixBtn);
+            setTxt('i18n-chip-all', t.allStandards);
+            setTxt('i18n-chip-interaction', t.catInteraction);
+            setTxt('i18n-chip-navigation', t.catNavigation);
+            setTxt('i18n-chip-accessibility', t.catAccessibility);
+            setTxt('i18n-chip-i18n', t.cati18n);
+            setTxt('i18n-chip-shell', t.catShell);
+            setTxt('i18n-chip-libs', t.catLibs);
+            setTxt('i18n-chip-governance', t.catGovernance);
+            setTxt('i18n-cat-heading', t.specCatalog);
+            setTxt('i18n-back-btn-text', t.backBtn);
+            setTxt('i18n-copy-text', t.copyLink);
+            setTxt('i18n-crate-label', t.canonicalCrate);
+            setTxt('i18n-apps-label', t.governedApps);
+            setTxt('i18n-wiki-label', t.craftWikiGuide);
+            setTxt('i18n-return-catalog', t.returnCatalog);
+            setTxt('i18n-prev-label', t.prevStandard);
+            setTxt('i18n-next-label', t.nextStandard);
+            setTxt('skip-link', t.skipLink);
+            setTxt('matrix-title', t.matrixTitle);
+            setTxt('matrix-desc', t.matrixDesc);
+            setTxt('i18n-empty-clear-btn', t.clearSearchBtn);
+            setTxt('empty-state-title', t.noMatchesTitle);
+            setTxt('i18n-suggestions-label', t.suggestionsLabel);
+            setTxt('i18n-footer-title', t.footerTitle);
+            setTxt('i18n-footer-desc', t.footerDesc);
+            setTxt('i18n-copyright', t.copyright);
+            setTxt('i18n-foss', t.foss);
+
+            announceA11y(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : `Language switched to ${t.name || lang}`);
             applyFilters();
         }
 
@@ -1600,13 +1978,45 @@ __SPECS_JSON__
             if (el) el.textContent = message;
         }
 
-        // Data model
+        // =========================================================================
+        // Data Model & Category Counts
+        // =========================================================================
         const SPECS = JSON.parse(document.getElementById('specs-data').textContent);
         const specsMap = {};
         SPECS.forEach((s, idx) => {
             s._index = idx;
             specsMap[s.id] = s;
         });
+
+        function initCategoryCounts() {
+            const counts = {
+                all: SPECS.length,
+                interaction: 0,
+                navigation: 0,
+                accessibility: 0,
+                internationalization: 0,
+                shell: 0,
+                'unified-libs': 0,
+                governance: 0
+            };
+            SPECS.forEach(s => {
+                if (counts[s.category] !== undefined) {
+                    counts[s.category]++;
+                }
+            });
+            const setBadge = (id, count) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = count;
+            };
+            setBadge('count-all', counts.all);
+            setBadge('count-interaction', counts.interaction);
+            setBadge('count-navigation', counts.navigation);
+            setBadge('count-accessibility', counts.accessibility);
+            setBadge('count-internationalization', counts.internationalization);
+            setBadge('count-shell', counts.shell);
+            setBadge('count-unified-libs', counts['unified-libs']);
+            setBadge('count-governance', counts.governance);
+        }
 
         let currentCategory = 'all';
         let activeSpecId = null;
@@ -1624,26 +2034,120 @@ __SPECS_JSON__
                 btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
             applyFilters();
-            announceA11y(`Filtered by category: ${cat}`);
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+            announceA11y(`Filtered by category: ${getCategoryName(cat, t)}`);
         }
 
         document.getElementById('search').addEventListener('input', applyFilters);
 
         function applyFilters() {
-            const q = document.getElementById('search').value.toLowerCase().trim();
-            const t = I18N[currentLang] || I18N.en;
+            const searchInput = document.getElementById('search');
+            const q = searchInput ? searchInput.value.trim() : '';
+            const qLower = q.toLowerCase();
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+
+            const clearBtn = document.getElementById('search-clear-btn');
+            if (clearBtn) {
+                clearBtn.style.display = q.length > 0 ? 'inline-flex' : 'none';
+            }
+
             let visible = 0;
             document.querySelectorAll('.standard-tile').forEach(tile => {
                 const matchesCat = currentCategory === 'all' || tile.dataset.category === currentCategory;
-                const matchesSearch = !q || tile.innerText.toLowerCase().includes(q);
+                const matchesSearch = !qLower || tile.innerText.toLowerCase().includes(qLower);
                 const show = matchesCat && matchesSearch;
                 tile.style.display = show ? 'flex' : 'none';
                 if (show) visible++;
             });
-            const text = t.showingCount.replace('{count}', visible).replace('{total}', SPECS.length);
-            document.getElementById('visible-count').textContent = text;
-            if (q) {
-                announceA11y(text);
+
+            const grid = document.getElementById('grid');
+            const emptyState = document.getElementById('empty-state-card');
+            const visibleCountEl = document.getElementById('visible-count');
+            const clearSearchLink = document.getElementById('clear-search-link');
+
+            if (visible === 0) {
+                if (grid) grid.style.display = 'none';
+                if (emptyState) emptyState.style.display = 'flex';
+                const emptyDesc = document.getElementById('empty-state-desc');
+                if (emptyDesc) {
+                    const templateDesc = t.noMatchesDesc || "We couldn't find any standards matching \"{query}\".";
+                    emptyDesc.textContent = templateDesc.replace('{query}', q);
+                }
+                if (visibleCountEl) visibleCountEl.textContent = `0 ${t.specCatalog || 'specifications'}`;
+                if (clearSearchLink) clearSearchLink.style.display = 'inline';
+                announceA11y(emptyDesc ? emptyDesc.textContent : 'No matches found');
+            } else {
+                if (grid) grid.style.display = 'grid';
+                if (emptyState) emptyState.style.display = 'none';
+                if (clearSearchLink) {
+                    clearSearchLink.style.display = (q.length > 0 || currentCategory !== 'all') ? 'inline' : 'none';
+                }
+
+                let statusText = '';
+                if (q.length > 0) {
+                    if (currentCategory !== 'all') {
+                        const catName = getCategoryName(currentCategory, t);
+                        statusText = (t.foundResultsCat || 'Found {count} specifications matching "{query}" in {category}')
+                            .replace('{count}', visible)
+                            .replace('{query}', q)
+                            .replace('{category}', catName);
+                    } else {
+                        statusText = (t.foundResults || 'Found {count} specifications matching "{query}"')
+                            .replace('{count}', visible)
+                            .replace('{query}', q);
+                    }
+                } else {
+                    if (currentCategory !== 'all') {
+                        const catName = getCategoryName(currentCategory, t);
+                        statusText = (t.showingFilterCount || 'Showing {count} of {total} specifications in {category}')
+                            .replace('{count}', visible)
+                            .replace('{total}', SPECS.length)
+                            .replace('{category}', catName);
+                    } else {
+                        statusText = (t.showingCount || 'Showing {count} of {total} specifications')
+                            .replace('{count}', visible)
+                            .replace('{total}', SPECS.length);
+                    }
+                }
+                if (visibleCountEl) visibleCountEl.textContent = statusText;
+                if (q.length > 0) {
+                    announceA11y(statusText);
+                }
+            }
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('search');
+            if (input) {
+                input.value = '';
+                applyFilters();
+                input.focus();
+            }
+        }
+
+        function clearSearchAndFilters() {
+            const input = document.getElementById('search');
+            if (input) input.value = '';
+            currentCategory = 'all';
+            document.querySelectorAll('.filter-chip').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
+            const allChip = document.getElementById('chip-all');
+            if (allChip) {
+                allChip.classList.add('active');
+                allChip.setAttribute('aria-pressed', 'true');
+            }
+            applyFilters();
+            if (input) input.focus();
+        }
+
+        function applySuggestion(term) {
+            const input = document.getElementById('search');
+            if (input) {
+                input.value = term;
+                applyFilters();
+                input.focus();
             }
         }
 
@@ -1844,13 +2348,45 @@ __SPECS_JSON__
             }
         }
 
-        // Global Keyboard Navigation (a11y: Escape to return, Alt+Left/Right for pagination)
+        // Global Keyboard Navigation (a11y: Escape to return/close, Alt+Left/Right for pagination, '/' for search)
         window.addEventListener('keydown', (e) => {
-            if (activeSpecId) {
-                if (e.key === 'Escape') {
+            const matrixModal = document.getElementById('matrix-modal');
+            const searchInput = document.getElementById('search');
+
+            if (e.key === 'Escape') {
+                if (matrixModal && matrixModal.style.display === 'flex') {
+                    e.preventDefault();
+                    closeComplianceMatrix();
+                    return;
+                }
+                if (document.activeElement === searchInput) {
+                    if (searchInput.value) {
+                        e.preventDefault();
+                        clearSearch();
+                    } else {
+                        searchInput.blur();
+                    }
+                    return;
+                }
+                if (activeSpecId) {
                     e.preventDefault();
                     showDashboard();
-                } else if (e.altKey && e.key === 'ArrowLeft') {
+                    return;
+                }
+            }
+
+            if (e.key === '/' && document.activeElement !== searchInput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                e.preventDefault();
+                if (activeSpecId) showDashboard();
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+                return;
+            }
+
+            if (activeSpecId) {
+                if (e.altKey && e.key === 'ArrowLeft') {
                     e.preventDefault();
                     navigateSpec(document.documentElement.dir === 'rtl' ? 1 : -1);
                 } else if (e.altKey && e.key === 'ArrowRight') {
@@ -2117,7 +2653,12 @@ __SPECS_JSON__
         }
 
         window.addEventListener('hashchange', handleRouting);
-        window.addEventListener('DOMContentLoaded', handleRouting);
+        window.addEventListener('DOMContentLoaded', () => {
+            initLanguages();
+            initCategoryCounts();
+            applyLanguage(currentLang);
+            handleRouting();
+        });
     </script>
 
     <!-- Compliance Matrix Modal -->
