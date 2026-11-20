@@ -185,5 +185,9 @@
   "faqLinkCopied": "Lien vers la question copié dans le presse-papiers !",
   "faqNoResultsTitle": "Aucune question correspondante trouvée",
   "faqNoResultsDesc": "Essayez avec d'autres termes ou sélectionnez 'Toutes les FAQ'.",
-  "faqResetSearch": "Réinitialiser la recherche FAQ"
+  "faqResetSearch": "Réinitialiser la recherche FAQ",
+  "navAbout": "Vue d'ensemble",
+  "aboutTitle": "Introduction et aperçu architectural",
+  "aboutEyebrow": "Résumé exécutif et livre blanc architectural",
+  "aboutDesc": "Contrats architecturaux de référence, invariants ergonomiques et gouvernance autonome des agents d'IA unifiant les plus de 20 applications de la suite ArtCraft."
 }

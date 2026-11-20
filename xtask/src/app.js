@@ -214,6 +214,13 @@
                 expandText.textContent = faqExpandAllMode ? (t.faqCollapseAll || 'Collapse All') : (t.faqExpandAll || 'Expand All');
             }
 
+            // Overview / About View
+            setTxt('i18n-nav-about', t.navAbout || 'Overview');
+            setTxt('i18n-about-eyebrow', t.aboutEyebrow);
+            setTxt('about-page-title', t.aboutTitle);
+            setTxt('about-page-desc', t.aboutDesc);
+            setTxt('i18n-about-back-btn', t.matrixBackBtn || t.backBtn || 'Back to Catalog');
+
             // Footer & Metadata
             setTxt('skip-link', t.skipLink);
             setTxt('i18n-footer-title', t.footerTitle);
@@ -797,14 +804,18 @@
             if (matrixView) matrixView.style.display = 'none';
             const faqView = document.getElementById('faq-view');
             if (faqView) faqView.style.display = 'none';
+            const aboutView = document.getElementById('about-view');
+            if (aboutView) aboutView.style.display = 'none';
             document.getElementById('spec-view').style.display = 'block';
 
             const navCatalog = document.getElementById('nav-btn-catalog');
             const navMatrix = document.getElementById('nav-btn-matrix');
             const navFaq = document.getElementById('nav-btn-faq');
+            const navAbout = document.getElementById('nav-btn-about');
             if (navCatalog) navCatalog.classList.remove('active');
             if (navMatrix) navMatrix.classList.remove('active');
             if (navFaq) navFaq.classList.remove('active');
+            if (navAbout) navAbout.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -833,14 +844,18 @@
             if (matrixView) matrixView.style.display = 'none';
             const faqView = document.getElementById('faq-view');
             if (faqView) faqView.style.display = 'none';
+            const aboutView = document.getElementById('about-view');
+            if (aboutView) aboutView.style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
 
             const navCatalog = document.getElementById('nav-btn-catalog');
             const navMatrix = document.getElementById('nav-btn-matrix');
             const navFaq = document.getElementById('nav-btn-faq');
+            const navAbout = document.getElementById('nav-btn-about');
             if (navCatalog) navCatalog.classList.add('active');
             if (navMatrix) navMatrix.classList.remove('active');
             if (navFaq) navFaq.classList.remove('active');
+            if (navAbout) navAbout.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -865,15 +880,19 @@
             document.getElementById('dashboard-view').style.display = 'none';
             const faqView = document.getElementById('faq-view');
             if (faqView) faqView.style.display = 'none';
+            const aboutView = document.getElementById('about-view');
+            if (aboutView) aboutView.style.display = 'none';
             const matrixView = document.getElementById('matrix-view');
             if (matrixView) matrixView.style.display = 'block';
 
             const navCatalog = document.getElementById('nav-btn-catalog');
             const navMatrix = document.getElementById('nav-btn-matrix');
             const navFaq = document.getElementById('nav-btn-faq');
+            const navAbout = document.getElementById('nav-btn-about');
             if (navCatalog) navCatalog.classList.remove('active');
             if (navMatrix) navMatrix.classList.add('active');
             if (navFaq) navFaq.classList.remove('active');
+            if (navAbout) navAbout.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
             renderMatrixView();
@@ -917,6 +936,8 @@
             } else if (hash === 'faq' || hash.startsWith('faq/')) {
                 const targetFaqId = hash.startsWith('faq/') ? hash.substring(4) : null;
                 showFaqView(null, targetFaqId);
+            } else if (hash === 'about' || hash === 'overview' || hash === 'intro') {
+                showAboutView();
             } else if (hash.startsWith('faq-')) {
                 showFaqView(null, hash);
             } else if (hash && specsMap[hash]) {
@@ -924,6 +945,35 @@
             } else {
                 showDashboard();
             }
+        }
+
+        function showAboutView(e) {
+            if (e) e.preventDefault();
+            activeSpecId = null;
+            closeAllSpecDrawers();
+            if (window.location.hash !== '#about' && window.location.hash !== '#overview') {
+                history.pushState(null, null, '#about');
+            }
+            document.getElementById('spec-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'none';
+            const matrixView = document.getElementById('matrix-view');
+            if (matrixView) matrixView.style.display = 'none';
+            const faqView = document.getElementById('faq-view');
+            if (faqView) faqView.style.display = 'none';
+            const aboutView = document.getElementById('about-view');
+            if (aboutView) aboutView.style.display = 'block';
+
+            const navCatalog = document.getElementById('nav-btn-catalog');
+            const navMatrix = document.getElementById('nav-btn-matrix');
+            const navFaq = document.getElementById('nav-btn-faq');
+            const navAbout = document.getElementById('nav-btn-about');
+            if (navCatalog) navCatalog.classList.remove('active');
+            if (navMatrix) navMatrix.classList.remove('active');
+            if (navFaq) navFaq.classList.remove('active');
+            if (navAbout) navAbout.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            announceA11y('Viewing Introduction and Architecture Overview');
         }
 
         // Global Keyboard Navigation (a11y: Escape to return/close, Alt+Left/Right for pagination, '/' for search)
@@ -1866,14 +1916,18 @@
             document.getElementById('dashboard-view').style.display = 'none';
             const matrixView = document.getElementById('matrix-view');
             if (matrixView) matrixView.style.display = 'none';
+            const aboutView = document.getElementById('about-view');
+            if (aboutView) aboutView.style.display = 'none';
             const faqView = document.getElementById('faq-view');
             if (faqView) faqView.style.display = 'block';
 
             const navCatalog = document.getElementById('nav-btn-catalog');
             const navMatrix = document.getElementById('nav-btn-matrix');
             const navFaq = document.getElementById('nav-btn-faq');
+            const navAbout = document.getElementById('nav-btn-about');
             if (navCatalog) navCatalog.classList.remove('active');
             if (navMatrix) navMatrix.classList.remove('active');
+            if (navAbout) navAbout.classList.remove('active');
             if (navFaq) navFaq.classList.add('active');
 
             renderFaqView();

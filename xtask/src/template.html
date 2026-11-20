@@ -47,6 +47,9 @@ __STYLE__
                 <button class="nav-view-btn" id="nav-btn-faq" onclick="showFaqView(event)" role="tab" aria-selected="false" title="Frequently Asked Questions">
                     <span id="i18n-nav-faq">FAQ</span>
                 </button>
+                <button class="nav-view-btn" id="nav-btn-about" onclick="showAboutView(event)" role="tab" aria-selected="false" title="Introduction &amp; Architecture Overview">
+                    <span id="i18n-nav-about">Overview</span>
+                </button>
             </div>
         </div>
 
@@ -106,6 +109,9 @@ __STYLE__
                     <a class="mobile-dropdown-item" href="#" onclick="openCommandPalette(); closeMobileMenu(); return false;">
                         <span>⌘ Quick Command Finder (Ctrl+K)</span>
                     </a>
+                    <a class="mobile-dropdown-item" href="#" onclick="showAboutView(event); closeMobileMenu(); return false;">
+                        <span>🏛️ Introduction &amp; Overview</span>
+                    </a>
                     <a class="mobile-dropdown-item" href="#" onclick="openBadgeModal(); closeMobileMenu(); return false;">
                         <span>🛡️ Contributor README Badges</span>
                     </a>
@@ -151,6 +157,9 @@ __STYLE__
                 </a>
                 <a href="#STD-GOV-001" class="hero-anchor-pill highlight">
                     <span id="i18n-hero-badge-drift">🛡️ Zero AST Drift Guarantee</span>
+                </a>
+                <a href="#" onclick="showAboutView(event); return false;" class="hero-anchor-pill">
+                    <span id="i18n-hero-badge-about">📖 Introduction &amp; Overview</span>
                 </a>
             </div>
         </section>
@@ -464,6 +473,183 @@ __ITEMS__
         <!-- FAQ Accordion List -->
         <div class="faq-accordion-list" id="faq-accordion-container" role="region" aria-label="FAQ Accordion">
             <!-- Populated dynamically via app.js -->
+        </div>
+    </main>
+
+    <!-- FULL-PAGE INTRODUCTION & ARCHITECTURE OVERVIEW (Executive Whitepaper) -->
+    <main id="about-view" class="main-container" style="display:none;" role="main" aria-label="Introduction &amp; Architecture Overview">
+        <!-- Top Breadcrumb Bar -->
+        <nav class="reader-breadcrumb-bar" aria-label="Introduction Navigation" style="margin-bottom:24px;">
+            <div class="reader-actions">
+                <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
+                    <span class="arrow-icon">←</span> <span id="i18n-about-back-btn">Back to Catalog</span>
+                </button>
+            </div>
+            <div class="reader-breadcrumbs">
+                <ol>
+                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                    <li><span class="current" aria-current="page">introduction-and-overview</span></li>
+                </ol>
+            </div>
+        </nav>
+
+        <!-- Executive Hero -->
+        <section class="wiki-hero" style="margin-bottom:32px;">
+            <div class="wiki-eyebrow">
+                <span class="live-pulse"></span>
+                <span id="i18n-about-eyebrow">Executive Overview &amp; Architectural Whitepaper</span>
+                <span class="eyebrow-tag">v0.2.0 Invariants</span>
+            </div>
+            <h1 class="wiki-title" id="about-page-title">Introduction to ArtCraft Standards</h1>
+            <p class="wiki-desc" id="about-page-desc">
+                Authoritative architectural contracts, ergonomic invariants, and autonomous AI agent governance unifying the 20+ ArtCraft Creative Suite desktop applications.
+            </p>
+            <div class="wiki-hero-actions" style="margin-top:16px;">
+                <button class="hero-anchor-pill highlight" onclick="showMatrixView(event)">
+                    <span>📊 Compliance Matrix (95.8%)</span>
+                </button>
+                <button class="hero-anchor-pill" onclick="openAgentHubModal()">
+                    <span>⚡ AutoCraft MCP Gateway</span>
+                </button>
+                <button class="hero-anchor-pill" onclick="showFaqView(event)">
+                    <span>💡 Contributor FAQ</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 4 Key Value Metric Cards -->
+        <div class="wiki-stats-bar" style="margin-bottom:36px;">
+            <div class="wiki-stat-card" onclick="showMatrixView(event)" style="cursor:pointer;">
+                <div class="stat-number highlight">20+</div>
+                <div class="stat-label">Governed Desktop Apps</div>
+                <div class="stat-sublabel">PhotoCraft, FilmCraft, CADCraft...</div>
+            </div>
+            <div class="wiki-stat-card" onclick="showMatrixView(event)" style="cursor:pointer;">
+                <div class="stat-number" style="color:#58A6FF;">28</div>
+                <div class="stat-label">Active Standard Contracts</div>
+                <div class="stat-sublabel">100% Machine-Executable Specs</div>
+            </div>
+            <div class="wiki-stat-card">
+                <div class="stat-number" style="color:#3FB950;">100%</div>
+                <div class="stat-label">Zero AST Drift Guarantee</div>
+                <div class="stat-sublabel">Automated Sentinel CI Gate</div>
+            </div>
+            <div class="wiki-stat-card" onclick="openAgentHubModal()" style="cursor:pointer;">
+                <div class="stat-number" style="color:#D29922;">v0.2.0</div>
+                <div class="stat-label">AutoCraft MCP Stdio Protocol</div>
+                <div class="stat-sublabel">Claude Code, Cursor &amp; AutoCraft</div>
+            </div>
+        </div>
+
+        <!-- Executive Narrative Cards -->
+        <div style="display:flex; flex-direction:column; gap:24px; margin-bottom:48px;">
+            <!-- Section 1: Executive Mission -->
+            <div class="spec-card-full" style="background:var(--sl-color-card); border:1px solid var(--sl-color-border); border-radius:12px; padding:28px;">
+                <h2 style="font-size:20px; font-weight:700; color:#FFF; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                    <span>🎯</span> The Mission: End Erroneous UI Fragmentation
+                </h2>
+                <p style="color:#C9D1D9; font-size:14.5px; line-height:1.7; margin-bottom:14px;">
+                    Storytold develops over 20 creative, CAD, video, and productivity desktop applications in Rust. With over 6,000 contributors, independent development teams naturally solve common problems in subtly divergent ways: keymaps clash, dialog dismissals invert button orders, and timeline scrubbers behave unpredictably.
+                </p>
+                <p style="color:#C9D1D9; font-size:14.5px; line-height:1.7;">
+                    <strong>ArtCraft Standards (<kbd>craft-standards</kbd>)</strong> establishes an authoritative, contract-enforced foundation. Every application adheres to identical ergonomic muscle memory, AccessKit accessibility trees, BiDi spatial mirroring, and sandbox invariants—enforced automatically before any code can merge.
+                </p>
+            </div>
+
+            <!-- Section 2: Before vs. After Comparison -->
+            <div class="spec-card-full" style="background:var(--sl-color-card); border:1px solid var(--sl-color-border); border-radius:12px; padding:28px;">
+                <h2 style="font-size:20px; font-weight:700; color:#FFF; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                    <span>⚖️</span> Monorepo Transformation: Before vs. After
+                </h2>
+                <div style="overflow-x:auto;">
+                    <table class="spec-table" style="width:100%; border-collapse:collapse; font-size:13.5px;">
+                        <thead>
+                            <tr style="border-bottom:1px solid var(--sl-color-border); text-align:start;">
+                                <th style="padding:10px 14px; color:var(--sl-color-text-muted);">Capability</th>
+                                <th style="padding:10px 14px; color:#F85149;">Legacy Disjointed Monorepo</th>
+                                <th style="padding:10px 14px; color:#3FB950;">Unified ArtCraft Standards (v0.2.0)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">Tool Cycling &amp; Hotkeys</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Each app re-invented hotkeys; frequent collisions between PhotoCraft and CADCraft.</td>
+                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-INPUT-001:</strong> Universal <code>[V, M, B]</code> tool slot cycling and spring modifiers across all 20 apps.</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">Accessibility (AccessKit)</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Manual ad-hoc tagging; screen readers broken in timeline and canvas views.</td>
+                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-A11Y-001:</strong> Mandatory AccessKit node hierarchy and 7:1 AAA contrast enforced via headless CI audits.</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">BiDi &amp; RTL Mirroring</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Incomplete text-only translation; toolbars and timelines misaligned in Arabic/Hebrew.</td>
+                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-I18N-001:</strong> Full shell spatial inversion with directional CSS properties and egui layout galley shaping.</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">File I/O Sandboxing</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Raw <code>std::fs</code> calls caused path traversal vulnerabilities and broke automated agents.</td>
+                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-SHELL-003:</strong> Sandboxed <code>craft_fs::AutomationRoot</code> restricts I/O to explicitly mounted directories.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">Autonomous AI Agents</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Agents hallucinated non-standard APIs; maintainers spent hours manually correcting PRs.</td>
+                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>AutoCraft MCP Gateway:</strong> Claude Code, Cursor, and AutoCraft query standard rules over stdio before emitting code.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Section 3: The 7 Invariant Pillars -->
+            <div class="spec-card-full" style="background:var(--sl-color-card); border:1px solid var(--sl-color-border); border-radius:12px; padding:28px;">
+                <h2 style="font-size:20px; font-weight:700; color:#FFF; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                    <span>🏛️</span> The 7 Architectural Pillars
+                </h2>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:#58A6FF; margin-bottom:6px;">01 · Interaction &amp; Gestures</h3>
+                        <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Slot cycling, spring tools, canvas physics, and 14-stop gradient color proofing.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:#58A6FF; margin-bottom:6px;">02 · Navigation &amp; Layout</h3>
+                        <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Universal document tab switching, dock collapsing, arrow-key scrubs, and JKL timecodes.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:#3FB950; margin-bottom:6px;">03 · Accessibility (a11y)</h3>
+                        <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Automated AccessKit tree audits, 7:1 AAA contrast ratios, keyboard rings, and reduced motion.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:#D29922; margin-bottom:6px;">04 · Internationalization (i18n)</h3>
+                        <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Full shell BiDi mirroring, Arabic/Hebrew typography, and locale-aware numeral formatting.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:#F85149; margin-bottom:6px;">05 · Shell &amp; Sandboxing</h3>
+                        <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Clipboard interchange, dialog button hierarchies, dirty state recovery, and confined file access.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:#A371F7; margin-bottom:6px;">06 · Unified Shared Libs</h3>
+                        <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Keymap normalization, widget primitives, host font activation, GPU lifecycles, and The Keep Rule.</p>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px; grid-column:1/-1;">
+                        <h3 style="font-size:15px; font-weight:600; color:#E3B341; margin-bottom:6px;">07 · Governance &amp; Licensing</h3>
+                        <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Clean-room reverse engineering, patent isolation, contributor issue claiming, and machine-verified RFCs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Call to Actions -->
+            <div style="display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:16px;">
+                <button class="reader-btn primary" onclick="showMatrixView(event)" style="padding:12px 24px; font-size:14.5px;">
+                    <span>📊 Inspect Compliance Matrix (95.8%)</span>
+                </button>
+                <button class="reader-btn" onclick="showDashboard(event)" style="padding:12px 24px; font-size:14.5px;">
+                    <span>📚 Explore Specifications Catalog</span>
+                </button>
+                <button class="reader-btn" onclick="openAgentHubModal()" style="padding:12px 24px; font-size:14.5px;">
+                    <span>⚡ Launch AutoCraft Agent Hub (Ctrl+K)</span>
+                </button>
+            </div>
         </div>
     </main>
 

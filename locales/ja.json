@@ -185,5 +185,9 @@
   "faqLinkCopied": "質問のリンクをクリップボードにコピーしました！",
   "faqNoResultsTitle": "一致する質問が見つかりませんでした",
   "faqNoResultsDesc": "別のキーワードで検索するか、「すべてのFAQ」を選択してください。",
-  "faqResetSearch": "FAQ検索をリセット"
+  "faqResetSearch": "FAQ検索をリセット",
+  "navAbout": "概要",
+  "aboutTitle": "はじめにとアーキテクチャの概要",
+  "aboutEyebrow": "エグゼクティブ概要とアーキテクチャホワイトペーパー",
+  "aboutDesc": "20以上のArtCraftクリエイティブスイートデスクトップアプリケーションを統合する、信頼できるアーキテクチャ規約、エルゴノミクス不変条件、および自律型AIエージェントガバナンス。"
 }

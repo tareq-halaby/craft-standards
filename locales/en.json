@@ -185,5 +185,9 @@
   "faqLinkCopied": "Question link copied to clipboard!",
   "faqNoResultsTitle": "No matching questions found",
   "faqNoResultsDesc": "Try searching with different terms or select 'All FAQs'.",
-  "faqResetSearch": "Reset FAQ search"
+  "faqResetSearch": "Reset FAQ search",
+  "navAbout": "Overview",
+  "aboutTitle": "Introduction & Architecture Overview",
+  "aboutEyebrow": "Executive Overview & Architectural Whitepaper",
+  "aboutDesc": "Authoritative architectural contracts, ergonomic invariants, and autonomous AI agent governance unifying the 20+ ArtCraft Creative Suite desktop applications."
 }

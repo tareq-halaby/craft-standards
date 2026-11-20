@@ -20,6 +20,8 @@
   <img alt="Apps: 20+" src="https://img.shields.io/badge/ArtCraft%20Apps-20%2B-orange?style=flat-square">
 </p>
 
+> 📖 **Executive Overview:** Read the [Executive Introduction & Architectural Whitepaper](docs/INTRODUCTION.md) or visit the live portal at [https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/).
+
 ---
 
 ## The ArtCraft Ecosystem Roster

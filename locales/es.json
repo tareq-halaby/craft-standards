@@ -185,5 +185,9 @@
   "faqLinkCopied": "¡Enlace a la pregunta copiado al portapapeles!",
   "faqNoResultsTitle": "No se encontraron preguntas coincidentes",
   "faqNoResultsDesc": "Intente buscar con otros términos o seleccione 'Todas las preguntas'.",
-  "faqResetSearch": "Restablecer búsqueda de FAQ"
+  "faqResetSearch": "Restablecer búsqueda de FAQ",
+  "navAbout": "Visión general",
+  "aboutTitle": "Introducción y descripción arquitectónica",
+  "aboutEyebrow": "Resumen ejecutivo y documento técnico",
+  "aboutDesc": "Contratos arquitectónicos vinculantes, invariantes ergonómicas y gobernanza autónoma de agentes de IA que unifican las más de 20 aplicaciones de ArtCraft."
 }

@@ -185,5 +185,9 @@
   "faqLinkCopied": "Link zur Frage in die Zwischenablage kopiert!",
   "faqNoResultsTitle": "Keine passenden Fragen gefunden",
   "faqNoResultsDesc": "Versuchen Sie andere Suchbegriffe oder wählen Sie 'Alle FAQs'.",
-  "faqResetSearch": "FAQ-Suche zurücksetzen"
+  "faqResetSearch": "FAQ-Suche zurücksetzen",
+  "navAbout": "Übersicht",
+  "aboutTitle": "Einführung & Architekturüberblick",
+  "aboutEyebrow": "Executive Overview & Architektur-Whitepaper",
+  "aboutDesc": "Verbindliche Architekturverträge, ergonomische Invarianten und autonome KI-Agenten-Governance für die über 20 Desktop-Apps der ArtCraft Creative Suite."
 }
