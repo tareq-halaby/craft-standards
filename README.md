@@ -14,6 +14,7 @@
   <img alt="License: MIT OR Apache-2.0" src="https://img.shields.io/badge/license-MIT%20%2F%20Apache--2.0-3a3a3a?style=flat-square">
   <img alt="Status: active" src="https://img.shields.io/badge/status-active-success?style=flat-square">
   <a href="https://tareq-halaby.github.io/craft-standards/"><img alt="Live Dashboard" src="https://img.shields.io/badge/Dashboard-GitHub%20Pages-brightgreen?style=flat-square"></a>
+  <img alt="Languages" src="https://img.shields.io/badge/i18n-EN%20%7C%20AR%20%7C%20DE%20%7C%20ES%20%7C%20FR%20%7C%20JA-informational?style=flat-square">
   <img alt="MCP: enabled" src="https://img.shields.io/badge/MCP-craft--standards--mcp-blue?style=flat-square">
   <img alt="AutoCraft: integrated" src="https://img.shields.io/badge/AutoCraft-integrated-purple?style=flat-square">
   <img alt="Apps: 20+" src="https://img.shields.io/badge/ArtCraft%20Apps-20%2B-orange?style=flat-square">
@@ -157,15 +158,53 @@ Rebuild the interactive portal:
 cargo run --manifest-path xtask/Cargo.toml -- report
 ```
 
-### Reusable GitHub Actions Sentinel
-Any ArtCraft application repository can integrate the standards gate into `.github/workflows/standards.yml`:
+### Reusable GitHub Actions Sentinel (Automated PR Gate)
+
+To prevent architectural drift and ensure every Pull Request in all 20+ ArtCraft repositories adheres to the standards, downstream applications (e.g. `photocraft`, `vectorcraft`, `cadcraft`, `wordcraft`) integrate the **ArtCraft Standards Sentinel** in `.github/workflows/standards.yml`:
+
 ```yaml
-name: Standards Gate
-on: [pull_request, push]
+name: ArtCraft Standards Gate
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
 jobs:
-  audit:
+  standards-gate:
+    name: Standards Compliance Audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: tareq-halaby/craft-standards/actions/sentinel@main
+      - name: Checkout Application Code
+        uses: actions/checkout@v4
+
+      - name: Run ArtCraft Standards Sentinel
+        uses: tareq-halaby/craft-standards/actions/sentinel@main
+        with:
+          strict-licensing: 'true'
+          strict-confinement: 'true'
 ```
+
+#### What Sentinel Checks on Every PR:
+1. **`STD-SHELL-003` (Confined File Access & Sandboxing)**:
+   - Scans Rust source files for unshielded file writes (`std::fs::write`, `std::fs::File::create`) outside the application's designated automation root (`--automation-read-root`, `--automation-write-root`).
+2. **`STD-GOV-001` (Clean-Room Reverse Engineering & License Allowlist)**:
+   - Rejects viral copyleft dependencies (GPL, AGPL) in `Cargo.toml` and enforces MIT / Apache-2.0 compliance.
+3. **`STD-A11Y-001` (AccessKit Accessibility Tree)**:
+   - Verifies that new interactive UI components expose `AccessKit` semantic roles and accessible labels.
+4. **`STD-INPUT-001` (Multi-Tool Toolbar Cycling)**:
+   - Flags rapid-click double-click race conditions and verifies modifier key contracts.
+5. **`STD-LIB-005` (The Keep Rule & Hostile Input Sweeps)**:
+   - Flags unhandled `.unwrap()` panics in file format parsers and verifies fuzzing contract adherence.
+
+---
+
+## Interactive Documentation Portal (`Craft.wiki` 3-Column Architecture)
+
+The repository provides a zero-dependency, standalone portal deployed live at:
+👉 **[https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)**
+
+- **Jakob's Law 3-Column Reader**: Left navigation tree with live search, center reading canvas with interactive sandboxes, and right sticky "On this page" TOC with live ScrollSpy.
+- **Suite Compliance Telemetry**: App scorecards, domain filters, category column heatmap, and invariant drilldown.
+- **Full BiDi / RTL Localization**: Complete translations in 6 languages (`en`, `ar`, `de`, `es`, `fr`, `ja`) with full layout and breadcrumb mirroring in Arabic.
+- **AI Agent Directives Hub**: 1-click rules generator for Claude Code (`CLAUDE.md`), Cursor (`.cursorrules`), and AutoCraft autonomous pipelines.
