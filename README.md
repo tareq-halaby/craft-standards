@@ -100,7 +100,7 @@ craft-standards/
 ## Active Standards Catalog
 
 > [!TIP]
-> **Explore the interactive dashboard:** Browse, search, and filter all 20 standards with direct links to specs and live AST drift detection at **[https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)**.
+> **Explore the interactive dashboard:** Browse, search, and filter all 25 standards with direct links to specs and live AST drift detection at **[https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)**.
 
 | Standard ID | Title | Category | Canonical Crate |
 | :--- | :--- | :--- | :--- |
@@ -121,9 +121,14 @@ craft-standards/
 | **`STD-CMD-001`** | [Command Taxonomy & Headless MCP](standards/05-shell-and-chrome/STD-CMD-001-universal-command-taxonomy.md) | Shell | `craft-libs::craft-keymap` |
 | **`STD-SHELL-001`** | [Dialog Lifecycle & Button Order](standards/05-shell-and-chrome/STD-SHELL-001-dialog-lifecycle.md) | Shell | `craft-libs::craft-dialogs` |
 | **`STD-SHELL-002`** | [Document Dirty State & Autosave](standards/05-shell-and-chrome/STD-SHELL-002-document-dirty-and-autosave.md) | Shell | `craft-libs::craft-window` |
+| **`STD-SHELL-003`** | [Confined File Access & Sandboxing](standards/05-shell-and-chrome/STD-SHELL-003-confined-file-access.md) | Shell | `craft-libs::craft-confine` |
+| **`STD-SHELL-004`** | [Cloud Document Sync & Conflicts](standards/05-shell-and-chrome/STD-SHELL-004-cloud-document-sync-and-conflicts.md) | Shell | `craft-libs::craft-cloud` |
 | **`STD-LIB-001`** | [Cross-Platform Printing Pipeline](standards/06-unified-libs/STD-LIB-001-printing-pipeline.md) | Unified Libs | `craft-libs::craft-print` |
 | **`STD-LIB-002`** | [Keymap Architecture & Overrides](standards/06-unified-libs/STD-LIB-002-keymap-architecture.md) | Unified Libs | `craft-libs::craft-keymap` |
 | **`STD-LIB-003`** | [UI Widget Primitives & Tokens](standards/06-unified-libs/STD-LIB-003-ui-widget-primitives.md) | Unified Libs | `craft-libs::craft-ui` |
+| **`STD-LIB-004`** | [Host Font Store & Fallbacks](standards/06-unified-libs/STD-LIB-004-host-font-store.md) | Unified Libs | `craft-libs::craft-font-store` |
+| **`STD-LIB-005`** | [Invariant Testing & Hostile Sweeps](standards/06-unified-libs/STD-LIB-005-testing-invariants-and-hostile-sweeps.md) | Unified Libs | `craft-libs::craft-testkit` |
+| **`STD-LIB-006`** | [GPU Device Lifecycle & Shaders](standards/06-unified-libs/STD-LIB-006-gpu-rendering-pipeline.md) | Unified Libs | `craft-libs::craft-gpu` |
 
 ---
 

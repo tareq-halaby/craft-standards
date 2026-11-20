@@ -100,14 +100,14 @@ fn handle_request(req: &JsonRpcRequest) -> Option<JsonRpcResponse> {
                     },
                     {
                         "name": "verify_component",
-                        "description": "Semantic pre-flight linter: inspects proposed Rust/egui code for anti-patterns (e.g. frame modifier leaks, unshielded double-clicks, missing AccessKit roles, direct platform calls).",
+                        "description": "Semantic pre-flight linter: inspects proposed Rust/egui code for anti-patterns (e.g. frame modifier leaks, unshielded double-clicks, missing AccessKit roles, direct platform calls, unconfined file I/O, panics).",
                         "inputSchema": {
                             "type": "object",
                             "required": ["component_kind", "code_snippet"],
                             "properties": {
                                 "component_kind": {
                                     "type": "string",
-                                    "enum": ["toolbar_button", "dialog", "dock_panel", "text_input", "printing"]
+                                    "enum": ["toolbar_button", "dialog", "dock_panel", "text_input", "printing", "file_io", "parser", "fonts", "gpu", "cloud_sync"]
                                 },
                                 "code_snippet": {
                                     "type": "string",
@@ -125,7 +125,7 @@ fn handle_request(req: &JsonRpcRequest) -> Option<JsonRpcResponse> {
                             "properties": {
                                 "template": {
                                     "type": "string",
-                                    "enum": ["tool_slot", "accesskit_node", "ctrl_tab_handler", "rtl_layout_row"],
+                                    "enum": ["tool_slot", "accesskit_node", "ctrl_tab_handler", "rtl_layout_row", "confined_path", "keep_rule_parser"],
                                     "description": "The template boilerplate to generate"
                                 }
                             }
@@ -140,7 +140,7 @@ fn handle_request(req: &JsonRpcRequest) -> Option<JsonRpcResponse> {
                             "properties": {
                                 "domain": {
                                     "type": "string",
-                                    "description": "Domain to resolve: printing, keymap, ui, a11y, i18n, flags, windowing"
+                                    "description": "Domain to resolve: printing, keymap, ui, a11y, i18n, flags, windowing, confine, sandbox, fonts, gpu, testing, fuzzing, cloud, sync, color"
                                 }
                             }
                         }
@@ -190,6 +190,7 @@ fn execute_list_standards(args: &Value) -> Value {
     let category = args.get("category").and_then(Value::as_str);
 
     let standards = [
+        json!({ "id": "STD-COLOR-001", "title": "Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics", "category": "interaction", "canonical_crate": "craft-libs::craft-color" }),
         json!({ "id": "STD-INPUT-001", "title": "Multi-Tool Toolbar Slot Cycling & Gesture Ergonomics", "category": "interaction", "canonical_crate": "craft-libs::craft-ui::ToolSlot" }),
         json!({ "id": "STD-INPUT-002", "title": "Transient and Spring-Loaded Tool Invariants", "category": "interaction", "canonical_crate": "craft-libs::craft-ui" }),
         json!({ "id": "STD-INPUT-003", "title": "Canvas Pan, Zoom Physics, and Viewport Invariants", "category": "interaction", "canonical_crate": "craft-libs::craft-ui" }),
@@ -197,15 +198,23 @@ fn execute_list_standards(args: &Value) -> Value {
         json!({ "id": "STD-NAV-001", "title": "Universal Document Tab Navigation (Ctrl+Tab)", "category": "navigation", "canonical_crate": "craft-libs::craft-keymap" }),
         json!({ "id": "STD-NAV-002", "title": "Workspace Panel Visibility and Dock Collapsing Toggles", "category": "navigation", "canonical_crate": "craft-libs::craft-keymap" }),
         json!({ "id": "STD-NAV-003", "title": "Arrow-Key Value Scrubbing and Step Multipliers", "category": "navigation", "canonical_crate": "craft-libs::craft-ui" }),
+        json!({ "id": "STD-TIME-001", "title": "Timeline Navigation, JKL Scrubbing, and Timecode Invariants", "category": "navigation", "canonical_crate": "craft-libs::craft-ui" }),
         json!({ "id": "STD-A11Y-001", "title": "AccessKit Node Tagging and Automated CI Accessibility Audit", "category": "accessibility", "canonical_crate": "craft-libs::craft-ui::a11y" }),
         json!({ "id": "STD-A11Y-002", "title": "Keyboard Focus Rings, Contrast Ratios, and Reduced Motion", "category": "accessibility", "canonical_crate": "craft-libs::craft-ui" }),
         json!({ "id": "STD-I18N-001", "title": "Full Shell Direction Mirroring and Unicode BiDi Text Galley Shaping", "category": "internationalization", "canonical_crate": "craft-libs::craft-i18n" }),
-        json!({ "id": "STD-I18N-002", "title": "Locale-Aware Numeric Formatting, Decimal Separators, and Units", "category": "internationalization", "canonical_crate": "craft-libs::craft-i18n" }),
+        json!({ "id": "STD-I18N-002", "title": "Locale-Aware Numeric Formatting, Decimal Separators, and Measurement Units", "category": "internationalization", "canonical_crate": "craft-libs::craft-i18n" }),
+        json!({ "id": "STD-CLIP-001", "title": "Cross-Application Drag-and-Drop, Clipboard Data Interchange, and External File Ingestion", "category": "shell", "canonical_crate": "craft-libs::craft-window" }),
+        json!({ "id": "STD-CMD-001", "title": "Universal Application Command Taxonomy, CLI Flags, and Headless MCP Protocol", "category": "shell", "canonical_crate": "craft-libs::craft-keymap" }),
         json!({ "id": "STD-SHELL-001", "title": "Modal and Modeless Dialog Lifecycles, Dismissal, and Button Orders", "category": "shell", "canonical_crate": "craft-libs::craft-dialogs" }),
         json!({ "id": "STD-SHELL-002", "title": "Document Dirty State, Unsaved Changes Prompt, and Recovery Lifecycles", "category": "shell", "canonical_crate": "craft-libs::craft-window" }),
-        json!({ "id": "STD-LIB-001", "title": "Universal Cross-Platform Printing Pipeline", "category": "unified-libs", "canonical_crate": "craft-libs::craft-print" }),
+        json!({ "id": "STD-SHELL-003", "title": "Confined File Access, Sandboxing & Automation Root Isolation", "category": "shell", "canonical_crate": "craft-libs::craft-confine" }),
+        json!({ "id": "STD-SHELL-004", "title": "Cloud Document Synchronization, Delta Journal & Conflict Lifecycles", "category": "shell", "canonical_crate": "craft-libs::craft-cloud" }),
+        json!({ "id": "STD-LIB-001", "title": "Universal Cross-Platform Printing and Prepress Pipeline", "category": "unified-libs", "canonical_crate": "craft-libs::craft-print" }),
         json!({ "id": "STD-LIB-002", "title": "Keymap Architecture, Platform Chord Normalization, and Overrides", "category": "unified-libs", "canonical_crate": "craft-libs::craft-keymap" }),
         json!({ "id": "STD-LIB-003", "title": "UI Widget Primitives, Design Tokens, and Docking Systems", "category": "unified-libs", "canonical_crate": "craft-libs::craft-ui" }),
+        json!({ "id": "STD-LIB-004", "title": "Host Font Discovery, On-Demand Activation & Fallback Rendering", "category": "unified-libs", "canonical_crate": "craft-libs::craft-font-store" }),
+        json!({ "id": "STD-LIB-005", "title": "Invariant Testing, The Keep Rule & Hostile Input Sweeps", "category": "unified-libs", "canonical_crate": "craft-libs::craft-testkit" }),
+        json!({ "id": "STD-LIB-006", "title": "Universal GPU Device Lifecycle, Shader Caches & Fallbacks", "category": "unified-libs", "canonical_crate": "craft-libs::craft-gpu" }),
     ];
 
     let filtered: Vec<&Value> = match category {
@@ -220,6 +229,16 @@ fn execute_get_standard(args: &Value) -> Value {
     let id = args.get("id").and_then(Value::as_str).unwrap_or("");
 
     match id {
+        "STD-COLOR-001" => json!({
+            "id": "STD-COLOR-001",
+            "title": "Universal Color Picker, Hex Parsing, and Color Space Proofing Ergonomics",
+            "rules": [
+                "Hex parsing must tolerate leading `#`, whitespace, 3/4/6/8 character hex representations.",
+                "Color spaces must support sRGB, Display P3, and CMYK soft-proofing without clipping gamut.",
+                "Alpha channel scrubbing defaults to 0..=100% or 0..=255 integer format."
+            ],
+            "canonical_crate": "craft-libs::craft-color"
+        }),
         "STD-INPUT-001" => json!({
             "id": "STD-INPUT-001",
             "title": "Multi-Tool Toolbar Slot Cycling",
@@ -259,13 +278,74 @@ fn execute_get_standard(args: &Value) -> Value {
                 "Wrap text labels with craft_i18n::rtl::widget(ui, text) for BiDi shaping."
             ]
         }),
+        "STD-SHELL-002" => json!({
+            "id": "STD-SHELL-002",
+            "title": "Document Dirty State, Unsaved Changes Prompt, and Recovery Lifecycles",
+            "rules": [
+                "Window title must show dirty bullet `•` when changes are uncommitted.",
+                "Close event must intercept dirty documents with Save / Don't Save / Cancel dialog.",
+                "Autosave writes atomics to temp journals without overwriting working document."
+            ],
+            "canonical_crate": "craft-libs::craft-window"
+        }),
+        "STD-SHELL-003" => json!({
+            "id": "STD-SHELL-003",
+            "title": "Confined File Access, Sandboxing & Automation Root Isolation",
+            "rules": [
+                "All file path resolution must be verified against an isolated root via craft-confine.",
+                "Headless / automation runs must enforce `--automation-read-root` restrictions.",
+                "Path traversal sequences (`..`), symlinks, and junctions escaping root must be rejected with PermissionDenied."
+            ],
+            "canonical_crate": "craft-libs::craft-confine"
+        }),
+        "STD-SHELL-004" => json!({
+            "id": "STD-SHELL-004",
+            "title": "Cloud Document Synchronization, Delta Journal & Conflict Lifecycles",
+            "rules": [
+                "Cloud state mutations must be represented as immutable, causal delta journals.",
+                "Concurrent conflicting edits must merge via CRDT or surface clear non-destructive branch forks.",
+                "Network reconnects must backoff with full jitter and replay pending deltas in monotonic order."
+            ],
+            "canonical_crate": "craft-libs::craft-cloud"
+        }),
         "STD-LIB-001" => json!({
             "id": "STD-LIB-001",
             "title": "Printing Pipeline",
             "rules": [
                 "All printing routes through craft-libs::craft-print.",
                 "Zero direct platform print API calls (winspool, cups, etc)."
-            ]
+            ],
+            "canonical_crate": "craft-libs::craft-print"
+        }),
+        "STD-LIB-004" => json!({
+            "id": "STD-LIB-004",
+            "title": "Host Font Discovery, On-Demand Activation & Fallback Rendering",
+            "rules": [
+                "Font enumeration in UI pickers must be metadata-only (no disk read of TTF/OTF tables during browse).",
+                "Glyph rasterization and outline parsing occurs on-demand upon canvas rendering.",
+                "Missing glyphs must fallback gracefully through universal typography chains without panics."
+            ],
+            "canonical_crate": "craft-libs::craft-font-store"
+        }),
+        "STD-LIB-005" => json!({
+            "id": "STD-LIB-005",
+            "title": "Invariant Testing, The Keep Rule & Hostile Input Sweeps",
+            "rules": [
+                "The Keep Rule: No user input, corrupted document, or hostile asset may cause process panic.",
+                "All decoders must survive hostile::hammer fuzzer sweeps in CI.",
+                "Property test suites must execute invariants across arbitrary serialized states."
+            ],
+            "canonical_crate": "craft-libs::craft-testkit"
+        }),
+        "STD-LIB-006" => json!({
+            "id": "STD-LIB-006",
+            "title": "Universal GPU Device Lifecycle, Shader Caches & Fallbacks",
+            "rules": [
+                "GPU pipelines must gracefully handle DeviceLost events and reconstruct buffers.",
+                "Compiled WGSL shaders must be disk-cached by hash to ensure instant cold boot.",
+                "Headless CI and software fallbacks must execute seamlessly via llvmpipe / CPU rasterizers."
+            ],
+            "canonical_crate": "craft-libs::craft-gpu"
         }),
         _ => json!({ "error": format!("Standard '{id}' not found.") }),
     }
@@ -307,6 +387,49 @@ fn execute_verify_component(args: &Value) -> Value {
                 "rule": "STD-LIB-001",
                 "severity": "error",
                 "message": "Direct platform print API calls detected. All printing must route through craft_print::PrintSession."
+            }));
+        }
+    } else if component_kind == "file_io" {
+        if (code.contains("std::fs::read") || code.contains("std::fs::File::open") || code.contains("std::fs::write")) && !code.contains("craft_confine") && !code.contains("confined") {
+            violations.push(json!({
+                "rule": "STD-SHELL-003",
+                "severity": "error",
+                "message": "Unconfined direct filesystem access detected. All document and automation reads must be verified through craft-libs::craft-confine::PathConfine to prevent sandbox escapes."
+            }));
+            recommendations.push("Use `craft_confine::PathConfine::new(root).resolve(untrusted_path)?` before opening files.");
+        }
+    } else if component_kind == "parser" {
+        if code.contains(".unwrap()") || code.contains(".expect(") {
+            violations.push(json!({
+                "rule": "STD-LIB-005",
+                "severity": "error",
+                "message": "Panic potential (.unwrap()/.expect()) detected in parser. The Keep Rule forbids crashing on corrupted or hostile files."
+            }));
+            recommendations.push("Return Result<T, ParseError> and add a hostile sweep fuzz test using `craft_testkit::hostile`.");
+        }
+    } else if component_kind == "fonts" {
+        if code.contains("DirectWrite") || code.contains("CoreText") || code.contains("fontconfig") {
+            violations.push(json!({
+                "rule": "STD-LIB-004",
+                "severity": "error",
+                "message": "Direct platform font API detected. Use craft-libs::craft-font-store for cross-platform on-demand font activation and fallbacks."
+            }));
+        }
+    } else if component_kind == "gpu" {
+        if code.contains("wgpu::Device") && !code.contains("on_uncaptured_error") && !code.contains("DeviceLost") {
+            violations.push(json!({
+                "rule": "STD-LIB-006",
+                "severity": "warning",
+                "message": "GPU device initialized without uncaptured error or DeviceLost lifecycle recovery handler."
+            }));
+            recommendations.push("Implement STD-LIB-006 DeviceLost recovery loop to restore render pipelines upon GPU reset.");
+        }
+    } else if component_kind == "cloud_sync" {
+        if !code.contains("delta") && !code.contains("version") && !code.contains("journal") {
+            violations.push(json!({
+                "rule": "STD-SHELL-004",
+                "severity": "warning",
+                "message": "Direct cloud state mutation without delta journal or version vector tracking. May cause irreversible merge conflicts."
             }));
         }
     }
@@ -412,7 +535,46 @@ ui.with_layout(layout, |ui| {
     ui.label(craft_i18n::rtl::widget(ui, tl!("Toolbar Item")));
 });"#
         }),
-        _ => json!({ "error": format!("Unknown template: '{template}'. Available: tool_slot, accesskit_node, ctrl_tab_handler, rtl_layout_row") }),
+        "confined_path" => json!({
+            "template": "confined_path",
+            "standard": "STD-SHELL-003",
+            "rust_snippet": r#"// STD-SHELL-003 Confined File Resolver
+use craft_confine::PathConfine;
+
+pub fn safely_open_document(user_path: &std::path::Path, allowed_root: &std::path::Path) -> Result<std::fs::File, std::io::Error> {
+    let confinement = PathConfine::new(allowed_root);
+    let safe_path = confinement.resolve(user_path)
+        .map_err(|e| std::io::Error::new(std::io::ErrorKind::PermissionDenied, e))?;
+    std::fs::File::open(safe_path)
+}"#
+        }),
+        "keep_rule_parser" => json!({
+            "template": "keep_rule_parser",
+            "standard": "STD-LIB-005",
+            "rust_snippet": r#"// STD-LIB-005 Panic-Free Parser Skeleton (The Keep Rule)
+#[derive(Debug, thiserror::Error)]
+pub enum DocumentParseError {
+    #[error("Unexpected EOF: need {needed} bytes, got {actual}")]
+    UnexpectedEof { needed: usize, actual: usize },
+    #[error("Corrupt header magic: {0:?}")]
+    CorruptHeader([u8; 4]),
+    #[error("Invalid element count: {0}")]
+    InvalidCount(u32),
+}
+
+pub fn parse_document_header(bytes: &[u8]) -> Result<DocumentHeader, DocumentParseError> {
+    if bytes.len() < 8 {
+        return Err(DocumentParseError::UnexpectedEof { needed: 8, actual: bytes.len() });
+    }
+    let magic: [u8; 4] = bytes[0..4].try_into().map_err(|_| DocumentParseError::UnexpectedEof { needed: 4, actual: bytes.len() })?;
+    if &magic != b"CRFT" {
+        return Err(DocumentParseError::CorruptHeader(magic));
+    }
+    let version = u32::from_le_bytes(bytes[4..8].try_into().unwrap());
+    Ok(DocumentHeader { version })
+}"#
+        }),
+        _ => json!({ "error": format!("Unknown template: '{template}'. Available: tool_slot, accesskit_node, ctrl_tab_handler, rtl_layout_row, confined_path, keep_rule_parser") }),
     }
 }
 
@@ -427,6 +589,12 @@ fn execute_resolve_library_primitive(args: &Value) -> Value {
         "i18n" => json!({ "crate": "craft-i18n", "path": "craft-libs/crates/i18n", "description": "Catalogs, Unicode BiDi galley shaper, HarfBuzz complex scripts, RTL layout helpers." }),
         "flags" => json!({ "crate": "craft-flags", "path": "craft-libs/crates/flags", "description": "Runtime feature toggling." }),
         "windowing" => json!({ "crate": "craft-window", "path": "craft-libs/crates/window", "description": "Multi-window lifecycle and native OS dialog integration." }),
+        "confine" | "sandbox" | "file-access" => json!({ "crate": "craft-confine", "path": "craft-libs/crates/confine", "description": "Path traversal prevention, sandbox boundary enforcement, and automation root confinement (STD-SHELL-003 / RFC-0015)." }),
+        "fonts" | "font-store" => json!({ "crate": "craft-font-store", "path": "craft-libs/crates/font-store", "description": "Host font discovery, metadata enumeration, on-demand glyph activation, and typographic fallbacks (STD-LIB-004 / RFC-0034)." }),
+        "testing" | "fuzzing" | "hostile" => json!({ "crate": "craft-testkit", "path": "craft-libs/crates/testkit", "description": "The Keep Rule enforcement, hostile byte fuzzer sweeps, invariant assertions, and headless harnesses (STD-LIB-005 / RFC-0071)." }),
+        "gpu" | "rendering" | "shaders" => json!({ "crate": "craft-gpu", "path": "craft-libs/crates/gpu", "description": "Universal GPU device lifecycle, device loss recovery, shader compilation caches, and fallback contexts (STD-LIB-006 / RFC-0022)." }),
+        "cloud" | "sync" | "crdt" => json!({ "crate": "craft-cloud", "path": "craft-libs/crates/cloud", "description": "Delta journals, conflict resolution lifecycles, and causal CRDT sync pipelines (STD-SHELL-004 / RFC-0024)." }),
+        "color" | "icc" | "proofing" => json!({ "crate": "craft-color", "path": "craft-libs/crates/color", "description": "Universal color spaces, hex parsing, CMYK/sRGB proofing (STD-COLOR-001)." }),
         _ => json!({ "error": format!("No standard library mapped for domain: '{domain}'. Consider proposing one.") }),
     }
 }
@@ -439,7 +607,7 @@ mod tests {
     fn test_list_standards_all() {
         let res = execute_list_standards(&json!({}));
         let list = res["standards"].as_array().expect("array of standards");
-        assert!(list.len() >= 16);
+        assert_eq!(list.len(), 25);
     }
 
     #[test]
@@ -457,6 +625,10 @@ mod tests {
         let res = execute_get_standard(&json!({ "id": "STD-INPUT-001" }));
         assert_eq!(res["id"], "STD-INPUT-001");
         assert!(res["rules"].as_array().unwrap().len() >= 3);
+
+        let res_shell = execute_get_standard(&json!({ "id": "STD-SHELL-003" }));
+        assert_eq!(res_shell["id"], "STD-SHELL-003");
+        assert_eq!(res_shell["canonical_crate"], "craft-libs::craft-confine");
     }
 
     #[test]
@@ -473,6 +645,34 @@ mod tests {
         assert_eq!(res["status"], "violations_found");
         let violations = res["violations"].as_array().unwrap();
         assert!(violations.len() >= 2);
+    }
+
+    #[test]
+    fn test_verify_component_file_io_violation() {
+        let unsafe_io = r#"
+            let bytes = std::fs::read("/etc/passwd");
+        "#;
+        let res = execute_verify_component(&json!({
+            "component_kind": "file_io",
+            "code_snippet": unsafe_io
+        }));
+        assert_eq!(res["status"], "violations_found");
+        let violations = res["violations"].as_array().unwrap();
+        assert_eq!(violations[0]["rule"], "STD-SHELL-003");
+    }
+
+    #[test]
+    fn test_verify_component_parser_violation() {
+        let panicky_parser = r#"
+            let chunk = buffer.get(..4).unwrap();
+        "#;
+        let res = execute_verify_component(&json!({
+            "component_kind": "parser",
+            "code_snippet": panicky_parser
+        }));
+        assert_eq!(res["status"], "violations_found");
+        let violations = res["violations"].as_array().unwrap();
+        assert_eq!(violations[0]["rule"], "STD-LIB-005");
     }
 
     #[test]
@@ -495,11 +695,21 @@ mod tests {
         let res = execute_generate_compliant_code(&json!({ "template": "tool_slot" }));
         assert_eq!(res["template"], "tool_slot");
         assert!(res["rust_snippet"].as_str().unwrap().contains("STD-INPUT-001"));
+
+        let res_keep = execute_generate_compliant_code(&json!({ "template": "keep_rule_parser" }));
+        assert_eq!(res_keep["template"], "keep_rule_parser");
+        assert!(res_keep["rust_snippet"].as_str().unwrap().contains("The Keep Rule"));
     }
 
     #[test]
     fn test_resolve_library_primitive() {
         let res = execute_resolve_library_primitive(&json!({ "domain": "printing" }));
         assert_eq!(res["crate"], "craft-print");
+
+        let res_confine = execute_resolve_library_primitive(&json!({ "domain": "confine" }));
+        assert_eq!(res_confine["crate"], "craft-confine");
+
+        let res_font = execute_resolve_library_primitive(&json!({ "domain": "fonts" }));
+        assert_eq!(res_font["crate"], "craft-font-store");
     }
 }
