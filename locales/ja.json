@@ -133,5 +133,12 @@
   "faqCatArch": "アーキテクチャ & 不変条件",
   "faqCatAutoCraft": "AutoCraft & エージェント",
   "faqCatContrib": "貢献 & RFC提案",
-  "faqCatI18n": "国際化 & RTL"
+  "faqCatI18n": "国際化 & RTL",
+  "specTocOnThisPage": "このページの内容",
+  "specTocBackToTop": "トップに戻る",
+  "specTocShare": "仕様を共有",
+  "specNavSearchPlaceholder": "仕様を検索...",
+  "specNavAllSpecs": "すべての仕様",
+  "specNavToggleBtn": "仕様一覧",
+  "specTocToggleBtn": "目次"
 }

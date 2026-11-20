@@ -133,5 +133,12 @@
   "faqCatArch": "الهندسة والثوابت",
   "faqCatAutoCraft": "AutoCraft والوكلاء",
   "faqCatContrib": "المساهمة ومقترحات RFC",
-  "faqCatI18n": "التدويل والـ RTL"
+  "faqCatI18n": "التدويل والـ RTL",
+  "specTocOnThisPage": "في هذه الصفحة",
+  "specTocBackToTop": "الرجوع للأعلى",
+  "specTocShare": "مشاركة المعيار",
+  "specNavSearchPlaceholder": "البحث في المعايير...",
+  "specNavAllSpecs": "كافة المواصفات",
+  "specNavToggleBtn": "المعايير",
+  "specTocToggleBtn": "في هذه الصفحة"
 }

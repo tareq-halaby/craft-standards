@@ -152,6 +152,22 @@
             setTxt('i18n-footer-desc', t.footerDesc);
             setTxt('i18n-copyright', t.copyright);
             setTxt('i18n-foss', t.foss);
+            setTxt('i18n-toc-on-this-page', t.specTocOnThisPage);
+            setTxt('i18n-toc-back-to-top', t.specTocBackToTop);
+            setTxt('i18n-toc-share', t.specTocShare);
+            setTxt('i18n-sidebar-all-specs', t.specNavAllSpecs);
+            setTxt('i18n-spec-nav-toggle', t.specNavToggleBtn);
+            setTxt('i18n-spec-toc-toggle', t.specTocToggleBtn);
+
+            const sNavInput = document.getElementById('spec-sidebar-search-input');
+            if (sNavInput && t.specNavSearchPlaceholder) {
+                sNavInput.placeholder = t.specNavSearchPlaceholder;
+                sNavInput.setAttribute('aria-label', t.specNavSearchPlaceholder);
+            }
+
+            if (activeSpecId) {
+                populateSpecNavTree(activeSpecId);
+            }
 
             announceA11y(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : `Language switched to ${t.name || lang}`);
             applyFilters();
@@ -340,6 +356,249 @@
             }
         }
 
+        
+        // =========================================================================
+        // Craft.wiki 3-Column Specification Navigation & TOC Engine (Jakob's Law)
+        // =========================================================================
+        const CATEGORY_GROUPS = [
+            { id: 'interaction', num: '01', icon: '🖱️' },
+            { id: 'navigation', num: '02', icon: '🧭' },
+            { id: 'accessibility', num: '03', icon: '♿' },
+            { id: 'internationalization', num: '04', icon: '🌐' },
+            { id: 'shell', num: '05', icon: '🖥️' },
+            { id: 'unified-libs', num: '06', icon: '📦' },
+            { id: 'governance', num: '07', icon: '⚖️' }
+        ];
+
+        function populateSpecNavTree(activeId) {
+            const treeEl = document.getElementById('spec-nav-tree');
+            if (!treeEl) return;
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+
+            let html = '';
+            CATEGORY_GROUPS.forEach(grp => {
+                const grpSpecs = SPECS.filter(s => s.category === grp.id);
+                if (grpSpecs.length === 0) return;
+                const catName = getCategoryName(grp.id, t);
+
+                html += `
+                    <div class="spec-nav-group" data-category="${grp.id}">
+                        <div class="spec-nav-group-header">
+                            <span class="spec-nav-group-title">
+                                <span>${grp.icon}</span>
+                                <span>${grp.num} · ${catName}</span>
+                            </span>
+                            <span class="spec-nav-group-count">${grpSpecs.length}</span>
+                        </div>
+                        <ul class="spec-nav-items">
+                `;
+
+                grpSpecs.forEach(s => {
+                    const isActive = s.id === activeId;
+                    html += `
+                        <li class="spec-nav-item" data-spec-id="${s.id}">
+                            <a href="#${s.id}" class="${isActive ? 'active' : ''}" onclick="openSpec('${s.id}'); closeAllSpecDrawers(); return false;" aria-current="${isActive ? 'page' : 'false'}">
+                                <span class="spec-nav-item-id">${s.id}</span>
+                                <span class="spec-nav-item-title" title="${s.title}">${s.title}</span>
+                            </a>
+                        </li>
+                    `;
+                });
+
+                html += `
+                        </ul>
+                    </div>
+                `;
+            });
+
+            treeEl.innerHTML = html;
+
+            // Update total badge
+            const totalBadge = document.getElementById('spec-sidebar-total-badge');
+            if (totalBadge) totalBadge.textContent = SPECS.length;
+
+            // Scroll active nav item smoothly into view inside sidebar
+            if (activeId) {
+                setTimeout(() => {
+                    const activeLink = treeEl.querySelector('.spec-nav-item a.active');
+                    if (activeLink) {
+                        activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    }
+                }, 50);
+            }
+        }
+
+        function filterSpecSidebar(query) {
+            const clearBtn = document.getElementById('spec-sidebar-search-clear');
+            const q = (query || '').trim().toLowerCase();
+            if (clearBtn) {
+                clearBtn.style.display = q ? 'flex' : 'none';
+            }
+
+            const groups = document.querySelectorAll('#spec-nav-tree .spec-nav-group');
+            groups.forEach(grp => {
+                let visibleInGroup = 0;
+                const items = grp.querySelectorAll('.spec-nav-item');
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    const match = !q || text.includes(q);
+                    item.style.display = match ? 'block' : 'none';
+                    if (match) visibleInGroup++;
+                });
+                grp.style.display = visibleInGroup > 0 ? 'flex' : 'none';
+            });
+        }
+
+        function clearSpecSidebarSearch() {
+            const input = document.getElementById('spec-sidebar-search-input');
+            if (input) {
+                input.value = '';
+                filterSpecSidebar('');
+                input.focus();
+            }
+        }
+
+        let tocObserver = null;
+
+        function generateSpecTOC() {
+            const tocList = document.getElementById('spec-toc-list');
+            if (!tocList) return;
+
+            if (tocObserver) {
+                tocObserver.disconnect();
+                tocObserver = null;
+            }
+
+            const contentEl = document.getElementById('spec-content');
+            if (!contentEl) return;
+
+            const headings = contentEl.querySelectorAll('h2, h3');
+            if (headings.length === 0) {
+                tocList.innerHTML = `<li class="spec-toc-item"><span style="font-size:12px;color:var(--sl-color-text-muted);">No sections found</span></li>`;
+                return;
+            }
+
+            let tocHtml = '';
+            const headingElements = [];
+
+            headings.forEach((h, index) => {
+                const text = h.textContent.trim();
+                if (!text) return;
+
+                // Create slug ID
+                const slug = 'heading-' + index + '-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                h.id = slug;
+                headingElements.push({ el: h, id: slug });
+
+                const isH3 = h.tagName.toLowerCase() === 'h3';
+                tocHtml += `
+                    <li class="spec-toc-item ${isH3 ? 'level-3' : 'level-2'}">
+                        <a href="#${slug}" data-target-id="${slug}" onclick="onTocLinkClick(event, '${slug}')">
+                            ${text}
+                        </a>
+                    </li>
+                `;
+            });
+
+            tocList.innerHTML = tocHtml;
+
+            // Highlight first item initially
+            const firstLink = tocList.querySelector('a');
+            if (firstLink) firstLink.classList.add('active');
+
+            // Setup IntersectionObserver for ScrollSpy
+            if ('IntersectionObserver' in window && headingElements.length > 0) {
+                tocObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const activeId = entry.target.id;
+                            tocList.querySelectorAll('a').forEach(a => {
+                                if (a.dataset.targetId === activeId) {
+                                    a.classList.add('active');
+                                } else {
+                                    a.classList.remove('active');
+                                }
+                            });
+                        }
+                    });
+                }, {
+                    rootMargin: '-80px 0px -60% 0px',
+                    threshold: 0
+                });
+
+                headingElements.forEach(item => {
+                    tocObserver.observe(item.el);
+                });
+            }
+        }
+
+        function onTocLinkClick(e, slug) {
+            if (e) e.preventDefault();
+            const target = document.getElementById(slug);
+            if (target) {
+                const offset = 80;
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = target.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+
+                // Update active link in TOC
+                const tocList = document.getElementById('spec-toc-list');
+                if (tocList) {
+                    tocList.querySelectorAll('a').forEach(a => {
+                        a.classList.toggle('active', a.dataset.targetId === slug);
+                    });
+                }
+            }
+            closeAllSpecDrawers();
+        }
+
+        function toggleSpecNavDrawer(e) {
+            if (e) e.stopPropagation();
+            const sidebar = document.getElementById('spec-nav-sidebar');
+            const overlay = document.getElementById('spec-drawer-overlay');
+            const isOpen = sidebar.classList.contains('drawer-open');
+            closeAllSpecDrawers();
+            if (!isOpen) {
+                sidebar.classList.add('drawer-open');
+                overlay.classList.add('active');
+                const btn = document.getElementById('spec-drawer-toggle-btn');
+                if (btn) btn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        function toggleSpecTocDrawer(e) {
+            if (e) e.stopPropagation();
+            const toc = document.getElementById('spec-toc-sidebar');
+            const overlay = document.getElementById('spec-drawer-overlay');
+            const isOpen = toc.classList.contains('drawer-open');
+            closeAllSpecDrawers();
+            if (!isOpen) {
+                toc.classList.add('drawer-open');
+                overlay.classList.add('active');
+                const btn = document.getElementById('spec-toc-toggle-btn');
+                if (btn) btn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        function closeAllSpecDrawers() {
+            const sidebar = document.getElementById('spec-nav-sidebar');
+            const toc = document.getElementById('spec-toc-sidebar');
+            const overlay = document.getElementById('spec-drawer-overlay');
+            if (sidebar) sidebar.classList.remove('drawer-open');
+            if (toc) toc.classList.remove('drawer-open');
+            if (overlay) overlay.classList.remove('active');
+            const btnNav = document.getElementById('spec-drawer-toggle-btn');
+            const btnToc = document.getElementById('spec-toc-toggle-btn');
+            if (btnNav) btnNav.setAttribute('aria-expanded', 'false');
+            if (btnToc) btnToc.setAttribute('aria-expanded', 'false');
+        }
+
         function openSpec(id, updateHash = true) {
             const spec = specsMap[id];
             if (!spec) return;
@@ -488,11 +747,17 @@
                 titleEl.focus();
             }
             announceA11y(`Now reading specification ${spec.id}: ${spec.title}`);
+
+            // Craft.wiki 3-Column Integration
+            populateSpecNavTree(spec.id);
+            generateSpecTOC();
+            closeAllSpecDrawers();
         }
 
         function showDashboard(e) {
             if (e) e.preventDefault();
             activeSpecId = null;
+            closeAllSpecDrawers();
             if (window.location.hash) {
                 history.pushState(null, null, ' ');
             }
@@ -525,6 +790,7 @@
         function showMatrixView(e) {
             if (e) e.preventDefault();
             activeSpecId = null;
+            closeAllSpecDrawers();
             if (window.location.hash !== '#matrix') {
                 history.pushState(null, null, '#matrix');
             }
@@ -609,6 +875,14 @@
 
             if (e.key === 'Escape') {
                 closeMobileMenu();
+                const navSidebar = document.getElementById('spec-nav-sidebar');
+                const tocSidebar = document.getElementById('spec-toc-sidebar');
+                if ((navSidebar && navSidebar.classList.contains('drawer-open')) ||
+                    (tocSidebar && tocSidebar.classList.contains('drawer-open'))) {
+                    e.preventDefault();
+                    closeAllSpecDrawers();
+                    return;
+                }
                 if (cmdModal && cmdModal.style.display !== 'none') {
                     e.preventDefault();
                     closeCommandPalette();
@@ -1505,6 +1779,7 @@
         function showFaqView(e) {
             if (e) e.preventDefault();
             activeSpecId = null;
+            closeAllSpecDrawers();
             if (window.location.hash !== '#faq') {
                 history.pushState(null, null, '#faq');
             }

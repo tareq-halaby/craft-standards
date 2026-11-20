@@ -471,11 +471,32 @@ __ITEMS__
         </div>
     </main>
 
-    <!-- SPECIFICATION VIEWER -->
+    <!-- SPECIFICATION VIEWER (Craft.wiki 3-Column Documentation Architecture following Jakob's Law) -->
     <div id="spec-view" role="region" aria-label="Specification Document">
-        <!-- W3C Breadcrumb Pattern -->
+        <!-- Sticky Navigation & Actions Toolbar -->
         <nav class="reader-breadcrumb-bar" aria-label="Breadcrumb navigation">
+            <div class="reader-bar-left">
+                <!-- Mobile Toggle for Left Nav Drawer -->
+                <button class="spec-mobile-toggle-btn mobile-only" id="spec-drawer-toggle-btn" onclick="toggleSpecNavDrawer(event)" aria-label="Toggle standards navigation menu" aria-expanded="false">
+                    <span class="icon" aria-hidden="true">☰</span>
+                    <span class="btn-text" id="i18n-spec-nav-toggle">Standards</span>
+                    <span class="btn-badge">28</span>
+                </button>
+                <div class="reader-breadcrumbs">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
+                    </ol>
+                </div>
+            </div>
             <div class="reader-actions">
+                <!-- Mobile Toggle for Right TOC Drawer -->
+                <button class="spec-mobile-toggle-btn mobile-only" id="spec-toc-toggle-btn" onclick="toggleSpecTocDrawer(event)" aria-label="Toggle Table of Contents" aria-expanded="false">
+                    <span class="icon" aria-hidden="true">📑</span>
+                    <span class="btn-text" id="i18n-spec-toc-toggle">On this page</span>
+                </button>
                 <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Catalog</span>
                 </button>
@@ -486,73 +507,116 @@ __ITEMS__
                     GitHub ↗
                 </a>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
-                </ol>
-            </div>
         </nav>
 
-        <div class="reader-wrapper">
-            <!-- Specification Meta Card -->
-            <header class="reader-meta-header">
-                <div class="reader-meta-top">
-                    <span id="spec-id-badge" class="tile-id"></span>
-                    <span id="spec-cat-badge" class="tile-cat-badge"></span>
-                    <span id="spec-status-badge" class="tile-cat-badge cat-accessibility">ACTIVE</span>
+        <!-- 3-Column Documentation Grid -->
+        <div class="spec-doc-container">
+            <!-- COLUMN 1: LEFT NAVIGATION SIDEBAR (Craft.wiki hierarchy) -->
+            <aside id="spec-nav-sidebar" class="spec-nav-sidebar" aria-label="Standards Directory">
+                <div class="spec-sidebar-inner">
+                    <div class="spec-sidebar-search">
+                        <span class="search-icon" aria-hidden="true">🔍</span>
+                        <input type="search" id="spec-sidebar-search-input" placeholder="Search standards..." aria-label="Search standards list" oninput="filterSpecSidebar(this.value)">
+                        <button id="spec-sidebar-search-clear" class="spec-search-clear" onclick="clearSpecSidebarSearch()" aria-label="Clear search" style="display:none;">✕</button>
+                    </div>
+                    <div class="spec-sidebar-all-link">
+                        <a href="#" onclick="showDashboard(event)">
+                            <span class="icon" aria-hidden="true">📚</span>
+                            <span id="i18n-sidebar-all-specs">All Specifications</span>
+                            <span class="badge" id="spec-sidebar-total-badge">28</span>
+                        </a>
+                    </div>
+                    <div class="spec-nav-tree" id="spec-nav-tree" role="navigation" aria-label="Specifications hierarchy">
+                        <!-- Populated dynamically: grouped by category with active highlight -->
+                    </div>
                 </div>
-                <h1 id="spec-title" class="reader-title" tabindex="-1"></h1>
-                <div class="reader-tags-grid">
-                    <div class="reader-pill" id="spec-crate-pill"><strong id="i18n-crate-label">Canonical Crate:</strong> <code id="spec-crate"></code></div>
-                    <div class="reader-pill" id="spec-apps-pill"><strong id="i18n-apps-label">Governed Apps:</strong> <span id="spec-apps"></span></div>
-                    <div class="reader-pill" id="spec-wiki-pill" style="display:none;"><strong id="i18n-wiki-label">Craft Wiki Guide:</strong> <a id="spec-wiki-link" href="#" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">Open Reference ↗</a></div>
+            </aside>
+
+            <!-- COLUMN 2: CENTER READING VIEW -->
+            <main class="spec-content-center" id="spec-main-article">
+                <div class="reader-wrapper">
+                    <!-- Specification Meta Card -->
+                    <header class="reader-meta-header">
+                        <div class="reader-meta-top">
+                            <span id="spec-id-badge" class="tile-id"></span>
+                            <span id="spec-cat-badge" class="tile-cat-badge"></span>
+                            <span id="spec-status-badge" class="tile-cat-badge cat-accessibility">ACTIVE</span>
+                        </div>
+                        <h1 id="spec-title" class="reader-title" tabindex="-1"></h1>
+                        <div class="reader-tags-grid">
+                            <div class="reader-pill" id="spec-crate-pill"><strong id="i18n-crate-label">Canonical Crate:</strong> <code id="spec-crate"></code></div>
+                            <div class="reader-pill" id="spec-apps-pill"><strong id="i18n-apps-label">Governed Apps:</strong> <span id="spec-apps"></span></div>
+                            <div class="reader-pill" id="spec-wiki-pill" style="display:none;"><strong id="i18n-wiki-label">Craft Wiki Guide:</strong> <a id="spec-wiki-link" href="#" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">Open Reference ↗</a></div>
+                        </div>
+                    </header>
+
+                    <!-- Interactive In-Browser Ergonomic Sandbox Slot -->
+                    <div id="interactive-sandbox-slot"></div>
+
+                    <!-- Interactive Rust Implementation Snippet Lab -->
+                    <div id="spec-snippet-lab" class="snippet-lab-card" style="display:none;" role="region" aria-label="Compliant Rust Boilerplate Generator">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <!-- Rendered Markdown Body -->
+                    <article id="spec-content" class="markdown-body" aria-label="Specification Content"></article>
+
+                    <!-- Rich Pagination & Back to Catalog Component -->
+                    <nav class="reader-nav-section" aria-label="Document pagination and navigation">
+                        <div class="return-catalog-row">
+                            <button class="return-catalog-btn" onclick="showDashboard(event)" aria-label="Return to full catalog (Shortcut: Escape)">
+                                <span class="arrow-icon">↑</span>
+                                <span id="i18n-return-catalog">Back to All Specifications</span>
+                                <kbd class="kbd-hint">Esc</kbd>
+                            </button>
+                        </div>
+
+                        <div class="reader-pagination">
+                            <a href="#" id="prev-pag-card" class="pag-card prev-card" onclick="navigateSpec(-1, event)" rel="prev">
+                                <span class="pag-label">
+                                    <span class="pagination-arrow arrow-icon">←</span>
+                                    <span id="i18n-prev-label">Previous Standard</span>
+                                </span>
+                                <span class="pag-title" id="prev-pag-title">STD-NAV-001</span>
+                            </a>
+                            <a href="#" id="next-pag-card" class="pag-card next-card" onclick="navigateSpec(1, event)" rel="next">
+                                <span class="pag-label">
+                                    <span id="i18n-next-label">Next Standard</span>
+                                    <span class="pagination-arrow arrow-icon">→</span>
+                                </span>
+                                <span class="pag-title" id="next-pag-title">STD-NAV-003</span>
+                            </a>
+                        </div>
+                    </nav>
                 </div>
-            </header>
+            </main>
 
-            <!-- Interactive In-Browser Ergonomic Sandbox Slot -->
-            <div id="interactive-sandbox-slot"></div>
-
-            <!-- Interactive Rust Implementation Snippet Lab -->
-            <div id="spec-snippet-lab" class="snippet-lab-card" style="display:none;" role="region" aria-label="Compliant Rust Boilerplate Generator">
-                <!-- Populated dynamically -->
-            </div>
-
-            <!-- Rendered Markdown Body -->
-            <article id="spec-content" class="markdown-body" aria-label="Specification Content"></article>
-
-            <!-- Rich Pagination & Back to Catalog Component (Enhanced UI/UX/a11y/i18n) -->
-            <nav class="reader-nav-section" aria-label="Document pagination and navigation">
-                <!-- Center Prominent Back to Catalog Button with Shortcut Hint -->
-                <div class="return-catalog-row">
-                    <button class="return-catalog-btn" onclick="showDashboard(event)" aria-label="Return to full catalog (Shortcut: Escape)">
-                        <span class="arrow-icon">↑</span>
-                        <span id="i18n-return-catalog">Back to All Specifications</span>
-                        <kbd class="kbd-hint">Esc</kbd>
-                    </button>
+            <!-- COLUMN 3: RIGHT TABLE OF CONTENTS ("On this page") -->
+            <aside id="spec-toc-sidebar" class="spec-toc-sidebar" aria-label="Table of Contents">
+                <div class="spec-toc-inner">
+                    <div class="spec-toc-header">
+                        <span class="toc-icon" aria-hidden="true">📑</span>
+                        <h3 class="spec-toc-title" id="i18n-toc-on-this-page">On this page</h3>
+                    </div>
+                    <nav class="spec-toc-list-wrap" aria-label="Document sections">
+                        <ul id="spec-toc-list" class="spec-toc-list">
+                            <!-- Populated dynamically from H2 and H3 headings -->
+                        </ul>
+                    </nav>
+                    <div class="spec-toc-footer">
+                        <button class="spec-toc-action-link" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to top of document">
+                            <span class="arrow" aria-hidden="true">↑</span> <span id="i18n-toc-back-to-top">Back to top</span>
+                        </button>
+                        <button class="spec-toc-action-link" onclick="copyCurrentLink()" aria-label="Share direct specification link">
+                            <span aria-hidden="true">🔗</span> <span id="i18n-toc-share">Share standard</span>
+                        </button>
+                    </div>
                 </div>
-
-                <!-- Dual Rich Pagination Cards -->
-                <div class="reader-pagination">
-                    <a href="#" id="prev-pag-card" class="pag-card prev-card" onclick="navigateSpec(-1, event)" rel="prev">
-                        <span class="pag-label">
-                            <span class="pagination-arrow arrow-icon">←</span>
-                            <span id="i18n-prev-label">Previous Standard</span>
-                        </span>
-                        <span class="pag-title" id="prev-pag-title">STD-NAV-001</span>
-                    </a>
-                    <a href="#" id="next-pag-card" class="pag-card next-card" onclick="navigateSpec(1, event)" rel="next">
-                        <span class="pag-label">
-                            <span id="i18n-next-label">Next Standard</span>
-                            <span class="pagination-arrow arrow-icon">→</span>
-                        </span>
-                        <span class="pag-title" id="next-pag-title">STD-NAV-003</span>
-                    </a>
-                </div>
-            </nav>
+            </aside>
         </div>
+
+        <!-- Mobile Drawer Backdrop Overlay -->
+        <div id="spec-drawer-overlay" class="spec-drawer-overlay" onclick="closeAllSpecDrawers()" aria-hidden="true"></div>
     </div>
 
     <!-- FOOTER -->

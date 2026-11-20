@@ -1499,9 +1499,18 @@
         }
         .tile-gh-link:hover { color: var(--sl-color-white); }
 
-        /* Specification Reader View (Full a11y, i18n, Mobile-First) */
-        #spec-view { display: none; }
-        
+        /* =========================================================================
+           CRAFT.WIKI 3-COLUMN SPECIFICATION READER (Jakob's Law Architecture)
+           ========================================================================= */
+        #spec-view {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background: var(--sl-color-bg);
+            position: relative;
+        }
+
+        /* Top Sticky Toolbar & Breadcrumb Bar */
         .reader-breadcrumb-bar {
             position: sticky;
             top: 56px;
@@ -1512,30 +1521,78 @@
             border-bottom: 1px solid var(--sl-color-border);
             padding: 10px 16px;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         @media (min-width: 768px) {
             .reader-breadcrumb-bar {
                 top: 64px;
-                padding: 12px 32px;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-                gap: 16px;
+                padding: 12px 24px;
+                flex-wrap: nowrap;
             }
+        }
+        @media (min-width: 1200px) {
+            .reader-breadcrumb-bar {
+                padding: 12px 32px;
+            }
+        }
+
+        .reader-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
         }
 
         .reader-actions {
             display: flex;
             align-items: center;
             gap: 8px;
-            width: 100%;
-        }
-        @media (min-width: 768px) {
-            .reader-actions { width: auto; order: 2; }
+            flex-shrink: 0;
         }
 
+        /* Mobile Drawer Toggle Buttons */
+        .spec-mobile-toggle-btn {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--sl-color-border);
+            color: var(--sl-color-text);
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            height: 36px;
+            touch-action: manipulation;
+        }
+        .spec-mobile-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--sl-color-border-hover);
+            color: var(--sl-color-white);
+        }
+        .spec-mobile-toggle-btn .btn-badge {
+            background: rgba(56, 139, 253, 0.2);
+            color: #58A6FF;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        @media (max-width: 1023px) {
+            .spec-mobile-toggle-btn.mobile-only {
+                display: inline-flex;
+            }
+        }
+
+        /* Action Buttons */
         .reader-btn {
             background: var(--sl-color-card);
             border: 1px solid var(--sl-color-border);
@@ -1552,6 +1609,7 @@
             gap: 6px;
             transition: all 0.15s;
             white-space: nowrap;
+            height: 36px;
         }
         .reader-btn:hover {
             border-color: var(--sl-color-border-hover);
@@ -1581,7 +1639,7 @@
         }
         .reader-breadcrumbs::-webkit-scrollbar { display: none; }
         @media (min-width: 768px) {
-            .reader-breadcrumbs { font-size: 13px; gap: 8px; order: 1; overflow-x: visible; }
+            .reader-breadcrumbs { font-size: 13px; gap: 8px; overflow-x: visible; }
         }
         .reader-breadcrumbs ol {
             display: flex;
@@ -1608,14 +1666,432 @@
             font-weight: 600;
         }
 
-        .reader-wrapper {
+        /* 3-Column Documentation Container */
+        .spec-doc-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 20px 16px 64px;
+            display: block;
+            padding: 16px 12px 64px;
         }
         @media (min-width: 768px) {
-            .reader-wrapper { padding: 40px 24px 80px; }
+            .spec-doc-container {
+                padding: 24px 20px 80px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .spec-doc-container {
+                display: grid;
+                grid-template-columns: 280px minmax(0, 1fr);
+                gap: 28px;
+                padding: 28px 24px 90px;
+                align-items: start;
+            }
+        }
+        @media (min-width: 1260px) {
+            .spec-doc-container {
+                grid-template-columns: 280px minmax(0, 1fr) 240px;
+                gap: 36px;
+                padding: 32px 32px 100px;
+            }
+        }
+        @media (min-width: 1480px) {
+            .spec-doc-container {
+                grid-template-columns: 300px minmax(0, 1fr) 260px;
+                gap: 48px;
+            }
+        }
+
+        /* COLUMN 1: LEFT NAVIGATION SIDEBAR (Craft.wiki Style) */
+        .spec-nav-sidebar {
+            background: transparent;
+        }
+        @media (min-width: 1024px) {
+            .spec-nav-sidebar {
+                position: sticky;
+                top: 120px;
+                max-height: calc(100vh - 140px);
+                overflow-y: auto;
+                overflow-x: hidden;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+                border-inline-end: 1px solid var(--sl-color-border);
+                padding-inline-end: 20px;
+            }
+            .spec-nav-sidebar::-webkit-scrollbar { width: 5px; }
+            .spec-nav-sidebar::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.12);
+                border-radius: 4px;
+            }
+        }
+        /* Mobile Drawer for Left Sidebar */
+        @media (max-width: 1023px) {
+            .spec-nav-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 320px;
+                max-width: 86vw;
+                background: #0D1117;
+                z-index: 250;
+                box-shadow: 4px 0 28px rgba(0, 0, 0, 0.7);
+                transform: translateX(-100%);
+                transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                padding: 20px 16px;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+            }
+            [dir="rtl"] .spec-nav-sidebar {
+                left: auto;
+                right: 0;
+                transform: translateX(100%);
+                box-shadow: -4px 0 28px rgba(0, 0, 0, 0.7);
+            }
+            .spec-nav-sidebar.drawer-open {
+                transform: translateX(0) !important;
+            }
+        }
+
+        .spec-sidebar-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Sidebar Search Box */
+        .spec-sidebar-search {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .spec-sidebar-search .search-icon {
+            position: absolute;
+            left: 12px;
+            font-size: 13px;
+            color: var(--sl-color-text-muted);
+            pointer-events: none;
+        }
+        [dir="rtl"] .spec-sidebar-search .search-icon {
+            left: auto;
+            right: 12px;
+        }
+        .spec-sidebar-search input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--sl-color-border);
+            border-radius: 8px;
+            padding: 8px 30px 8px 34px;
+            color: var(--sl-color-white);
+            font-size: 13px;
+            outline: none;
+            transition: all 0.15s;
+        }
+        [dir="rtl"] .spec-sidebar-search input {
+            padding: 8px 34px 8px 30px;
+        }
+        .spec-sidebar-search input:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--sl-color-accent);
+            box-shadow: 0 0 0 2px rgba(56, 139, 253, 0.2);
+        }
+        .spec-sidebar-search .spec-search-clear {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--sl-color-text-muted);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        [dir="rtl"] .spec-sidebar-search .spec-search-clear {
+            right: auto;
+            left: 10px;
+        }
+
+        /* "All Specifications" Top Link */
+        .spec-sidebar-all-link a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: var(--sl-color-white);
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--sl-color-border);
+            transition: all 0.15s;
+        }
+        .spec-sidebar-all-link a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--sl-color-border-hover);
+        }
+        .spec-sidebar-all-link .badge {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--sl-color-text);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 10px;
+        }
+
+        /* Navigation Category Trees */
+        .spec-nav-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .spec-nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .spec-nav-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--sl-color-text-muted);
+            user-select: none;
+        }
+        .spec-nav-group-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .spec-nav-group-count {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            opacity: 0.7;
+        }
+        .spec-nav-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .spec-nav-item a {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            color: var(--sl-color-text-muted);
+            text-decoration: none;
+            line-height: 1.35;
+            transition: all 0.12s;
+            position: relative;
+        }
+        .spec-nav-item a:hover {
+            color: var(--sl-color-white);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .spec-nav-item a.active {
+            color: #58A6FF;
+            font-weight: 600;
+            background: rgba(56, 139, 253, 0.12);
+            border-inline-start: 3px solid #388BFD;
+            padding-inline-start: 9px;
+        }
+        .spec-nav-item-id {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--sl-color-accent);
+            flex-shrink: 0;
+        }
+        .spec-nav-item a.active .spec-nav-item-id {
+            color: #58A6FF;
+        }
+        .spec-nav-item-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            flex: 1;
+        }
+
+        /* COLUMN 2: CENTER READING VIEW */
+        .spec-content-center {
+            min-width: 0;
+            width: 100%;
+        }
+        .spec-content-center .reader-wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        /* COLUMN 3: RIGHT TABLE OF CONTENTS ("On this page") */
+        .spec-toc-sidebar {
+            background: transparent;
+        }
+        @media (min-width: 1260px) {
+            .spec-toc-sidebar {
+                position: sticky;
+                top: 120px;
+                max-height: calc(100vh - 140px);
+                overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+                border-inline-start: 1px solid var(--sl-color-border);
+                padding-inline-start: 20px;
+            }
+            .spec-toc-sidebar::-webkit-scrollbar { width: 5px; }
+            .spec-toc-sidebar::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.12);
+                border-radius: 4px;
+            }
+        }
+        /* Mobile / Tablet Drawer for Right TOC */
+        @media (max-width: 1259px) {
+            .spec-toc-sidebar {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 300px;
+                max-width: 86vw;
+                background: #0D1117;
+                z-index: 250;
+                box-shadow: -4px 0 28px rgba(0, 0, 0, 0.7);
+                transform: translateX(100%);
+                transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                padding: 20px 16px;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+            }
+            [dir="rtl"] .spec-toc-sidebar {
+                right: auto;
+                left: 0;
+                transform: translateX(-100%);
+                box-shadow: 4px 0 28px rgba(0, 0, 0, 0.7);
+            }
+            .spec-toc-sidebar.drawer-open {
+                transform: translateX(0) !important;
+            }
+        }
+
+        .spec-toc-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .spec-toc-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--sl-color-border);
+        }
+        .spec-toc-header .toc-icon {
+            font-size: 14px;
+        }
+        .spec-toc-title {
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--sl-color-white);
+            margin: 0;
+        }
+        .spec-toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .spec-toc-item a {
+            display: block;
+            font-size: 12.5px;
+            color: var(--sl-color-text-muted);
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            line-height: 1.4;
+            transition: all 0.12s;
+            border-inline-start: 2px solid transparent;
+        }
+        .spec-toc-item a:hover {
+            color: var(--sl-color-white);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .spec-toc-item a.active {
+            color: #58A6FF;
+            font-weight: 600;
+            border-inline-start-color: #388BFD;
+            background: rgba(56, 139, 253, 0.08);
+        }
+        .spec-toc-item.level-3 {
+            padding-inline-start: 12px;
+        }
+        .spec-toc-item.level-3 a {
+            font-size: 11.5px;
+            opacity: 0.85;
+        }
+
+        /* TOC Footer quick action buttons */
+        .spec-toc-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-top: 12px;
+            border-top: 1px solid var(--sl-color-border);
+        }
+        .spec-toc-action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: none;
+            color: var(--sl-color-text-muted);
+            font-size: 11.5px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            text-align: start;
+            transition: all 0.12s;
+        }
+        .spec-toc-action-link:hover {
+            color: var(--sl-color-white);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Drawer Overlay Backdrop */
+        .spec-drawer-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 240;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .spec-drawer-overlay.active {
+            display: block;
+            opacity: 1;
         }
 
         .reader-meta-header {
@@ -3534,11 +4010,32 @@
         </div>
     </main>
 
-    <!-- SPECIFICATION VIEWER -->
+    <!-- SPECIFICATION VIEWER (Craft.wiki 3-Column Documentation Architecture following Jakob's Law) -->
     <div id="spec-view" role="region" aria-label="Specification Document">
-        <!-- W3C Breadcrumb Pattern -->
+        <!-- Sticky Navigation & Actions Toolbar -->
         <nav class="reader-breadcrumb-bar" aria-label="Breadcrumb navigation">
+            <div class="reader-bar-left">
+                <!-- Mobile Toggle for Left Nav Drawer -->
+                <button class="spec-mobile-toggle-btn mobile-only" id="spec-drawer-toggle-btn" onclick="toggleSpecNavDrawer(event)" aria-label="Toggle standards navigation menu" aria-expanded="false">
+                    <span class="icon" aria-hidden="true">☰</span>
+                    <span class="btn-text" id="i18n-spec-nav-toggle">Standards</span>
+                    <span class="btn-badge">28</span>
+                </button>
+                <div class="reader-breadcrumbs">
+                    <ol>
+                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
+                        <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
+                    </ol>
+                </div>
+            </div>
             <div class="reader-actions">
+                <!-- Mobile Toggle for Right TOC Drawer -->
+                <button class="spec-mobile-toggle-btn mobile-only" id="spec-toc-toggle-btn" onclick="toggleSpecTocDrawer(event)" aria-label="Toggle Table of Contents" aria-expanded="false">
+                    <span class="icon" aria-hidden="true">📑</span>
+                    <span class="btn-text" id="i18n-spec-toc-toggle">On this page</span>
+                </button>
                 <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
                     <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Catalog</span>
                 </button>
@@ -3549,73 +4046,116 @@
                     GitHub ↗
                 </a>
             </div>
-            <div class="reader-breadcrumbs">
-                <ol>
-                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
-                    <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
-                </ol>
-            </div>
         </nav>
 
-        <div class="reader-wrapper">
-            <!-- Specification Meta Card -->
-            <header class="reader-meta-header">
-                <div class="reader-meta-top">
-                    <span id="spec-id-badge" class="tile-id"></span>
-                    <span id="spec-cat-badge" class="tile-cat-badge"></span>
-                    <span id="spec-status-badge" class="tile-cat-badge cat-accessibility">ACTIVE</span>
+        <!-- 3-Column Documentation Grid -->
+        <div class="spec-doc-container">
+            <!-- COLUMN 1: LEFT NAVIGATION SIDEBAR (Craft.wiki hierarchy) -->
+            <aside id="spec-nav-sidebar" class="spec-nav-sidebar" aria-label="Standards Directory">
+                <div class="spec-sidebar-inner">
+                    <div class="spec-sidebar-search">
+                        <span class="search-icon" aria-hidden="true">🔍</span>
+                        <input type="search" id="spec-sidebar-search-input" placeholder="Search standards..." aria-label="Search standards list" oninput="filterSpecSidebar(this.value)">
+                        <button id="spec-sidebar-search-clear" class="spec-search-clear" onclick="clearSpecSidebarSearch()" aria-label="Clear search" style="display:none;">✕</button>
+                    </div>
+                    <div class="spec-sidebar-all-link">
+                        <a href="#" onclick="showDashboard(event)">
+                            <span class="icon" aria-hidden="true">📚</span>
+                            <span id="i18n-sidebar-all-specs">All Specifications</span>
+                            <span class="badge" id="spec-sidebar-total-badge">28</span>
+                        </a>
+                    </div>
+                    <div class="spec-nav-tree" id="spec-nav-tree" role="navigation" aria-label="Specifications hierarchy">
+                        <!-- Populated dynamically: grouped by category with active highlight -->
+                    </div>
                 </div>
-                <h1 id="spec-title" class="reader-title" tabindex="-1"></h1>
-                <div class="reader-tags-grid">
-                    <div class="reader-pill" id="spec-crate-pill"><strong id="i18n-crate-label">Canonical Crate:</strong> <code id="spec-crate"></code></div>
-                    <div class="reader-pill" id="spec-apps-pill"><strong id="i18n-apps-label">Governed Apps:</strong> <span id="spec-apps"></span></div>
-                    <div class="reader-pill" id="spec-wiki-pill" style="display:none;"><strong id="i18n-wiki-label">Craft Wiki Guide:</strong> <a id="spec-wiki-link" href="#" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">Open Reference ↗</a></div>
+            </aside>
+
+            <!-- COLUMN 2: CENTER READING VIEW -->
+            <main class="spec-content-center" id="spec-main-article">
+                <div class="reader-wrapper">
+                    <!-- Specification Meta Card -->
+                    <header class="reader-meta-header">
+                        <div class="reader-meta-top">
+                            <span id="spec-id-badge" class="tile-id"></span>
+                            <span id="spec-cat-badge" class="tile-cat-badge"></span>
+                            <span id="spec-status-badge" class="tile-cat-badge cat-accessibility">ACTIVE</span>
+                        </div>
+                        <h1 id="spec-title" class="reader-title" tabindex="-1"></h1>
+                        <div class="reader-tags-grid">
+                            <div class="reader-pill" id="spec-crate-pill"><strong id="i18n-crate-label">Canonical Crate:</strong> <code id="spec-crate"></code></div>
+                            <div class="reader-pill" id="spec-apps-pill"><strong id="i18n-apps-label">Governed Apps:</strong> <span id="spec-apps"></span></div>
+                            <div class="reader-pill" id="spec-wiki-pill" style="display:none;"><strong id="i18n-wiki-label">Craft Wiki Guide:</strong> <a id="spec-wiki-link" href="#" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">Open Reference ↗</a></div>
+                        </div>
+                    </header>
+
+                    <!-- Interactive In-Browser Ergonomic Sandbox Slot -->
+                    <div id="interactive-sandbox-slot"></div>
+
+                    <!-- Interactive Rust Implementation Snippet Lab -->
+                    <div id="spec-snippet-lab" class="snippet-lab-card" style="display:none;" role="region" aria-label="Compliant Rust Boilerplate Generator">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <!-- Rendered Markdown Body -->
+                    <article id="spec-content" class="markdown-body" aria-label="Specification Content"></article>
+
+                    <!-- Rich Pagination & Back to Catalog Component -->
+                    <nav class="reader-nav-section" aria-label="Document pagination and navigation">
+                        <div class="return-catalog-row">
+                            <button class="return-catalog-btn" onclick="showDashboard(event)" aria-label="Return to full catalog (Shortcut: Escape)">
+                                <span class="arrow-icon">↑</span>
+                                <span id="i18n-return-catalog">Back to All Specifications</span>
+                                <kbd class="kbd-hint">Esc</kbd>
+                            </button>
+                        </div>
+
+                        <div class="reader-pagination">
+                            <a href="#" id="prev-pag-card" class="pag-card prev-card" onclick="navigateSpec(-1, event)" rel="prev">
+                                <span class="pag-label">
+                                    <span class="pagination-arrow arrow-icon">←</span>
+                                    <span id="i18n-prev-label">Previous Standard</span>
+                                </span>
+                                <span class="pag-title" id="prev-pag-title">STD-NAV-001</span>
+                            </a>
+                            <a href="#" id="next-pag-card" class="pag-card next-card" onclick="navigateSpec(1, event)" rel="next">
+                                <span class="pag-label">
+                                    <span id="i18n-next-label">Next Standard</span>
+                                    <span class="pagination-arrow arrow-icon">→</span>
+                                </span>
+                                <span class="pag-title" id="next-pag-title">STD-NAV-003</span>
+                            </a>
+                        </div>
+                    </nav>
                 </div>
-            </header>
+            </main>
 
-            <!-- Interactive In-Browser Ergonomic Sandbox Slot -->
-            <div id="interactive-sandbox-slot"></div>
-
-            <!-- Interactive Rust Implementation Snippet Lab -->
-            <div id="spec-snippet-lab" class="snippet-lab-card" style="display:none;" role="region" aria-label="Compliant Rust Boilerplate Generator">
-                <!-- Populated dynamically -->
-            </div>
-
-            <!-- Rendered Markdown Body -->
-            <article id="spec-content" class="markdown-body" aria-label="Specification Content"></article>
-
-            <!-- Rich Pagination & Back to Catalog Component (Enhanced UI/UX/a11y/i18n) -->
-            <nav class="reader-nav-section" aria-label="Document pagination and navigation">
-                <!-- Center Prominent Back to Catalog Button with Shortcut Hint -->
-                <div class="return-catalog-row">
-                    <button class="return-catalog-btn" onclick="showDashboard(event)" aria-label="Return to full catalog (Shortcut: Escape)">
-                        <span class="arrow-icon">↑</span>
-                        <span id="i18n-return-catalog">Back to All Specifications</span>
-                        <kbd class="kbd-hint">Esc</kbd>
-                    </button>
+            <!-- COLUMN 3: RIGHT TABLE OF CONTENTS ("On this page") -->
+            <aside id="spec-toc-sidebar" class="spec-toc-sidebar" aria-label="Table of Contents">
+                <div class="spec-toc-inner">
+                    <div class="spec-toc-header">
+                        <span class="toc-icon" aria-hidden="true">📑</span>
+                        <h3 class="spec-toc-title" id="i18n-toc-on-this-page">On this page</h3>
+                    </div>
+                    <nav class="spec-toc-list-wrap" aria-label="Document sections">
+                        <ul id="spec-toc-list" class="spec-toc-list">
+                            <!-- Populated dynamically from H2 and H3 headings -->
+                        </ul>
+                    </nav>
+                    <div class="spec-toc-footer">
+                        <button class="spec-toc-action-link" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to top of document">
+                            <span class="arrow" aria-hidden="true">↑</span> <span id="i18n-toc-back-to-top">Back to top</span>
+                        </button>
+                        <button class="spec-toc-action-link" onclick="copyCurrentLink()" aria-label="Share direct specification link">
+                            <span aria-hidden="true">🔗</span> <span id="i18n-toc-share">Share standard</span>
+                        </button>
+                    </div>
                 </div>
-
-                <!-- Dual Rich Pagination Cards -->
-                <div class="reader-pagination">
-                    <a href="#" id="prev-pag-card" class="pag-card prev-card" onclick="navigateSpec(-1, event)" rel="prev">
-                        <span class="pag-label">
-                            <span class="pagination-arrow arrow-icon">←</span>
-                            <span id="i18n-prev-label">Previous Standard</span>
-                        </span>
-                        <span class="pag-title" id="prev-pag-title">STD-NAV-001</span>
-                    </a>
-                    <a href="#" id="next-pag-card" class="pag-card next-card" onclick="navigateSpec(1, event)" rel="next">
-                        <span class="pag-label">
-                            <span id="i18n-next-label">Next Standard</span>
-                            <span class="pagination-arrow arrow-icon">→</span>
-                        </span>
-                        <span class="pag-title" id="next-pag-title">STD-NAV-003</span>
-                    </a>
-                </div>
-            </nav>
+            </aside>
         </div>
+
+        <!-- Mobile Drawer Backdrop Overlay -->
+        <div id="spec-drawer-overlay" class="spec-drawer-overlay" onclick="closeAllSpecDrawers()" aria-hidden="true"></div>
     </div>
 
     <!-- FOOTER -->
@@ -4031,7 +4571,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "faqCatArch": "الهندسة والثوابت",
   "faqCatAutoCraft": "AutoCraft والوكلاء",
   "faqCatContrib": "المساهمة ومقترحات RFC",
-  "faqCatI18n": "التدويل والـ RTL"
+  "faqCatI18n": "التدويل والـ RTL",
+  "specTocOnThisPage": "في هذه الصفحة",
+  "specTocBackToTop": "الرجوع للأعلى",
+  "specTocShare": "مشاركة المعيار",
+  "specNavSearchPlaceholder": "البحث في المعايير...",
+  "specNavAllSpecs": "كافة المواصفات",
+  "specNavToggleBtn": "المعايير",
+  "specTocToggleBtn": "في هذه الصفحة"
 },
 "de": {
   "code": "de",
@@ -4168,7 +4715,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "faqCatArch": "Architektur & Invarianten",
   "faqCatAutoCraft": "AutoCraft & Agenten",
   "faqCatContrib": "Mitwirken & RFCs",
-  "faqCatI18n": "i18n & RTL"
+  "faqCatI18n": "i18n & RTL",
+  "specTocOnThisPage": "Auf dieser Seite",
+  "specTocBackToTop": "Nach oben",
+  "specTocShare": "Standard teilen",
+  "specNavSearchPlaceholder": "Standards suchen...",
+  "specNavAllSpecs": "Alle Spezifikationen",
+  "specNavToggleBtn": "Standards",
+  "specTocToggleBtn": "Auf dieser Seite"
 },
 "en": {
   "code": "en",
@@ -4305,7 +4859,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "faqCatArch": "Architecture & Invariants",
   "faqCatAutoCraft": "AutoCraft & Agents",
   "faqCatContrib": "Contributing & RFCs",
-  "faqCatI18n": "i18n & RTL"
+  "faqCatI18n": "i18n & RTL",
+  "specTocOnThisPage": "On this page",
+  "specTocBackToTop": "Back to top",
+  "specTocShare": "Share standard",
+  "specNavSearchPlaceholder": "Search standards...",
+  "specNavAllSpecs": "All Specifications",
+  "specNavToggleBtn": "Standards",
+  "specTocToggleBtn": "On this page"
 },
 "es": {
   "code": "es",
@@ -4442,7 +5003,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "faqCatArch": "Arquitectura e Invariantes",
   "faqCatAutoCraft": "AutoCraft y Agentes",
   "faqCatContrib": "Contribuciones y RFCs",
-  "faqCatI18n": "i18n y RTL"
+  "faqCatI18n": "i18n y RTL",
+  "specTocOnThisPage": "En esta página",
+  "specTocBackToTop": "Volver arriba",
+  "specTocShare": "Compartir norma",
+  "specNavSearchPlaceholder": "Buscar especificaciones...",
+  "specNavAllSpecs": "Todas las especificaciones",
+  "specNavToggleBtn": "Normas",
+  "specTocToggleBtn": "En esta página"
 },
 "fr": {
   "code": "fr",
@@ -4579,7 +5147,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "faqCatArch": "Architecture & Invariants",
   "faqCatAutoCraft": "AutoCraft & Agents",
   "faqCatContrib": "Contributions & RFCs",
-  "faqCatI18n": "i18n & RTL"
+  "faqCatI18n": "i18n & RTL",
+  "specTocOnThisPage": "Sur cette page",
+  "specTocBackToTop": "Haut de page",
+  "specTocShare": "Partager la norme",
+  "specNavSearchPlaceholder": "Rechercher des normes...",
+  "specNavAllSpecs": "Toutes les spécifications",
+  "specNavToggleBtn": "Normes",
+  "specTocToggleBtn": "Sur cette page"
 },
 "ja": {
   "code": "ja",
@@ -4716,7 +5291,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "faqCatArch": "アーキテクチャ & 不変条件",
   "faqCatAutoCraft": "AutoCraft & エージェント",
   "faqCatContrib": "貢献 & RFC提案",
-  "faqCatI18n": "国際化 & RTL"
+  "faqCatI18n": "国際化 & RTL",
+  "specTocOnThisPage": "このページの内容",
+  "specTocBackToTop": "トップに戻る",
+  "specTocShare": "仕様を共有",
+  "specNavSearchPlaceholder": "仕様を検索...",
+  "specNavAllSpecs": "すべての仕様",
+  "specNavToggleBtn": "仕様一覧",
+  "specTocToggleBtn": "目次"
 }}
     </script>
 
@@ -4875,6 +5457,22 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             setTxt('i18n-footer-desc', t.footerDesc);
             setTxt('i18n-copyright', t.copyright);
             setTxt('i18n-foss', t.foss);
+            setTxt('i18n-toc-on-this-page', t.specTocOnThisPage);
+            setTxt('i18n-toc-back-to-top', t.specTocBackToTop);
+            setTxt('i18n-toc-share', t.specTocShare);
+            setTxt('i18n-sidebar-all-specs', t.specNavAllSpecs);
+            setTxt('i18n-spec-nav-toggle', t.specNavToggleBtn);
+            setTxt('i18n-spec-toc-toggle', t.specTocToggleBtn);
+
+            const sNavInput = document.getElementById('spec-sidebar-search-input');
+            if (sNavInput && t.specNavSearchPlaceholder) {
+                sNavInput.placeholder = t.specNavSearchPlaceholder;
+                sNavInput.setAttribute('aria-label', t.specNavSearchPlaceholder);
+            }
+
+            if (activeSpecId) {
+                populateSpecNavTree(activeSpecId);
+            }
 
             announceA11y(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : `Language switched to ${t.name || lang}`);
             applyFilters();
@@ -5063,6 +5661,249 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             }
         }
 
+        
+        // =========================================================================
+        // Craft.wiki 3-Column Specification Navigation & TOC Engine (Jakob's Law)
+        // =========================================================================
+        const CATEGORY_GROUPS = [
+            { id: 'interaction', num: '01', icon: '🖱️' },
+            { id: 'navigation', num: '02', icon: '🧭' },
+            { id: 'accessibility', num: '03', icon: '♿' },
+            { id: 'internationalization', num: '04', icon: '🌐' },
+            { id: 'shell', num: '05', icon: '🖥️' },
+            { id: 'unified-libs', num: '06', icon: '📦' },
+            { id: 'governance', num: '07', icon: '⚖️' }
+        ];
+
+        function populateSpecNavTree(activeId) {
+            const treeEl = document.getElementById('spec-nav-tree');
+            if (!treeEl) return;
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+
+            let html = '';
+            CATEGORY_GROUPS.forEach(grp => {
+                const grpSpecs = SPECS.filter(s => s.category === grp.id);
+                if (grpSpecs.length === 0) return;
+                const catName = getCategoryName(grp.id, t);
+
+                html += `
+                    <div class="spec-nav-group" data-category="${grp.id}">
+                        <div class="spec-nav-group-header">
+                            <span class="spec-nav-group-title">
+                                <span>${grp.icon}</span>
+                                <span>${grp.num} · ${catName}</span>
+                            </span>
+                            <span class="spec-nav-group-count">${grpSpecs.length}</span>
+                        </div>
+                        <ul class="spec-nav-items">
+                `;
+
+                grpSpecs.forEach(s => {
+                    const isActive = s.id === activeId;
+                    html += `
+                        <li class="spec-nav-item" data-spec-id="${s.id}">
+                            <a href="#${s.id}" class="${isActive ? 'active' : ''}" onclick="openSpec('${s.id}'); closeAllSpecDrawers(); return false;" aria-current="${isActive ? 'page' : 'false'}">
+                                <span class="spec-nav-item-id">${s.id}</span>
+                                <span class="spec-nav-item-title" title="${s.title}">${s.title}</span>
+                            </a>
+                        </li>
+                    `;
+                });
+
+                html += `
+                        </ul>
+                    </div>
+                `;
+            });
+
+            treeEl.innerHTML = html;
+
+            // Update total badge
+            const totalBadge = document.getElementById('spec-sidebar-total-badge');
+            if (totalBadge) totalBadge.textContent = SPECS.length;
+
+            // Scroll active nav item smoothly into view inside sidebar
+            if (activeId) {
+                setTimeout(() => {
+                    const activeLink = treeEl.querySelector('.spec-nav-item a.active');
+                    if (activeLink) {
+                        activeLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    }
+                }, 50);
+            }
+        }
+
+        function filterSpecSidebar(query) {
+            const clearBtn = document.getElementById('spec-sidebar-search-clear');
+            const q = (query || '').trim().toLowerCase();
+            if (clearBtn) {
+                clearBtn.style.display = q ? 'flex' : 'none';
+            }
+
+            const groups = document.querySelectorAll('#spec-nav-tree .spec-nav-group');
+            groups.forEach(grp => {
+                let visibleInGroup = 0;
+                const items = grp.querySelectorAll('.spec-nav-item');
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    const match = !q || text.includes(q);
+                    item.style.display = match ? 'block' : 'none';
+                    if (match) visibleInGroup++;
+                });
+                grp.style.display = visibleInGroup > 0 ? 'flex' : 'none';
+            });
+        }
+
+        function clearSpecSidebarSearch() {
+            const input = document.getElementById('spec-sidebar-search-input');
+            if (input) {
+                input.value = '';
+                filterSpecSidebar('');
+                input.focus();
+            }
+        }
+
+        let tocObserver = null;
+
+        function generateSpecTOC() {
+            const tocList = document.getElementById('spec-toc-list');
+            if (!tocList) return;
+
+            if (tocObserver) {
+                tocObserver.disconnect();
+                tocObserver = null;
+            }
+
+            const contentEl = document.getElementById('spec-content');
+            if (!contentEl) return;
+
+            const headings = contentEl.querySelectorAll('h2, h3');
+            if (headings.length === 0) {
+                tocList.innerHTML = `<li class="spec-toc-item"><span style="font-size:12px;color:var(--sl-color-text-muted);">No sections found</span></li>`;
+                return;
+            }
+
+            let tocHtml = '';
+            const headingElements = [];
+
+            headings.forEach((h, index) => {
+                const text = h.textContent.trim();
+                if (!text) return;
+
+                // Create slug ID
+                const slug = 'heading-' + index + '-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                h.id = slug;
+                headingElements.push({ el: h, id: slug });
+
+                const isH3 = h.tagName.toLowerCase() === 'h3';
+                tocHtml += `
+                    <li class="spec-toc-item ${isH3 ? 'level-3' : 'level-2'}">
+                        <a href="#${slug}" data-target-id="${slug}" onclick="onTocLinkClick(event, '${slug}')">
+                            ${text}
+                        </a>
+                    </li>
+                `;
+            });
+
+            tocList.innerHTML = tocHtml;
+
+            // Highlight first item initially
+            const firstLink = tocList.querySelector('a');
+            if (firstLink) firstLink.classList.add('active');
+
+            // Setup IntersectionObserver for ScrollSpy
+            if ('IntersectionObserver' in window && headingElements.length > 0) {
+                tocObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const activeId = entry.target.id;
+                            tocList.querySelectorAll('a').forEach(a => {
+                                if (a.dataset.targetId === activeId) {
+                                    a.classList.add('active');
+                                } else {
+                                    a.classList.remove('active');
+                                }
+                            });
+                        }
+                    });
+                }, {
+                    rootMargin: '-80px 0px -60% 0px',
+                    threshold: 0
+                });
+
+                headingElements.forEach(item => {
+                    tocObserver.observe(item.el);
+                });
+            }
+        }
+
+        function onTocLinkClick(e, slug) {
+            if (e) e.preventDefault();
+            const target = document.getElementById(slug);
+            if (target) {
+                const offset = 80;
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = target.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+
+                // Update active link in TOC
+                const tocList = document.getElementById('spec-toc-list');
+                if (tocList) {
+                    tocList.querySelectorAll('a').forEach(a => {
+                        a.classList.toggle('active', a.dataset.targetId === slug);
+                    });
+                }
+            }
+            closeAllSpecDrawers();
+        }
+
+        function toggleSpecNavDrawer(e) {
+            if (e) e.stopPropagation();
+            const sidebar = document.getElementById('spec-nav-sidebar');
+            const overlay = document.getElementById('spec-drawer-overlay');
+            const isOpen = sidebar.classList.contains('drawer-open');
+            closeAllSpecDrawers();
+            if (!isOpen) {
+                sidebar.classList.add('drawer-open');
+                overlay.classList.add('active');
+                const btn = document.getElementById('spec-drawer-toggle-btn');
+                if (btn) btn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        function toggleSpecTocDrawer(e) {
+            if (e) e.stopPropagation();
+            const toc = document.getElementById('spec-toc-sidebar');
+            const overlay = document.getElementById('spec-drawer-overlay');
+            const isOpen = toc.classList.contains('drawer-open');
+            closeAllSpecDrawers();
+            if (!isOpen) {
+                toc.classList.add('drawer-open');
+                overlay.classList.add('active');
+                const btn = document.getElementById('spec-toc-toggle-btn');
+                if (btn) btn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        function closeAllSpecDrawers() {
+            const sidebar = document.getElementById('spec-nav-sidebar');
+            const toc = document.getElementById('spec-toc-sidebar');
+            const overlay = document.getElementById('spec-drawer-overlay');
+            if (sidebar) sidebar.classList.remove('drawer-open');
+            if (toc) toc.classList.remove('drawer-open');
+            if (overlay) overlay.classList.remove('active');
+            const btnNav = document.getElementById('spec-drawer-toggle-btn');
+            const btnToc = document.getElementById('spec-toc-toggle-btn');
+            if (btnNav) btnNav.setAttribute('aria-expanded', 'false');
+            if (btnToc) btnToc.setAttribute('aria-expanded', 'false');
+        }
+
         function openSpec(id, updateHash = true) {
             const spec = specsMap[id];
             if (!spec) return;
@@ -5211,11 +6052,17 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
                 titleEl.focus();
             }
             announceA11y(`Now reading specification ${spec.id}: ${spec.title}`);
+
+            // Craft.wiki 3-Column Integration
+            populateSpecNavTree(spec.id);
+            generateSpecTOC();
+            closeAllSpecDrawers();
         }
 
         function showDashboard(e) {
             if (e) e.preventDefault();
             activeSpecId = null;
+            closeAllSpecDrawers();
             if (window.location.hash) {
                 history.pushState(null, null, ' ');
             }
@@ -5248,6 +6095,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
         function showMatrixView(e) {
             if (e) e.preventDefault();
             activeSpecId = null;
+            closeAllSpecDrawers();
             if (window.location.hash !== '#matrix') {
                 history.pushState(null, null, '#matrix');
             }
@@ -5332,6 +6180,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
 
             if (e.key === 'Escape') {
                 closeMobileMenu();
+                const navSidebar = document.getElementById('spec-nav-sidebar');
+                const tocSidebar = document.getElementById('spec-toc-sidebar');
+                if ((navSidebar && navSidebar.classList.contains('drawer-open')) ||
+                    (tocSidebar && tocSidebar.classList.contains('drawer-open'))) {
+                    e.preventDefault();
+                    closeAllSpecDrawers();
+                    return;
+                }
                 if (cmdModal && cmdModal.style.display !== 'none') {
                     e.preventDefault();
                     closeCommandPalette();
@@ -6228,6 +7084,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
         function showFaqView(e) {
             if (e) e.preventDefault();
             activeSpecId = null;
+            closeAllSpecDrawers();
             if (window.location.hash !== '#faq') {
                 history.pushState(null, null, '#faq');
             }

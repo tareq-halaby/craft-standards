@@ -133,5 +133,12 @@
   "faqCatArch": "Arquitectura e Invariantes",
   "faqCatAutoCraft": "AutoCraft y Agentes",
   "faqCatContrib": "Contribuciones y RFCs",
-  "faqCatI18n": "i18n y RTL"
+  "faqCatI18n": "i18n y RTL",
+  "specTocOnThisPage": "En esta página",
+  "specTocBackToTop": "Volver arriba",
+  "specTocShare": "Compartir norma",
+  "specNavSearchPlaceholder": "Buscar especificaciones...",
+  "specNavAllSpecs": "Todas las especificaciones",
+  "specNavToggleBtn": "Normas",
+  "specTocToggleBtn": "En esta página"
 }

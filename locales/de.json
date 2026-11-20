@@ -133,5 +133,12 @@
   "faqCatArch": "Architektur & Invarianten",
   "faqCatAutoCraft": "AutoCraft & Agenten",
   "faqCatContrib": "Mitwirken & RFCs",
-  "faqCatI18n": "i18n & RTL"
+  "faqCatI18n": "i18n & RTL",
+  "specTocOnThisPage": "Auf dieser Seite",
+  "specTocBackToTop": "Nach oben",
+  "specTocShare": "Standard teilen",
+  "specNavSearchPlaceholder": "Standards suchen...",
+  "specNavAllSpecs": "Alle Spezifikationen",
+  "specNavToggleBtn": "Standards",
+  "specTocToggleBtn": "Auf dieser Seite"
 }
