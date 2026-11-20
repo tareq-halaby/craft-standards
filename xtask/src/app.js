@@ -209,6 +209,10 @@
             setTxt('faq-cat-i18n', t.faqCatI18n);
             const faqSearch = document.getElementById('faq-search-input');
             if (faqSearch && t.faqSearchPlaceholder) faqSearch.placeholder = t.faqSearchPlaceholder;
+            const expandText = document.getElementById('faq-expand-text');
+            if (expandText) {
+                expandText.textContent = faqExpandAllMode ? (t.faqCollapseAll || 'Collapse All') : (t.faqExpandAll || 'Expand All');
+            }
 
             // Footer & Metadata
             setTxt('skip-link', t.skipLink);
@@ -910,8 +914,11 @@
             const hash = window.location.hash.replace(/^#\/?/, '').trim();
             if (hash === 'matrix') {
                 showMatrixView();
-            } else if (hash === 'faq') {
-                showFaqView();
+            } else if (hash === 'faq' || hash.startsWith('faq/')) {
+                const targetFaqId = hash.startsWith('faq/') ? hash.substring(4) : null;
+                showFaqView(null, targetFaqId);
+            } else if (hash.startsWith('faq-')) {
+                showFaqView(null, hash);
             } else if (hash && specsMap[hash]) {
                 openSpec(hash, false);
             } else {
@@ -1837,14 +1844,23 @@
 
         let faqActiveCategory = 'all';
         let faqSearchQuery = '';
-        const faqOpenSet = new Set(['faq-1', 'faq-2']);
+        let faqActiveId = null; // Starts completely collapsed per user request!
+        let faqExpandAllMode = false;
 
-        function showFaqView(e) {
+        function showFaqView(e, targetId) {
             if (e) e.preventDefault();
             activeSpecId = null;
             closeAllSpecDrawers();
-            if (window.location.hash !== '#faq') {
-                history.pushState(null, null, '#faq');
+            if (targetId) {
+                faqActiveId = targetId;
+                faqExpandAllMode = false;
+                if (window.location.hash !== '#faq/' + targetId && window.location.hash !== '#' + targetId) {
+                    history.pushState(null, null, '#faq/' + targetId);
+                }
+            } else {
+                if (window.location.hash !== '#faq' && !window.location.hash.startsWith('#faq/')) {
+                    history.pushState(null, null, '#faq');
+                }
             }
             document.getElementById('spec-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'none';
@@ -1860,17 +1876,33 @@
             if (navMatrix) navMatrix.classList.remove('active');
             if (navFaq) navFaq.classList.add('active');
 
-            window.scrollTo({ top: 0, behavior: 'instant' });
             renderFaqView();
+
+            if (targetId) {
+                setTimeout(() => {
+                    const el = document.getElementById(targetId);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 80);
+            } else {
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }
             announceA11y('Viewing Frequently Asked Questions and Contributor Guide');
         }
 
+        // Mutual exclusion: opening one closes all others. Clicking an open one closes it.
         function toggleFaqItem(id) {
-            if (faqOpenSet.has(id)) {
-                faqOpenSet.delete(id);
+            if (faqExpandAllMode) {
+                faqExpandAllMode = false;
+                faqActiveId = id;
             } else {
-                faqOpenSet.add(id);
+                faqActiveId = (faqActiveId === id) ? null : id;
             }
+            renderFaqView();
+        }
+
+        function toggleAllFaqs() {
+            faqExpandAllMode = !faqExpandAllMode;
+            faqActiveId = null;
             renderFaqView();
         }
 
@@ -1894,9 +1926,56 @@
             handleFaqSearch('');
         }
 
+        function copyFaqLink(e, id) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            const url = window.location.origin + window.location.pathname + '#faq/' + id;
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToastNotification(t.faqLinkCopied || 'Question link copied to clipboard!');
+                }).catch(() => {
+                    showToastNotification('Link: ' + url);
+                });
+            } else {
+                showToastNotification('Link: ' + url);
+            }
+        }
+
+        function showToastNotification(msg) {
+            announceA11y(msg);
+            let toast = document.getElementById('global-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'global-toast';
+                toast.setAttribute('role', 'status');
+                toast.setAttribute('aria-live', 'polite');
+                toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1F6FEB;color:#FFF;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,0.5);z-index:99999;transition:opacity 0.25s ease;pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            clearTimeout(window.__toastTimeout);
+            window.__toastTimeout = setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2500);
+        }
+
         function renderFaqView() {
             const container = document.getElementById('faq-accordion-container');
             if (!container) return;
+
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+
+            // Update Expand/Collapse all button label
+            const expandBtn = document.getElementById('faq-expand-all-btn');
+            if (expandBtn) {
+                const isAllExpanded = faqExpandAllMode;
+                const iconSpan = document.getElementById('faq-expand-icon');
+                const textSpan = document.getElementById('faq-expand-text');
+                if (iconSpan) iconSpan.textContent = isAllExpanded ? '⊟' : '⊞';
+                if (textSpan) textSpan.textContent = isAllExpanded ? (t.faqCollapseAll || 'Collapse All') : (t.faqExpandAll || 'Expand All');
+                expandBtn.setAttribute('aria-expanded', isAllExpanded ? 'true' : 'false');
+            }
 
             const filtered = FAQ_DATA.filter(item => {
                 const matchesCat = faqActiveCategory === 'all' || item.cat === faqActiveCategory;
@@ -1908,31 +1987,33 @@
                 container.innerHTML = `
                     <div class="empty-state-card" style="display:block;margin-top:20px;">
                         <div class="empty-state-icon">🔍</div>
-                        <h3>No matching questions found</h3>
-                        <p>Try searching with different terms or select 'All FAQs'.</p>
-                        <button class="reader-btn primary" onclick="clearFaqSearch(); filterFaqCategory('all', document.getElementById('faq-cat-all'));" style="margin-top:8px;">Reset FAQ search</button>
+                        <h3>${t.faqNoResultsTitle || 'No matching questions found'}</h3>
+                        <p>${t.faqNoResultsDesc || 'Try searching with different terms or select \'All FAQs\'.'}</p>
+                        <button class="reader-btn primary" onclick="clearFaqSearch(); filterFaqCategory('all', document.getElementById('faq-cat-all'));" style="margin-top:8px;">${t.faqResetSearch || 'Reset FAQ search'}</button>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = filtered.map(item => {
-                const isOpen = faqOpenSet.has(item.id);
-                const t = LOCALES[currentLang] || LOCALES.en || {};
+                const isOpen = faqExpandAllMode || (faqActiveId === item.id);
                 const locItem = (t.faqQuestions && t.faqQuestions[item.id]) ? t.faqQuestions[item.id] : null;
                 const qText = locItem ? locItem.q : item.q;
                 const aText = locItem ? locItem.a : item.a;
 
                 return `
-                    <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}">
-                        <button class="faq-question-btn" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}">
+                    <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}" role="region" aria-labelledby="header-${item.id}">
+                        <button class="faq-question-btn" id="header-${item.id}" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}" aria-controls="content-${item.id}">
                             <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
                                 <span class="faq-tag">${item.tag}</span>
                                 <span>${qText}</span>
                             </div>
-                            <span class="faq-toggle-icon" aria-hidden="true">▾</span>
+                            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                                <button type="button" class="faq-copy-btn" onclick="copyFaqLink(event, '${item.id}')" title="Copy direct link to question" aria-label="Copy direct link to question">🔗</button>
+                                <span class="faq-toggle-icon" aria-hidden="true">▾</span>
+                            </div>
                         </button>
-                        <div class="faq-answer">
+                        <div class="faq-answer" id="content-${item.id}" role="region" aria-labelledby="header-${item.id}">
                             ${aText}
                         </div>
                     </div>

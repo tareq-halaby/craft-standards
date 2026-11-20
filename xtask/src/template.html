@@ -441,18 +441,23 @@ __ITEMS__
         </section>
 
         <!-- FAQ Search and Filters -->
-        <section class="matrix-toolbar" style="margin-bottom:20px;">
-            <div class="matrix-search-box search-box" style="margin-bottom:0;">
-                <span class="search-icon" aria-hidden="true">🔍</span>
+        <section class="faq-toolbar" aria-label="FAQ Search and Filters">
+            <div class="faq-search-box search-box">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="search" id="faq-search-input" class="search-input" placeholder="Search FAQ topics, rules, AutoCraft, licensing..." oninput="handleFaqSearch(this.value)" aria-label="Search FAQs">
-                <button id="faq-search-clear-btn" class="search-clear-btn" onclick="clearFaqSearch()" style="display:none;">✕</button>
+                <button id="faq-search-clear-btn" class="search-clear-btn" onclick="clearFaqSearch()" style="display:none;" aria-label="Clear search">✕</button>
             </div>
-            <div class="matrix-category-chips" id="faq-category-chips" role="toolbar" aria-label="Filter FAQs by topic">
-                <button class="matrix-cat-chip active" onclick="filterFaqCategory('all', this)" id="faq-cat-all">All FAQs</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('arch', this)" id="faq-cat-arch">Architecture &amp; Invariants</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('autocraft', this)" id="faq-cat-autocraft">AutoCraft &amp; Agents</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('contrib', this)" id="faq-cat-contrib">Contributing &amp; RFCs</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('i18n', this)" id="faq-cat-i18n">i18n &amp; RTL</button>
+            <div class="faq-chips-row">
+                <div class="matrix-category-chips" id="faq-category-chips" role="toolbar" aria-label="Filter FAQs by topic">
+                    <button class="matrix-cat-chip active" onclick="filterFaqCategory('all', this)" id="faq-cat-all">All FAQs</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('arch', this)" id="faq-cat-arch">Architecture &amp; Invariants</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('autocraft', this)" id="faq-cat-autocraft">AutoCraft &amp; Agents</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('contrib', this)" id="faq-cat-contrib">Contributing &amp; RFCs</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('i18n', this)" id="faq-cat-i18n">i18n &amp; RTL</button>
+                </div>
+                <button class="matrix-cat-chip" id="faq-expand-all-btn" onclick="toggleAllFaqs()" aria-label="Expand or collapse all questions">
+                    <span id="faq-expand-icon" aria-hidden="true">⊞</span> <span id="faq-expand-text">Expand All</span>
+                </button>
             </div>
         </section>
 

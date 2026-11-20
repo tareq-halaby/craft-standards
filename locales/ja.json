@@ -179,5 +179,11 @@
       "a": "すべてのポータル翻訳は<code>locales/&lt;lang-code&gt;.json</code>に格納されています。新しい言語（例：<code>locales/it.json</code>）を追加するだけで、Rustの<code>xtask</code>ビルドが次回の単一ファイルダッシュボード生成時に自動的に取り込みます。"
     }
   },
-  "heroBadgeDrift": "🛡️ ASTドリフトゼロ保証"
+  "heroBadgeDrift": "🛡️ ASTドリフトゼロ保証",
+  "faqExpandAll": "すべて展開",
+  "faqCollapseAll": "すべて折りたたむ",
+  "faqLinkCopied": "質問のリンクをクリップボードにコピーしました！",
+  "faqNoResultsTitle": "一致する質問が見つかりませんでした",
+  "faqNoResultsDesc": "別のキーワードで検索するか、「すべてのFAQ」を選択してください。",
+  "faqResetSearch": "FAQ検索をリセット"
 }

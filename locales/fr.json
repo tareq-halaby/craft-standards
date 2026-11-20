@@ -179,5 +179,11 @@
       "a": "Toutes les traductions résident dans <code>locales/&lt;lang-code&gt;.json</code>. Créez un fichier (ex. <code>locales/it.json</code>) avec les clés standards et xtask l'intégrera automatiquement au prochain build."
     }
   },
-  "heroBadgeDrift": "🛡️ Garantie zéro dérive AST"
+  "heroBadgeDrift": "🛡️ Garantie zéro dérive AST",
+  "faqExpandAll": "Tout développer",
+  "faqCollapseAll": "Tout réduire",
+  "faqLinkCopied": "Lien vers la question copié dans le presse-papiers !",
+  "faqNoResultsTitle": "Aucune question correspondante trouvée",
+  "faqNoResultsDesc": "Essayez avec d'autres termes ou sélectionnez 'Toutes les FAQ'.",
+  "faqResetSearch": "Réinitialiser la recherche FAQ"
 }

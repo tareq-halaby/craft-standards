@@ -179,5 +179,11 @@
       "a": "Alle Übersetzungen liegen in JSON-Dateien unter <code>locales/&lt;lang-code&gt;.json</code>. Erstellen Sie eine neue Datei (z. B. <code>locales/it.json</code>) mit den Standardschlüsseln; der xtask-Build integriert sie beim nächsten Mal automatisch!"
     }
   },
-  "heroBadgeDrift": "🛡️ Null AST-Drift-Garantie"
+  "heroBadgeDrift": "🛡️ Null AST-Drift-Garantie",
+  "faqExpandAll": "Alle aufklappen",
+  "faqCollapseAll": "Alle zuklappen",
+  "faqLinkCopied": "Link zur Frage in die Zwischenablage kopiert!",
+  "faqNoResultsTitle": "Keine passenden Fragen gefunden",
+  "faqNoResultsDesc": "Versuchen Sie andere Suchbegriffe oder wählen Sie 'Alle FAQs'.",
+  "faqResetSearch": "FAQ-Suche zurücksetzen"
 }

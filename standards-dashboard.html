@@ -701,7 +701,7 @@
         .search-box {
             position: relative;
             width: 100%;
-            max-width: 780px;
+            max-width: 100%;
         }
         .search-input {
             width: 100%;
@@ -3193,7 +3193,29 @@
             max-height: 360px;
         }
 
-        /* FAQ Page and Accordion Styles */
+        /* FAQ Page and Modern Exclusive Accordion Styles */
+        .faq-toolbar {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+            background: #0E121A;
+            border: 1px solid var(--sl-color-border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        .faq-search-box {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+        }
+        .faq-chips-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
         .faq-accordion-list {
             display: flex;
             flex-direction: column;
@@ -3205,20 +3227,21 @@
             border: 1px solid var(--sl-color-border);
             border-radius: 10px;
             overflow: hidden;
-            transition: all 0.15s;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .faq-item:hover {
-            border-color: rgba(56, 139, 253, 0.4);
+            border-color: rgba(56, 139, 253, 0.45);
         }
         .faq-item.open {
-            border-color: var(--sl-color-accent);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            border-color: rgba(56, 139, 253, 0.65);
+            background: #111622;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
         }
         .faq-question-btn {
             width: 100%;
             background: transparent;
             border: none;
-            padding: 16px 20px;
+            padding: 18px 20px;
             text-align: start;
             cursor: pointer;
             display: flex;
@@ -3229,29 +3252,56 @@
             font-family: var(--font-display);
             font-size: 15px;
             font-weight: 600;
+            transition: color 0.15s ease;
         }
         .faq-question-btn:hover {
             color: var(--sl-color-accent);
         }
+        .faq-item.open .faq-question-btn {
+            color: var(--sl-color-accent);
+        }
         .faq-toggle-icon {
-            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 13px;
             color: var(--sl-color-text-muted);
-            transition: transform 0.2s;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, color 0.2s;
             flex-shrink: 0;
+        }
+        .faq-item:hover .faq-toggle-icon {
+            background: rgba(56, 139, 253, 0.15);
+            color: var(--sl-color-accent);
         }
         .faq-item.open .faq-toggle-icon {
             transform: rotate(180deg);
+            background: rgba(56, 139, 253, 0.25);
             color: var(--sl-color-accent);
         }
         .faq-answer {
             display: none;
             padding: 0 20px 20px 20px;
-            font-size: 13.5px;
-            line-height: 1.6;
-            color: var(--sl-color-text-muted);
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 14px;
+            line-height: 1.65;
+            color: #C9D1D9;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             margin-top: 4px;
             padding-top: 14px;
+            animation: faqFadeSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes faqFadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .faq-item.open .faq-answer {
             display: block;
@@ -3272,6 +3322,27 @@
             background: rgba(255, 255, 255, 0.06);
             color: var(--sl-color-text-muted);
             margin-inline-end: 8px;
+        }
+        .faq-copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--sl-color-text-muted);
+            opacity: 0;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: opacity 0.15s, color 0.15s;
+        }
+        .faq-item:hover .faq-copy-btn {
+            opacity: 0.7;
+        }
+        .faq-copy-btn:hover {
+            opacity: 1;
+            color: var(--sl-color-accent);
+        }
+        [dir="rtl"] .faq-toggle-icon {
+            margin-inline-start: auto;
         }
 
     </style>
@@ -4005,18 +4076,23 @@
         </section>
 
         <!-- FAQ Search and Filters -->
-        <section class="matrix-toolbar" style="margin-bottom:20px;">
-            <div class="matrix-search-box search-box" style="margin-bottom:0;">
-                <span class="search-icon" aria-hidden="true">🔍</span>
+        <section class="faq-toolbar" aria-label="FAQ Search and Filters">
+            <div class="faq-search-box search-box">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="search" id="faq-search-input" class="search-input" placeholder="Search FAQ topics, rules, AutoCraft, licensing..." oninput="handleFaqSearch(this.value)" aria-label="Search FAQs">
-                <button id="faq-search-clear-btn" class="search-clear-btn" onclick="clearFaqSearch()" style="display:none;">✕</button>
+                <button id="faq-search-clear-btn" class="search-clear-btn" onclick="clearFaqSearch()" style="display:none;" aria-label="Clear search">✕</button>
             </div>
-            <div class="matrix-category-chips" id="faq-category-chips" role="toolbar" aria-label="Filter FAQs by topic">
-                <button class="matrix-cat-chip active" onclick="filterFaqCategory('all', this)" id="faq-cat-all">All FAQs</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('arch', this)" id="faq-cat-arch">Architecture &amp; Invariants</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('autocraft', this)" id="faq-cat-autocraft">AutoCraft &amp; Agents</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('contrib', this)" id="faq-cat-contrib">Contributing &amp; RFCs</button>
-                <button class="matrix-cat-chip" onclick="filterFaqCategory('i18n', this)" id="faq-cat-i18n">i18n &amp; RTL</button>
+            <div class="faq-chips-row">
+                <div class="matrix-category-chips" id="faq-category-chips" role="toolbar" aria-label="Filter FAQs by topic">
+                    <button class="matrix-cat-chip active" onclick="filterFaqCategory('all', this)" id="faq-cat-all">All FAQs</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('arch', this)" id="faq-cat-arch">Architecture &amp; Invariants</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('autocraft', this)" id="faq-cat-autocraft">AutoCraft &amp; Agents</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('contrib', this)" id="faq-cat-contrib">Contributing &amp; RFCs</button>
+                    <button class="matrix-cat-chip" onclick="filterFaqCategory('i18n', this)" id="faq-cat-i18n">i18n &amp; RTL</button>
+                </div>
+                <button class="matrix-cat-chip" id="faq-expand-all-btn" onclick="toggleAllFaqs()" aria-label="Expand or collapse all questions">
+                    <span id="faq-expand-icon" aria-hidden="true">⊞</span> <span id="faq-expand-text">Expand All</span>
+                </button>
             </div>
         </section>
 
@@ -4639,7 +4715,13 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "توجد كافة ترجمات المنصة في ملفات JSON معيارية ومستقلة داخل مجلد <code>locales/&lt;lang-code&gt;.json</code>. للمساهمة بلغة جديدة، أنشئ ملفاً جديداً (مثل <code>locales/it.json</code>) بالمفاتيح القياسية، ليقوم مُنشئ xtask بدمجه تلقائياً في التقرير عند البناء التالي."
     }
   },
-  "heroBadgeDrift": "🛡️ ضمان انعدام الانحراف البرمجي"
+  "heroBadgeDrift": "🛡️ ضمان انعدام الانحراف البرمجي",
+  "faqExpandAll": "توسيع الكل",
+  "faqCollapseAll": "طي الكل",
+  "faqLinkCopied": "تم نسخ رابط السؤال إلى الحافظة!",
+  "faqNoResultsTitle": "لم يتم العثور على أسئلة مطابقة",
+  "faqNoResultsDesc": "جرّب البحث بكلمات أخرى أو اختر 'كافة الأسئلة'.",
+  "faqResetSearch": "إعادة تعيين البحث"
 },
 "de": {
   "code": "de",
@@ -4822,7 +4904,13 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "Alle Übersetzungen liegen in JSON-Dateien unter <code>locales/&lt;lang-code&gt;.json</code>. Erstellen Sie eine neue Datei (z. B. <code>locales/it.json</code>) mit den Standardschlüsseln; der xtask-Build integriert sie beim nächsten Mal automatisch!"
     }
   },
-  "heroBadgeDrift": "🛡️ Null AST-Drift-Garantie"
+  "heroBadgeDrift": "🛡️ Null AST-Drift-Garantie",
+  "faqExpandAll": "Alle aufklappen",
+  "faqCollapseAll": "Alle zuklappen",
+  "faqLinkCopied": "Link zur Frage in die Zwischenablage kopiert!",
+  "faqNoResultsTitle": "Keine passenden Fragen gefunden",
+  "faqNoResultsDesc": "Versuchen Sie andere Suchbegriffe oder wählen Sie 'Alle FAQs'.",
+  "faqResetSearch": "FAQ-Suche zurücksetzen"
 },
 "en": {
   "code": "en",
@@ -5005,7 +5093,13 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "All portal translations live in modular JSON files under <code>locales/&lt;lang-code&gt;.json</code>. To contribute a new language, create a new JSON file (e.g. <code>locales/it.json</code>) with the standard keys. The Rust <code>xtask</code> build automatically bundles it into the single-file dashboard on next build!"
     }
   },
-  "heroBadgeDrift": "🛡️ Zero AST Drift Guarantee"
+  "heroBadgeDrift": "🛡️ Zero AST Drift Guarantee",
+  "faqExpandAll": "Expand All",
+  "faqCollapseAll": "Collapse All",
+  "faqLinkCopied": "Question link copied to clipboard!",
+  "faqNoResultsTitle": "No matching questions found",
+  "faqNoResultsDesc": "Try searching with different terms or select 'All FAQs'.",
+  "faqResetSearch": "Reset FAQ search"
 },
 "es": {
   "code": "es",
@@ -5188,7 +5282,13 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "Todas las traducciones residen en archivos modulares en <code>locales/&lt;lang-code&gt;.json</code>. Cree un nuevo archivo (ej. <code>locales/it.json</code>) con las claves estándar y xtask lo compilará automáticamente en el portal."
     }
   },
-  "heroBadgeDrift": "🛡️ Garantía de deriva AST cero"
+  "heroBadgeDrift": "🛡️ Garantía de deriva AST cero",
+  "faqExpandAll": "Expandir todo",
+  "faqCollapseAll": "Contraer todo",
+  "faqLinkCopied": "¡Enlace a la pregunta copiado al portapapeles!",
+  "faqNoResultsTitle": "No se encontraron preguntas coincidentes",
+  "faqNoResultsDesc": "Intente buscar con otros términos o seleccione 'Todas las preguntas'.",
+  "faqResetSearch": "Restablecer búsqueda de FAQ"
 },
 "fr": {
   "code": "fr",
@@ -5371,7 +5471,13 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "Toutes les traductions résident dans <code>locales/&lt;lang-code&gt;.json</code>. Créez un fichier (ex. <code>locales/it.json</code>) avec les clés standards et xtask l'intégrera automatiquement au prochain build."
     }
   },
-  "heroBadgeDrift": "🛡️ Garantie zéro dérive AST"
+  "heroBadgeDrift": "🛡️ Garantie zéro dérive AST",
+  "faqExpandAll": "Tout développer",
+  "faqCollapseAll": "Tout réduire",
+  "faqLinkCopied": "Lien vers la question copié dans le presse-papiers !",
+  "faqNoResultsTitle": "Aucune question correspondante trouvée",
+  "faqNoResultsDesc": "Essayez avec d'autres termes ou sélectionnez 'Toutes les FAQ'.",
+  "faqResetSearch": "Réinitialiser la recherche FAQ"
 },
 "ja": {
   "code": "ja",
@@ -5554,7 +5660,13 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "すべてのポータル翻訳は<code>locales/&lt;lang-code&gt;.json</code>に格納されています。新しい言語（例：<code>locales/it.json</code>）を追加するだけで、Rustの<code>xtask</code>ビルドが次回の単一ファイルダッシュボード生成時に自動的に取り込みます。"
     }
   },
-  "heroBadgeDrift": "🛡️ ASTドリフトゼロ保証"
+  "heroBadgeDrift": "🛡️ ASTドリフトゼロ保証",
+  "faqExpandAll": "すべて展開",
+  "faqCollapseAll": "すべて折りたたむ",
+  "faqLinkCopied": "質問のリンクをクリップボードにコピーしました！",
+  "faqNoResultsTitle": "一致する質問が見つかりませんでした",
+  "faqNoResultsDesc": "別のキーワードで検索するか、「すべてのFAQ」を選択してください。",
+  "faqResetSearch": "FAQ検索をリセット"
 }}
     </script>
 
@@ -5770,6 +5882,10 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             setTxt('faq-cat-i18n', t.faqCatI18n);
             const faqSearch = document.getElementById('faq-search-input');
             if (faqSearch && t.faqSearchPlaceholder) faqSearch.placeholder = t.faqSearchPlaceholder;
+            const expandText = document.getElementById('faq-expand-text');
+            if (expandText) {
+                expandText.textContent = faqExpandAllMode ? (t.faqCollapseAll || 'Collapse All') : (t.faqExpandAll || 'Expand All');
+            }
 
             // Footer & Metadata
             setTxt('skip-link', t.skipLink);
@@ -6471,8 +6587,11 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             const hash = window.location.hash.replace(/^#\/?/, '').trim();
             if (hash === 'matrix') {
                 showMatrixView();
-            } else if (hash === 'faq') {
-                showFaqView();
+            } else if (hash === 'faq' || hash.startsWith('faq/')) {
+                const targetFaqId = hash.startsWith('faq/') ? hash.substring(4) : null;
+                showFaqView(null, targetFaqId);
+            } else if (hash.startsWith('faq-')) {
+                showFaqView(null, hash);
             } else if (hash && specsMap[hash]) {
                 openSpec(hash, false);
             } else {
@@ -7398,14 +7517,23 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
 
         let faqActiveCategory = 'all';
         let faqSearchQuery = '';
-        const faqOpenSet = new Set(['faq-1', 'faq-2']);
+        let faqActiveId = null; // Starts completely collapsed per user request!
+        let faqExpandAllMode = false;
 
-        function showFaqView(e) {
+        function showFaqView(e, targetId) {
             if (e) e.preventDefault();
             activeSpecId = null;
             closeAllSpecDrawers();
-            if (window.location.hash !== '#faq') {
-                history.pushState(null, null, '#faq');
+            if (targetId) {
+                faqActiveId = targetId;
+                faqExpandAllMode = false;
+                if (window.location.hash !== '#faq/' + targetId && window.location.hash !== '#' + targetId) {
+                    history.pushState(null, null, '#faq/' + targetId);
+                }
+            } else {
+                if (window.location.hash !== '#faq' && !window.location.hash.startsWith('#faq/')) {
+                    history.pushState(null, null, '#faq');
+                }
             }
             document.getElementById('spec-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'none';
@@ -7421,17 +7549,33 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             if (navMatrix) navMatrix.classList.remove('active');
             if (navFaq) navFaq.classList.add('active');
 
-            window.scrollTo({ top: 0, behavior: 'instant' });
             renderFaqView();
+
+            if (targetId) {
+                setTimeout(() => {
+                    const el = document.getElementById(targetId);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 80);
+            } else {
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }
             announceA11y('Viewing Frequently Asked Questions and Contributor Guide');
         }
 
+        // Mutual exclusion: opening one closes all others. Clicking an open one closes it.
         function toggleFaqItem(id) {
-            if (faqOpenSet.has(id)) {
-                faqOpenSet.delete(id);
+            if (faqExpandAllMode) {
+                faqExpandAllMode = false;
+                faqActiveId = id;
             } else {
-                faqOpenSet.add(id);
+                faqActiveId = (faqActiveId === id) ? null : id;
             }
+            renderFaqView();
+        }
+
+        function toggleAllFaqs() {
+            faqExpandAllMode = !faqExpandAllMode;
+            faqActiveId = null;
             renderFaqView();
         }
 
@@ -7455,9 +7599,56 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             handleFaqSearch('');
         }
 
+        function copyFaqLink(e, id) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            const url = window.location.origin + window.location.pathname + '#faq/' + id;
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToastNotification(t.faqLinkCopied || 'Question link copied to clipboard!');
+                }).catch(() => {
+                    showToastNotification('Link: ' + url);
+                });
+            } else {
+                showToastNotification('Link: ' + url);
+            }
+        }
+
+        function showToastNotification(msg) {
+            announceA11y(msg);
+            let toast = document.getElementById('global-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'global-toast';
+                toast.setAttribute('role', 'status');
+                toast.setAttribute('aria-live', 'polite');
+                toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1F6FEB;color:#FFF;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 6px 20px rgba(0,0,0,0.5);z-index:99999;transition:opacity 0.25s ease;pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            clearTimeout(window.__toastTimeout);
+            window.__toastTimeout = setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 2500);
+        }
+
         function renderFaqView() {
             const container = document.getElementById('faq-accordion-container');
             if (!container) return;
+
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+
+            // Update Expand/Collapse all button label
+            const expandBtn = document.getElementById('faq-expand-all-btn');
+            if (expandBtn) {
+                const isAllExpanded = faqExpandAllMode;
+                const iconSpan = document.getElementById('faq-expand-icon');
+                const textSpan = document.getElementById('faq-expand-text');
+                if (iconSpan) iconSpan.textContent = isAllExpanded ? '⊟' : '⊞';
+                if (textSpan) textSpan.textContent = isAllExpanded ? (t.faqCollapseAll || 'Collapse All') : (t.faqExpandAll || 'Expand All');
+                expandBtn.setAttribute('aria-expanded', isAllExpanded ? 'true' : 'false');
+            }
 
             const filtered = FAQ_DATA.filter(item => {
                 const matchesCat = faqActiveCategory === 'all' || item.cat === faqActiveCategory;
@@ -7469,31 +7660,33 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
                 container.innerHTML = `
                     <div class="empty-state-card" style="display:block;margin-top:20px;">
                         <div class="empty-state-icon">🔍</div>
-                        <h3>No matching questions found</h3>
-                        <p>Try searching with different terms or select 'All FAQs'.</p>
-                        <button class="reader-btn primary" onclick="clearFaqSearch(); filterFaqCategory('all', document.getElementById('faq-cat-all'));" style="margin-top:8px;">Reset FAQ search</button>
+                        <h3>${t.faqNoResultsTitle || 'No matching questions found'}</h3>
+                        <p>${t.faqNoResultsDesc || 'Try searching with different terms or select \'All FAQs\'.'}</p>
+                        <button class="reader-btn primary" onclick="clearFaqSearch(); filterFaqCategory('all', document.getElementById('faq-cat-all'));" style="margin-top:8px;">${t.faqResetSearch || 'Reset FAQ search'}</button>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = filtered.map(item => {
-                const isOpen = faqOpenSet.has(item.id);
-                const t = LOCALES[currentLang] || LOCALES.en || {};
+                const isOpen = faqExpandAllMode || (faqActiveId === item.id);
                 const locItem = (t.faqQuestions && t.faqQuestions[item.id]) ? t.faqQuestions[item.id] : null;
                 const qText = locItem ? locItem.q : item.q;
                 const aText = locItem ? locItem.a : item.a;
 
                 return `
-                    <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}">
-                        <button class="faq-question-btn" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}">
+                    <div class="faq-item ${isOpen ? 'open' : ''}" id="${item.id}" role="region" aria-labelledby="header-${item.id}">
+                        <button class="faq-question-btn" id="header-${item.id}" onclick="toggleFaqItem('${item.id}')" aria-expanded="${isOpen}" aria-controls="content-${item.id}">
                             <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
                                 <span class="faq-tag">${item.tag}</span>
                                 <span>${qText}</span>
                             </div>
-                            <span class="faq-toggle-icon" aria-hidden="true">▾</span>
+                            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                                <button type="button" class="faq-copy-btn" onclick="copyFaqLink(event, '${item.id}')" title="Copy direct link to question" aria-label="Copy direct link to question">🔗</button>
+                                <span class="faq-toggle-icon" aria-hidden="true">▾</span>
+                            </div>
                         </button>
-                        <div class="faq-answer">
+                        <div class="faq-answer" id="content-${item.id}" role="region" aria-labelledby="header-${item.id}">
                             ${aText}
                         </div>
                     </div>

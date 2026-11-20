@@ -179,5 +179,11 @@
       "a": "All portal translations live in modular JSON files under <code>locales/&lt;lang-code&gt;.json</code>. To contribute a new language, create a new JSON file (e.g. <code>locales/it.json</code>) with the standard keys. The Rust <code>xtask</code> build automatically bundles it into the single-file dashboard on next build!"
     }
   },
-  "heroBadgeDrift": "🛡️ Zero AST Drift Guarantee"
+  "heroBadgeDrift": "🛡️ Zero AST Drift Guarantee",
+  "faqExpandAll": "Expand All",
+  "faqCollapseAll": "Collapse All",
+  "faqLinkCopied": "Question link copied to clipboard!",
+  "faqNoResultsTitle": "No matching questions found",
+  "faqNoResultsDesc": "Try searching with different terms or select 'All FAQs'.",
+  "faqResetSearch": "Reset FAQ search"
 }

@@ -179,5 +179,11 @@
       "a": "Todas las traducciones residen en archivos modulares en <code>locales/&lt;lang-code&gt;.json</code>. Cree un nuevo archivo (ej. <code>locales/it.json</code>) con las claves estándar y xtask lo compilará automáticamente en el portal."
     }
   },
-  "heroBadgeDrift": "🛡️ Garantía de deriva AST cero"
+  "heroBadgeDrift": "🛡️ Garantía de deriva AST cero",
+  "faqExpandAll": "Expandir todo",
+  "faqCollapseAll": "Contraer todo",
+  "faqLinkCopied": "¡Enlace a la pregunta copiado al portapapeles!",
+  "faqNoResultsTitle": "No se encontraron preguntas coincidentes",
+  "faqNoResultsDesc": "Intente buscar con otros términos o seleccione 'Todas las preguntas'.",
+  "faqResetSearch": "Restablecer búsqueda de FAQ"
 }
