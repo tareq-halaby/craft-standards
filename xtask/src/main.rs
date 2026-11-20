@@ -438,11 +438,15 @@ fn run_html_report() {
     let locales_json = load_locales_json();
 
     const TEMPLATE: &str = include_str!("template.html");
+    const STYLE: &str = include_str!("style.css");
+    const APP_JS: &str = include_str!("app.js");
     let html = TEMPLATE
+        .replace("__STYLE__", STYLE)
         .replace("__TOTAL__", &specs.len().to_string())
         .replace("__ITEMS__", &items_html)
         .replace("__SPECS_JSON__", &specs_json)
-        .replace("__LOCALES_JSON__", &locales_json);
+        .replace("__LOCALES_JSON__", &locales_json)
+        .replace("__APP_JS__", APP_JS);
 
     let output_path = standards_dir().parent().unwrap_or(Path::new(".")).join("standards-dashboard.html");
     if let Err(e) = fs::write(&output_path, html) {

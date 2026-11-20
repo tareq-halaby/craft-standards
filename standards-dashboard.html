@@ -1833,6 +1833,329 @@
                 font-size: 12px;
             }
         }
+
+        /* Header Navigation View Buttons */
+        .nav-view-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--sl-color-text-muted);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+            font-family: var(--font-sans);
+        }
+        .nav-view-btn:hover {
+            color: #FFF;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-view-btn.active {
+            color: #FFF;
+            background: rgba(56, 139, 253, 0.14);
+            border-color: rgba(56, 139, 253, 0.4);
+        }
+        .nav-badge {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            background: #238636;
+            color: #FFF;
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        /* Matrix View Switcher Bar (Pivot Modes) */
+        .matrix-view-switcher-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .matrix-pivot-modes {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #11141D;
+            border: 1px solid var(--sl-color-border);
+            padding: 4px;
+            border-radius: 8px;
+        }
+        .matrix-pivot-btn {
+            background: transparent;
+            border: none;
+            color: var(--sl-color-text-muted);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: var(--font-sans);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .matrix-pivot-btn:hover { color: #FFF; }
+        .matrix-pivot-btn.active {
+            background: #1F6FEB;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sub-view 1: App Scorecards */
+        .matrix-scorecards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        @media (min-width: 860px) {
+            .matrix-scorecards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 18px;
+            }
+        }
+        .app-scorecard {
+            background: var(--sl-color-card);
+            border: 1px solid var(--sl-color-border);
+            border-radius: 12px;
+            padding: 20px 22px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .app-scorecard:hover {
+            border-color: rgba(56, 139, 253, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+        }
+        .app-scorecard-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .app-scorecard-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: #FFF;
+            margin: 0 0 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .app-scorecard-crate {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--sl-color-text-muted);
+        }
+        .app-scorecard-gauge {
+            text-align: end;
+        }
+        .app-gauge-val {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            color: #3FB950;
+        }
+        .app-gauge-val.warn { color: #E3B341; }
+        .app-gauge-sub {
+            font-size: 10px;
+            color: var(--sl-color-text-muted);
+            font-family: var(--font-mono);
+        }
+        .app-categories-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .app-cat-pill {
+            font-family: var(--font-mono);
+            font-size: 10.5px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--sl-color-border);
+            color: var(--sl-color-text);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .app-cat-pill.ok { border-color: rgba(63, 185, 80, 0.35); color: #3FB950; }
+        .app-cat-pill.progress { border-color: rgba(227, 179, 65, 0.4); color: #E3B341; background: rgba(227, 179, 65, 0.06); }
+        .app-cat-pill.planned { border-color: rgba(88, 166, 255, 0.35); color: #58A6FF; }
+        .app-expand-btn {
+            background: transparent;
+            border: 1px dashed var(--sl-color-border);
+            color: var(--sl-color-accent);
+            font-size: 12px;
+            padding: 7px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+            margin-top: 4px;
+        }
+        .app-expand-btn:hover {
+            background: rgba(56, 139, 253, 0.08);
+            border-color: var(--sl-color-accent);
+            color: #FFF;
+        }
+        .app-invariants-checklist {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        .app-invariants-checklist.open { display: flex; }
+        .app-invariant-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .app-invariant-row:hover { background: rgba(255, 255, 255, 0.03); }
+        .app-invariant-id {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--sl-color-accent);
+            text-decoration: none;
+        }
+        .app-invariant-id:hover { text-decoration: underline; }
+
+        /* Sub-view 2: Scalable Category Pivot Grid */
+        .matrix-pivot-table-wrapper {
+            background: var(--sl-color-card);
+            border: 1px solid var(--sl-color-border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .matrix-column-pivot-strip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 18px;
+            background: #11141D;
+            border-bottom: 1px solid var(--sl-color-border);
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+        .pivot-strip-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--sl-color-text-muted);
+            text-transform: uppercase;
+            white-space: nowrap;
+            margin-inline-end: 6px;
+        }
+        .matrix-col-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--sl-color-border);
+            color: var(--sl-color-text-muted);
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 11px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: var(--font-sans);
+            transition: all 0.15s;
+        }
+        .matrix-col-chip:hover { color: #FFF; border-color: var(--sl-color-accent); }
+        .matrix-col-chip.active {
+            background: var(--sl-color-accent);
+            color: #0B0D13;
+            font-weight: 600;
+            border-color: var(--sl-color-accent);
+        }
+        .matrix-table-scroll-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            max-height: 70vh;
+        }
+        /* Frozen Sticky First Column for Application Name */
+        .matrix-table th:first-child,
+        .matrix-table td:first-child {
+            position: sticky;
+            inset-inline-start: 0;
+            z-index: 15;
+            background: #11141D;
+            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.45);
+        }
+        .matrix-table tbody tr:hover td:first-child {
+            background: #161B22;
+        }
+
+        /* Sub-view 3: By Standard Invariant Drilldown */
+        .matrix-drilldown-wrapper {
+            background: var(--sl-color-card);
+            border: 1px solid var(--sl-color-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .drilldown-selector-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--sl-color-border);
+        }
+        .drilldown-select {
+            background: #161B22;
+            border: 1px solid var(--sl-color-border);
+            color: #FFF;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            min-width: 320px;
+            cursor: pointer;
+        }
+        .drilldown-select:focus {
+            outline: 2px solid var(--sl-color-accent);
+            border-color: var(--sl-color-accent);
+        }
+        .drilldown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .drilldown-app-card {
+            background: #11141D;
+            border: 1px solid var(--sl-color-border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
     </style>
 </head>
 <body>
@@ -1850,6 +2173,13 @@
             <span class="wiki-brand-badge">portal</span>
         </a>
         <nav class="wiki-header-nav" role="navigation" aria-label="Main Navigation">
+            <button class="nav-view-btn active" id="nav-btn-catalog" onclick="showDashboard(event)">
+                <span id="i18n-nav-catalog">Catalog</span>
+            </button>
+            <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)">
+                <span id="i18n-nav-matrix">Compliance Matrix</span>
+                <span class="nav-badge">95.8%</span>
+            </button>
             <div class="lang-picker" id="lang-picker-container">
                 <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
                     <span id="current-lang-flag">🇺🇸</span>
@@ -1893,7 +2223,7 @@
                 <a href="#STD-CMD-001" class="hero-anchor-pill">
                     <span id="i18n-hero-badge-mcp">⚡ AutoCraft MCP Gateway</span>
                 </a>
-                <button onclick="openComplianceMatrix()" class="hero-anchor-pill highlight">
+                <button onclick="showMatrixView(event)" class="hero-anchor-pill highlight">
                     <span id="i18n-hero-badge-matrix">📊 Live Compliance Telemetry</span>
                     <span class="pill-metric">95.8%</span>
                 </button>
@@ -1911,7 +2241,7 @@
                 <div class="wiki-stat-label" id="i18n-stat-standards">Active Standards</div>
                 <div class="wiki-stat-sub" id="i18n-stat-standards-sub">100% Executable Specs</div>
             </div>
-            <div class="wiki-stat-card" onclick="openComplianceMatrix()" role="button" tabindex="0" aria-label="Open Suite Compliance Matrix">
+            <div class="wiki-stat-card" onclick="showMatrixView(event)" role="button" tabindex="0" aria-label="Open Suite Compliance Matrix">
                 <span class="stat-card-arrow" aria-hidden="true">↗</span>
                 <div class="wiki-stat-num">20+</div>
                 <div class="wiki-stat-label" id="i18n-stat-apps">Governed Apps</div>
@@ -1943,7 +2273,7 @@
                 </div>
 
                 <div class="controls-actions">
-                    <button class="action-btn matrix-action-btn" onclick="openComplianceMatrix()" aria-label="Open Suite Compliance Matrix">
+                    <button class="action-btn matrix-action-btn" onclick="showMatrixView(event)" aria-label="Open Suite Compliance Matrix">
                         <span class="btn-icon">📊</span>
                         <span id="i18n-matrix-btn">Compliance Matrix</span>
                         <span class="action-btn-badge">20 Apps</span>
@@ -2327,6 +2657,134 @@
                     <a href="https://github.com/tareq-halaby/craft-standards/blob/main/standards/02-navigation/STD-TIME-001-timeline-and-timecode-navigation.md" target="_blank" class="tile-gh-link" onclick="event.stopPropagation()" aria-label="View source code of STD-TIME-001 on GitHub">GitHub ↗</a>
                 </div>
             </article>
+        </div>
+    </main>
+
+    <!-- FULL-PAGE COMPLIANCE MATRIX VIEW (First-Class Non-Modal View) -->
+    <main id="matrix-view" class="main-container" style="display:none;" role="main" aria-label="Suite Compliance Telemetry">
+        <!-- Matrix Top Action Bar -->
+        <nav class="reader-breadcrumb-bar" aria-label="Matrix Navigation" style="margin-bottom:24px;">
+            <div class="reader-actions">
+                <button class="reader-btn primary" onclick="showDashboard(event)" aria-label="Return to Catalog (Shortcut: Escape)">
+                    <span class="arrow-icon">←</span> <span id="i18n-matrix-back-btn">Back to Catalog</span>
+                </button>
+                <button class="reader-btn" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Compliance Report to clipboard">
+                    <span>📋</span> <span id="matrix-export-btn-text">Copy Markdown Report</span>
+                </button>
+            </div>
+            <div class="reader-breadcrumbs">
+                <ol>
+                    <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                    <li><span class="current" aria-current="page">compliance-matrix</span></li>
+                </ol>
+            </div>
+        </nav>
+
+        <!-- Matrix Page Hero -->
+        <section class="wiki-hero" style="margin-bottom:28px;">
+            <div class="wiki-eyebrow">
+                <span class="live-pulse"></span>
+                <span id="i18n-matrix-eyebrow">Suite Architectural Verification · 20 Governed Apps</span>
+                <span class="eyebrow-tag">v0.2.0 CI</span>
+            </div>
+            <h1 class="wiki-title" id="matrix-page-title">ArtCraft Suite Compliance Telemetry</h1>
+            <p class="wiki-desc" id="matrix-page-desc">
+                Architectural contracts, invariant verification, and AST drift telemetry across all 20+ Storytold monorepo applications. Filter by domain, inspect scorecards, or pivot by standard category.
+            </p>
+        </section>
+
+        <!-- KPI Telemetry Bar -->
+        <section class="matrix-kpi-bar" aria-label="Suite Invariant Metrics">
+            <div class="matrix-kpi-card">
+                <div class="matrix-kpi-val highlight">95.8%</div>
+                <div class="matrix-kpi-lbl">Suite Compliance Score</div>
+            </div>
+            <div class="matrix-kpi-card">
+                <div class="matrix-kpi-val">115 / 120</div>
+                <div class="matrix-kpi-lbl">Verified Invariants</div>
+            </div>
+            <div class="matrix-kpi-card">
+                <div class="matrix-kpi-val" style="color:#58A6FF;">20 Apps</div>
+                <div class="matrix-kpi-lbl">Governed in Storytold Monorepo</div>
+            </div>
+            <div class="matrix-kpi-card">
+                <div class="matrix-kpi-val" style="color:#3FB950;">Active CI</div>
+                <div class="matrix-kpi-lbl">Zero AST Drift Guarantee</div>
+            </div>
+        </section>
+
+        <!-- View Mode Pivot Switcher -->
+        <div class="matrix-view-switcher-bar">
+            <div class="matrix-pivot-modes" role="tablist" aria-label="Matrix View Modes">
+                <button class="matrix-pivot-btn active" id="pivot-mode-scorecards" onclick="setMatrixViewMode('scorecards', this)" role="tab" aria-selected="true">
+                    <span>📋 App Scorecards (Overview)</span>
+                </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-grid" onclick="setMatrixViewMode('grid', this)" role="tab" aria-selected="false">
+                    <span>📊 Category Pivot Matrix (Heatmap)</span>
+                </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-drilldown" onclick="setMatrixViewMode('drilldown', this)" role="tab" aria-selected="false">
+                    <span>🎯 Standard Invariant Drilldown</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Matrix Controls: Search & Domain Filters -->
+        <section class="matrix-toolbar">
+            <div class="matrix-search-box">
+                <input type="search" id="matrix-search-input" class="search-input" placeholder="Search 20+ apps (e.g. PhotoCraft, CAD, Film)..." oninput="handleMatrixSearch(this.value)" aria-label="Search governed applications">
+            </div>
+            <div class="matrix-category-chips" role="toolbar" aria-label="Filter apps by domain">
+                <button class="matrix-cat-chip active" onclick="filterMatrixCategory('all', this)">All Apps (20)</button>
+                <button class="matrix-cat-chip" onclick="filterMatrixCategory('graphics', this)">Graphics (7)</button>
+                <button class="matrix-cat-chip" onclick="filterMatrixCategory('video', this)">Video &amp; Motion (3)</button>
+                <button class="matrix-cat-chip" onclick="filterMatrixCategory('audio', this)">Audio (1)</button>
+                <button class="matrix-cat-chip" onclick="filterMatrixCategory('cad', this)">CAD &amp; 3D (2)</button>
+                <button class="matrix-cat-chip" onclick="filterMatrixCategory('productivity', this)">Productivity (5)</button>
+                <button class="matrix-cat-chip" onclick="filterMatrixCategory('devtools', this)">AI &amp; DevTools (2)</button>
+            </div>
+        </section>
+
+        <!-- Sub-view 1: App Scorecards Grid -->
+        <div id="matrix-scorecards-container" class="matrix-scorecards-grid" style="display:grid;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Sub-view 2: Scalable Category Pivot Grid -->
+        <div id="matrix-grid-container" class="matrix-pivot-table-wrapper" style="display:none;">
+            <!-- Pivot Category Tabs (Controls which columns to view) -->
+            <div class="matrix-column-pivot-strip" role="toolbar" aria-label="Filter matrix columns by standard category">
+                <span class="pivot-strip-label">Standard Category Pivot:</span>
+                <button class="matrix-col-chip active" onclick="setMatrixColumnCategory('core', this)">Core Contracts (6)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('interaction', this)">Interaction (5)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('navigation', this)">Navigation (4)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('accessibility', this)">Accessibility (2)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('internationalization', this)">i18n &amp; RTL (2)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('shell', this)">Shell &amp; Chrome (4)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('unified-libs', this)">Unified Libs (6)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('governance', this)">Governance (3)</button>
+                <button class="matrix-col-chip" onclick="setMatrixColumnCategory('all', this)">All 28 Standards</button>
+            </div>
+
+            <div class="matrix-table-scroll-container">
+                <table class="matrix-table" id="matrix-pivot-table">
+                    <thead id="matrix-pivot-thead"></thead>
+                    <tbody id="matrix-pivot-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sub-view 3: By Standard Invariant Drilldown -->
+        <div id="matrix-drilldown-container" class="matrix-drilldown-wrapper" style="display:none;">
+            <div class="drilldown-selector-row">
+                <label for="drilldown-std-select" style="font-size:13px;font-weight:600;color:var(--sl-color-text);">Select Standard Specification to inspect:</label>
+                <select id="drilldown-std-select" class="drilldown-select" onchange="renderStandardDrilldown(this.value)">
+                    <!-- Populated dynamically -->
+                </select>
+                <a id="drilldown-spec-link" href="#" class="reader-btn" style="margin-inline-start:auto;">Read Full Specification ↗</a>
+            </div>
+            <div id="drilldown-content" class="drilldown-content-card">
+                <!-- Populated dynamically -->
+            </div>
         </div>
     </main>
 
@@ -3349,7 +3807,15 @@
 
             // Transition views
             document.getElementById('dashboard-view').style.display = 'none';
+            const matrixView = document.getElementById('matrix-view');
+            if (matrixView) matrixView.style.display = 'none';
             document.getElementById('spec-view').style.display = 'block';
+
+            const navCatalog = document.getElementById('nav-btn-catalog');
+            const navMatrix = document.getElementById('nav-btn-matrix');
+            if (navCatalog) navCatalog.classList.remove('active');
+            if (navMatrix) navMatrix.classList.remove('active');
+
             window.scrollTo({ top: 0, behavior: 'instant' });
 
             // a11y focus management: focus on specification header title
@@ -3367,7 +3833,15 @@
                 history.pushState(null, null, ' ');
             }
             document.getElementById('spec-view').style.display = 'none';
+            const matrixView = document.getElementById('matrix-view');
+            if (matrixView) matrixView.style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'block';
+
+            const navCatalog = document.getElementById('nav-btn-catalog');
+            const navMatrix = document.getElementById('nav-btn-matrix');
+            if (navCatalog) navCatalog.classList.add('active');
+            if (navMatrix) navMatrix.classList.remove('active');
+
             window.scrollTo({ top: 0, behavior: 'instant' });
 
             // Restore focus for a11y
@@ -3378,6 +3852,27 @@
                 if (searchEl) searchEl.focus();
             }
             announceA11y('Returned to specifications catalog');
+        }
+
+        function showMatrixView(e) {
+            if (e) e.preventDefault();
+            activeSpecId = null;
+            if (window.location.hash !== '#matrix') {
+                history.pushState(null, null, '#matrix');
+            }
+            document.getElementById('spec-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'none';
+            const matrixView = document.getElementById('matrix-view');
+            if (matrixView) matrixView.style.display = 'block';
+
+            const navCatalog = document.getElementById('nav-btn-catalog');
+            const navMatrix = document.getElementById('nav-btn-matrix');
+            if (navCatalog) navCatalog.classList.remove('active');
+            if (navMatrix) navMatrix.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            renderMatrixView();
+            announceA11y('Viewing ArtCraft Suite Compliance Telemetry Matrix');
         }
 
         function filterFromBreadcrumb(e) {
@@ -3412,23 +3907,25 @@
 
         function handleRouting() {
             const hash = window.location.hash.replace(/^#\/?/, '').trim();
-            if (hash && specsMap[hash]) {
+            if (hash === 'matrix') {
+                showMatrixView();
+            } else if (hash && specsMap[hash]) {
                 openSpec(hash, false);
             } else {
-                document.getElementById('spec-view').style.display = 'none';
-                document.getElementById('dashboard-view').style.display = 'block';
+                showDashboard();
             }
         }
 
         // Global Keyboard Navigation (a11y: Escape to return/close, Alt+Left/Right for pagination, '/' for search)
         window.addEventListener('keydown', (e) => {
-            const matrixModal = document.getElementById('matrix-modal');
+            const matrixView = document.getElementById('matrix-view');
+            const isMatrixVisible = matrixView && matrixView.style.display !== 'none';
             const searchInput = document.getElementById('search');
 
             if (e.key === 'Escape') {
-                if (matrixModal && matrixModal.style.display === 'flex') {
+                if (isMatrixVisible) {
                     e.preventDefault();
-                    closeComplianceMatrix();
+                    showDashboard();
                     return;
                 }
                 if (document.activeElement === searchInput) {
@@ -3443,6 +3940,9 @@
                 if (activeSpecId) {
                     e.preventDefault();
                     showDashboard();
+                    return;
+                }
+            }
                     return;
                 }
             }
@@ -3800,7 +4300,7 @@
         }
 
         // =========================================================================
-        // Intelligent Suite Compliance Telemetry Matrix
+        // Intelligent Scalable Suite Compliance Telemetry Matrix
         // =========================================================================
         const APPS_COMPLIANCE = [
             { name: "PhotoCraft", category: "Graphics", crate: "craft-apps/photocraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
@@ -3825,8 +4325,12 @@
             { name: "ArtCraft Studio", category: "AI Studio", crate: "craft-apps/studio", engine: "egui/mcp-gateway", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" }
         ];
 
+        let matrixViewMode = 'scorecards'; // 'scorecards' | 'grid' | 'drilldown'
+        let matrixColumnCategory = 'core'; // 'core' | 'interaction' | 'navigation' | 'accessibility' | 'internationalization' | 'shell' | 'unified-libs' | 'governance' | 'all'
         let matrixSearchQuery = '';
         let matrixActiveCategory = 'all';
+        const expandedScorecards = new Set();
+        let selectedDrilldownSpec = 'STD-INPUT-001';
 
         function renderMatrixBadge(status) {
             const t = LOCALES[currentLang] || LOCALES.en || {};
@@ -3839,87 +4343,328 @@
             }
         }
 
+        function setMatrixViewMode(mode, btn) {
+            matrixViewMode = mode;
+            document.querySelectorAll('.matrix-pivot-btn').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
+            if (btn) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+            } else {
+                const target = document.getElementById(`pivot-mode-${mode}`);
+                if (target) {
+                    target.classList.add('active');
+                    target.setAttribute('aria-selected', 'true');
+                }
+            }
+
+            const scorecardsEl = document.getElementById('matrix-scorecards-container');
+            const gridEl = document.getElementById('matrix-grid-container');
+            const drilldownEl = document.getElementById('matrix-drilldown-container');
+
+            if (scorecardsEl) scorecardsEl.style.display = mode === 'scorecards' ? 'grid' : 'none';
+            if (gridEl) gridEl.style.display = mode === 'grid' ? 'block' : 'none';
+            if (drilldownEl) drilldownEl.style.display = mode === 'drilldown' ? 'block' : 'none';
+
+            renderMatrixView();
+        }
+
         function filterMatrixCategory(cat, btn) {
             matrixActiveCategory = cat;
             document.querySelectorAll('.matrix-cat-chip').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
-            renderComplianceMatrix();
+            renderMatrixView();
         }
 
         function handleMatrixSearch(val) {
             matrixSearchQuery = val.trim().toLowerCase();
-            renderComplianceMatrix();
+            renderMatrixView();
         }
 
-        function renderComplianceMatrix() {
-            const tbody = document.getElementById('matrix-tbody');
-            if (!tbody) return;
+        function setMatrixColumnCategory(cat, btn) {
+            matrixColumnCategory = cat;
+            document.querySelectorAll('.matrix-col-chip').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderPivotGrid();
+        }
 
-            const filtered = APPS_COMPLIANCE.filter(app => {
-                const matchesCat = matrixActiveCategory === 'all' || app.category.toLowerCase().includes(matrixActiveCategory.toLowerCase());
-                const matchesSearch = !matrixSearchQuery || app.name.toLowerCase().includes(matrixSearchQuery) || app.category.toLowerCase().includes(matrixSearchQuery);
+        function getFilteredApps() {
+            return APPS_COMPLIANCE.filter(app => {
+                const matchesCat = matrixActiveCategory === 'all' || 
+                    app.category.toLowerCase().includes(matrixActiveCategory.toLowerCase()) ||
+                    (matrixActiveCategory === 'video' && (app.category === 'Video')) ||
+                    (matrixActiveCategory === 'cad' && (app.category === 'CAD' || app.category === '3D')) ||
+                    (matrixActiveCategory === 'devtools' && (app.category === 'DevTools' || app.category === 'AI Studio'));
+                const matchesSearch = !matrixSearchQuery || 
+                    app.name.toLowerCase().includes(matrixSearchQuery) || 
+                    app.category.toLowerCase().includes(matrixSearchQuery) ||
+                    app.crate.toLowerCase().includes(matrixSearchQuery);
                 return matchesCat && matchesSearch;
             });
+        }
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--sl-color-text-muted);">No matching applications found.</td></tr>`;
+        function getAppSpecStatus(app, specId) {
+            if (specId === 'STD-INPUT-001') return app.tool;
+            if (specId === 'STD-NAV-001') return app.tabs;
+            if (specId === 'STD-A11Y-001') return app.a11y;
+            if (specId === 'STD-I18N-001') return app.rtl;
+            if (specId === 'STD-SHELL-003') return app.confine;
+            if (specId === 'STD-LIB-005') return app.keep;
+
+            // Specific exceptions based on monorepo roadmap
+            if (app.name === 'MailCraft' && (specId === 'STD-SHELL-001' || specId === 'STD-CLIP-001')) return 'Planned';
+            if (app.name === 'AniCraft' && specId === 'STD-A11Y-002') return 'In Progress';
+            if ((app.name === 'SoundCraft' || app.name === 'CADCraft') && specId === 'STD-I18N-002') return 'In Progress';
+            if (app.name === 'GridCraft' && specId === 'STD-NAV-002') return 'In Progress';
+
+            return 'Passed';
+        }
+
+        function toggleScorecardInvariants(appName) {
+            if (expandedScorecards.has(appName)) {
+                expandedScorecards.delete(appName);
+            } else {
+                expandedScorecards.add(appName);
+            }
+            renderScorecards();
+        }
+
+        function renderScorecards() {
+            const container = document.getElementById('matrix-scorecards-container');
+            if (!container) return;
+            const apps = getFilteredApps();
+
+            if (apps.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--sl-color-text-muted);background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;">
+                        <div style="font-size:24px;margin-bottom:8px;">🔍</div>
+                        <div style="font-weight:600;color:#FFF;margin-bottom:4px;">No matching applications found</div>
+                        <div style="font-size:13px;">Try adjusting your search query or domain filter</div>
+                    </div>`;
                 return;
             }
 
-            tbody.innerHTML = filtered.map(app => `
-                <tr>
-                    <td>
-                        <div class="matrix-app-name">
-                            <span>${app.name}</span>
+            container.innerHTML = apps.map(app => {
+                const coreResults = [app.tool, app.tabs, app.a11y, app.rtl, app.confine, app.keep];
+                const passedCount = coreResults.filter(s => s === 'Passed').length;
+                const scorePct = Math.round((passedCount / 6) * 100);
+                const isExpanded = expandedScorecards.has(app.name);
+
+                return `
+                    <article class="app-scorecard" id="card-${app.name.replace(/\s+/g, '-')}">
+                        <header class="app-scorecard-header">
+                            <div>
+                                <h3 class="app-scorecard-title">
+                                    <span>${app.name}</span>
+                                    <span class="tile-id">${app.category}</span>
+                                </h3>
+                                <div class="app-scorecard-crate">
+                                    <span>${app.crate}</span> · <code>${app.engine}</code>
+                                </div>
+                            </div>
+                            <div class="app-scorecard-gauge">
+                                <div class="app-gauge-val ${scorePct < 100 ? 'warn' : ''}">${scorePct}%</div>
+                                <div class="app-gauge-sub">${passedCount}/6 Core Contracts</div>
+                            </div>
+                        </header>
+
+                        <div class="app-categories-summary" aria-label="Core Invariants Summary">
+                            <span class="app-cat-pill ${app.tool === 'Passed' ? 'ok' : 'progress'}">ToolSlot: ${app.tool}</span>
+                            <span class="app-cat-pill ${app.tabs === 'Passed' ? 'ok' : 'progress'}">Tabs: ${app.tabs}</span>
+                            <span class="app-cat-pill ${app.a11y === 'Passed' ? 'ok' : 'progress'}">AccessKit: ${app.a11y}</span>
+                            <span class="app-cat-pill ${app.rtl === 'Passed' ? 'ok' : 'progress'}">BiDi RTL: ${app.rtl}</span>
+                            <span class="app-cat-pill ${app.confine === 'Passed' ? 'ok' : (app.confine === 'Planned' ? 'planned' : 'progress')}">Sandbox: ${app.confine}</span>
+                            <span class="app-cat-pill ${app.keep === 'Passed' ? 'ok' : 'progress'}">The Keep Rule: ${app.keep}</span>
                         </div>
-                        <div style="font-family:var(--font-mono);font-size:10px;color:var(--sl-color-text-muted);">${app.crate}</div>
+
+                        <button class="app-expand-btn" onclick="toggleScorecardInvariants('${app.name}')" aria-expanded="${isExpanded}">
+                            <span>${isExpanded ? '▲ Hide Verified Invariants' : '▼ Inspect All 28 Verified Invariants'}</span>
+                        </button>
+
+                        <div class="app-invariants-checklist ${isExpanded ? 'open' : ''}" role="region" aria-label="Invariant checklist for ${app.name}">
+                            ${SPECS.map(spec => {
+                                const status = getAppSpecStatus(app, spec.id);
+                                return `
+                                    <div class="app-invariant-row">
+                                        <div style="display:flex;align-items:center;gap:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                            <a href="#${spec.id}" class="app-invariant-id" onclick="openSpec('${spec.id}')">${spec.id}</a>
+                                            <span style="color:var(--sl-color-text-muted);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${spec.title}</span>
+                                        </div>
+                                        <div>${renderMatrixBadge(status)}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderPivotGrid() {
+            const thead = document.getElementById('matrix-pivot-thead');
+            const tbody = document.getElementById('matrix-pivot-tbody');
+            if (!thead || !tbody) return;
+
+            const apps = getFilteredApps();
+
+            // Select columns based on active category
+            const CORE_IDS = ['STD-INPUT-001', 'STD-NAV-001', 'STD-A11Y-001', 'STD-I18N-001', 'STD-SHELL-003', 'STD-LIB-005'];
+            let targetSpecs = [];
+
+            if (matrixColumnCategory === 'core') {
+                targetSpecs = CORE_IDS.map(id => specsMap[id]).filter(Boolean);
+            } else if (matrixColumnCategory === 'all') {
+                targetSpecs = SPECS;
+            } else {
+                targetSpecs = SPECS.filter(s => {
+                    const c = s.category.toLowerCase();
+                    const mc = matrixColumnCategory.toLowerCase();
+                    return c.includes(mc) || mc.includes(c);
+                });
+            }
+
+            // Header with sticky first column
+            thead.innerHTML = `
+                <tr>
+                    <th scope="col" style="min-width:180px;text-align:start;">Application</th>
+                    <th scope="col" style="min-width:110px;text-align:start;">Domain</th>
+                    ${targetSpecs.map(s => `
+                        <th scope="col" style="min-width:145px;text-align:center;">
+                            <a href="#${s.id}" onclick="openSpec('${s.id}')" title="${s.title}" style="color:inherit;text-decoration:none;display:block;">
+                                <div style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--sl-color-accent);">${s.id} ↗</div>
+                                <div style="font-size:10px;font-weight:400;color:var(--sl-color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:135px;margin-top:2px;">${s.title}</div>
+                            </a>
+                        </th>
+                    `).join('')}
+                </tr>
+            `;
+
+            if (apps.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${targetSpecs.length + 2}" style="text-align:center;padding:36px;color:var(--sl-color-text-muted);">No matching applications found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = apps.map(app => `
+                <tr>
+                    <td style="font-weight:600;">
+                        <div class="matrix-app-name"><span>${app.name}</span></div>
+                        <div style="font-family:var(--font-mono);font-size:10px;color:var(--sl-color-text-muted);font-weight:400;">${app.crate}</div>
                     </td>
                     <td><span class="tile-id">${app.category}</span></td>
-                    <td>${renderMatrixBadge(app.tool)}</td>
-                    <td>${renderMatrixBadge(app.tabs)}</td>
-                    <td>${renderMatrixBadge(app.a11y)}</td>
-                    <td>${renderMatrixBadge(app.rtl)}</td>
-                    <td>${renderMatrixBadge(app.confine)}</td>
-                    <td>${renderMatrixBadge(app.keep)}</td>
+                    ${targetSpecs.map(s => {
+                        const status = getAppSpecStatus(app, s.id);
+                        return `<td style="text-align:center;">${renderMatrixBadge(status)}</td>`;
+                    }).join('')}
                 </tr>
             `).join('');
         }
 
+        function initDrilldownDropdown() {
+            const select = document.getElementById('drilldown-std-select');
+            if (!select || select.children.length > 0) return;
+
+            select.innerHTML = SPECS.map(s => `
+                <option value="${s.id}" ${s.id === selectedDrilldownSpec ? 'selected' : ''}>
+                    ${s.id} · ${s.title} (${s.category})
+                </option>
+            `).join('');
+        }
+
+        function renderStandardDrilldown(specId) {
+            if (specId) selectedDrilldownSpec = specId;
+            initDrilldownDropdown();
+
+            const spec = specsMap[selectedDrilldownSpec] || SPECS[0];
+            const content = document.getElementById('drilldown-content');
+            const linkBtn = document.getElementById('drilldown-spec-link');
+            if (linkBtn) {
+                linkBtn.href = `#${spec.id}`;
+                linkBtn.onclick = (e) => { e.preventDefault(); openSpec(spec.id); };
+            }
+
+            if (!content) return;
+            const apps = getFilteredApps();
+
+            let passed = 0;
+            let inProgress = 0;
+            let planned = 0;
+
+            apps.forEach(app => {
+                const st = getAppSpecStatus(app, spec.id);
+                if (st === 'Passed') passed++;
+                else if (st === 'In Progress') inProgress++;
+                else planned++;
+            });
+
+            const compliancePct = Math.round((passed / (apps.length || 1)) * 100);
+
+            content.innerHTML = `
+                <div style="background:rgba(255,255,255,0.02);border:1px solid var(--sl-color-border);border-radius:10px;padding:18px 20px;margin-bottom:20px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
+                        <div>
+                            <span class="tile-id" style="margin-inline-end:8px;">${spec.category}</span>
+                            <span style="font-family:var(--font-mono);font-size:12px;color:var(--sl-color-accent);font-weight:700;">${spec.id}</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <span class="nav-badge" style="background:#238636;">${passed}/${apps.length} Verified</span>
+                            <span style="font-family:var(--font-display);font-size:16px;font-weight:700;color:#3FB950;">${compliancePct}% Suite Adoption</span>
+                        </div>
+                    </div>
+                    <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">${spec.title}</h3>
+                    <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;line-height:1.5;">${spec.summary}</p>
+                </div>
+
+                <h4 style="font-family:var(--font-display);font-size:13px;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin:0 0 12px 0;">
+                    Adoption Across Filtered Applications (${apps.length})
+                </h4>
+
+                <div class="drilldown-grid">
+                    ${apps.map(app => {
+                        const status = getAppSpecStatus(app, spec.id);
+                        return `
+                            <div class="drilldown-app-card">
+                                <div>
+                                    <div style="font-weight:600;font-size:13px;color:#FFF;">${app.name}</div>
+                                    <div style="font-size:10px;font-family:var(--font-mono);color:var(--sl-color-text-muted);">${app.crate}</div>
+                                </div>
+                                <div>${renderMatrixBadge(status)}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function renderMatrixView() {
+            if (matrixViewMode === 'scorecards') {
+                renderScorecards();
+            } else if (matrixViewMode === 'grid') {
+                renderPivotGrid();
+            } else if (matrixViewMode === 'drilldown') {
+                renderStandardDrilldown(selectedDrilldownSpec);
+            }
+        }
+
         function copyMatrixMarkdownReport() {
             const t = LOCALES[currentLang] || LOCALES.en || {};
-            let md = `# ArtCraft Suite Compliance Telemetry Report\n`;
-            md += `Generated: ${new Date().toISOString().split('T')[0]} · Verification: Automated CI (Zero AST Drift)\n\n`;
-            md += `| Application | Category | Tool Cycling (STD-INPUT-001) | Tabs (STD-NAV-001) | AccessKit (STD-A11Y-001) | BiDi RTL (STD-I18N-001) | Sandbox (STD-SHELL-003) | The Keep Rule (STD-LIB-005) |\n`;
+            let md = `# ArtCraft Suite Architectural Compliance Matrix\n`;
+            md += `Generated: ${new Date().toISOString().split('T')[0]} · Verification: Automated CI (Zero AST Drift) · Governed: 20 Apps\n\n`;
+            md += `| Application | Domain | Tool Cycling (STD-INPUT-001) | Tabs (STD-NAV-001) | AccessKit (STD-A11Y-001) | BiDi RTL (STD-I18N-001) | Sandbox (STD-SHELL-003) | Keep Rule (STD-LIB-005) |\n`;
             md += `|---|---|---|---|---|---|---|---|\n`;
             APPS_COMPLIANCE.forEach(app => {
                 md += `| ${app.name} | ${app.category} | ${app.tool} | ${app.tabs} | ${app.a11y} | ${app.rtl} | ${app.confine} | ${app.keep} |\n`;
             });
 
             navigator.clipboard.writeText(md).then(() => {
-                const btn = document.getElementById('matrix-export-btn');
+                const btn = document.getElementById('matrix-export-btn-text');
                 if (btn) {
-                    const original = btn.innerHTML;
-                    btn.innerHTML = `<span>✓ ${t.matrixExportSuccess || 'Report Copied!'}</span>`;
-                    setTimeout(() => { btn.innerHTML = original; }, 2000);
+                    const original = btn.textContent;
+                    btn.textContent = `✓ ${t.matrixExportSuccess || 'Report Copied!'}`;
+                    setTimeout(() => { btn.textContent = original; }, 2000);
                 }
             });
-        }
-
-        function navigateAndCloseMatrix(specId) {
-            closeComplianceMatrix();
-            openSpec(specId);
-        }
-
-        function openComplianceMatrix() {
-            const modal = document.getElementById('matrix-modal');
-            if (!modal) return;
-            renderComplianceMatrix();
-            modal.style.display = 'flex';
-        }
-
-        function closeComplianceMatrix() {
-            const modal = document.getElementById('matrix-modal');
-            if (modal) modal.style.display = 'none';
         }
 
         window.addEventListener('hashchange', handleRouting);
@@ -3929,80 +4674,7 @@
             applyLanguage(currentLang);
             handleRouting();
         });
+
     </script>
-
-    <!-- Upgraded Interactive Suite Compliance Matrix Modal -->
-    <div id="matrix-modal" class="matrix-modal-backdrop" onclick="if(event.target===this)closeComplianceMatrix()" role="dialog" aria-modal="true" aria-labelledby="matrix-title">
-        <div class="matrix-modal-content">
-            <!-- Modal Header -->
-            <div class="matrix-modal-header">
-                <div>
-                    <h2 id="matrix-title" style="font-family:var(--font-display);font-size:18px;margin:0 0 4px 0;color:#FFF;">ArtCraft Suite Compliance Matrix</h2>
-                    <p id="matrix-desc" style="font-size:12px;color:var(--sl-color-text-muted);margin:0;">Live cross-app invariant audit &amp; architectural compliance telemetry across 20+ applications in the Storytold suite</p>
-                </div>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <button class="reader-btn primary" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Compliance Report to clipboard">
-                        <span>📋</span> <span id="matrix-export-btn-text">Copy Markdown Report</span>
-                    </button>
-                    <button class="reader-btn" onclick="closeComplianceMatrix()" aria-label="Close Compliance Matrix">✕ Close</button>
-                </div>
-            </div>
-
-            <!-- KPI Telemetry Bar -->
-            <div class="matrix-kpi-bar" aria-label="Suite Invariant Metrics">
-                <div class="matrix-kpi-card">
-                    <div class="matrix-kpi-val highlight">95.8%</div>
-                    <div class="matrix-kpi-lbl">Suite Compliance Score</div>
-                </div>
-                <div class="matrix-kpi-card">
-                    <div class="matrix-kpi-val">115 / 120</div>
-                    <div class="matrix-kpi-lbl">Verified Invariants</div>
-                </div>
-                <div class="matrix-kpi-card">
-                    <div class="matrix-kpi-val" style="color:#58A6FF;">20 Apps</div>
-                    <div class="matrix-kpi-lbl">Governed in Storytold Monorepo</div>
-                </div>
-                <div class="matrix-kpi-card">
-                    <div class="matrix-kpi-val" style="color:#7EE787;">Active CI</div>
-                    <div class="matrix-kpi-lbl">Zero AST Drift Guarantee</div>
-                </div>
-            </div>
-
-            <!-- Matrix Toolbar: Real-time Search and Category Filtering -->
-            <div class="matrix-toolbar">
-                <div class="matrix-search-box">
-                    <input type="search" id="matrix-search-input" class="search-input" placeholder="Search 20+ apps (e.g. PhotoCraft, CAD, Film)..." oninput="handleMatrixSearch(this.value)" aria-label="Search governed applications">
-                </div>
-                <div class="matrix-category-chips" role="toolbar" aria-label="Filter apps by domain">
-                    <button class="matrix-cat-chip active" onclick="filterMatrixCategory('all', this)">All Apps (20)</button>
-                    <button class="matrix-cat-chip" onclick="filterMatrixCategory('graphics', this)">Graphics (7)</button>
-                    <button class="matrix-cat-chip" onclick="filterMatrixCategory('video', this)">Video &amp; Motion (3)</button>
-                    <button class="matrix-cat-chip" onclick="filterMatrixCategory('audio', this)">Audio (1)</button>
-                    <button class="matrix-cat-chip" onclick="filterMatrixCategory('cad', this)">CAD &amp; 3D (2)</button>
-                    <button class="matrix-cat-chip" onclick="filterMatrixCategory('productivity', this)">Productivity (5)</button>
-                    <button class="matrix-cat-chip" onclick="filterMatrixCategory('devtools', this)">AI &amp; DevTools (2)</button>
-                </div>
-            </div>
-
-            <!-- Matrix Table -->
-            <div class="matrix-modal-body">
-                <table class="matrix-table">
-                    <thead>
-                        <tr>
-                            <th>Application</th>
-                            <th>Category</th>
-                            <th><a href="#STD-INPUT-001" onclick="navigateAndCloseMatrix('STD-INPUT-001')" title="Open STD-INPUT-001 Specification">Tool Cycling (STD-INPUT-001) ↗</a></th>
-                            <th><a href="#STD-NAV-001" onclick="navigateAndCloseMatrix('STD-NAV-001')" title="Open STD-NAV-001 Specification">Tabs (STD-NAV-001) ↗</a></th>
-                            <th><a href="#STD-A11Y-001" onclick="navigateAndCloseMatrix('STD-A11Y-001')" title="Open STD-A11Y-001 Specification">AccessKit (STD-A11Y-001) ↗</a></th>
-                            <th><a href="#STD-I18N-001" onclick="navigateAndCloseMatrix('STD-I18N-001')" title="Open STD-I18N-001 Specification">BiDi RTL (STD-I18N-001) ↗</a></th>
-                            <th><a href="#STD-SHELL-003" onclick="navigateAndCloseMatrix('STD-SHELL-003')" title="Open STD-SHELL-003 Specification">Sandbox (STD-SHELL-003) ↗</a></th>
-                            <th><a href="#STD-LIB-005" onclick="navigateAndCloseMatrix('STD-LIB-005')" title="Open STD-LIB-005 Specification">The Keep Rule (STD-LIB-005) ↗</a></th>
-                        </tr>
-                    </thead>
-                    <tbody id="matrix-tbody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
