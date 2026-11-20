@@ -536,7 +536,7 @@
             if (e) e.preventDefault();
             const target = document.getElementById(slug);
             if (target) {
-                const offset = 80;
+                const offset = 150;
                 const bodyRect = document.body.getBoundingClientRect().top;
                 const elementRect = target.getBoundingClientRect().top;
                 const elementPosition = elementRect - bodyRect;

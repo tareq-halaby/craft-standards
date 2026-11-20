@@ -671,25 +671,18 @@
             }
         }
 
-        /* Row 1: Search + Actions */
+        /* Row 1: Clean Dedicated Search Bar */
         .controls-top-row {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        @media (min-width: 640px) {
-            .controls-top-row {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-                gap: 16px;
-            }
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .search-box {
             position: relative;
-            flex: 1;
-            max-width: 640px;
+            width: 100%;
+            max-width: 780px;
         }
         .search-input {
             width: 100%;
@@ -1491,48 +1484,80 @@
             position: relative;
         }
 
-        /* Top Sticky Toolbar & Breadcrumb Bar */
-        .reader-breadcrumb-bar {
+        /* Sticky Navigation & Actions Header (2-Row Dedicated Architecture) */
+        .reader-toolbar-container {
             position: sticky;
             top: 56px;
             z-index: 90;
-            background: rgba(11, 13, 19, 0.94);
+            background: rgba(11, 13, 19, 0.96);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--sl-color-border);
-            padding: 10px 16px;
+        }
+        @media (min-width: 768px) {
+            .reader-toolbar-container {
+                top: 64px;
+            }
+        }
+
+        /* Row 1: Action Controls & Mobile Drawer Toggles */
+        .reader-actions-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
+            padding: 8px 16px;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         @media (min-width: 768px) {
-            .reader-breadcrumb-bar {
-                top: 64px;
-                padding: 12px 24px;
-                flex-wrap: nowrap;
+            .reader-actions-row {
+                padding: 10px 24px;
             }
         }
         @media (min-width: 1200px) {
-            .reader-breadcrumb-bar {
-                padding: 12px 32px;
+            .reader-actions-row {
+                padding: 10px 32px;
             }
         }
 
-        .reader-bar-left {
+        .reader-actions-left {
             display: flex;
             align-items: center;
-            gap: 12px;
-            min-width: 0;
-            flex: 1;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .reader-actions {
+        .reader-actions-right {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
+            margin-inline-start: auto;
+        }
+
+        /* Row 2: Dedicated Breadcrumb Bar (Zero Overlap on Any Screen Size) */
+        .reader-breadcrumbs-bar {
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.35);
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .reader-breadcrumbs-bar::-webkit-scrollbar {
+            display: none;
+        }
+        @media (min-width: 768px) {
+            .reader-breadcrumbs-bar {
+                padding: 8px 24px;
+            }
+        }
+        @media (min-width: 1200px) {
+            .reader-breadcrumbs-bar {
+                padding: 8px 32px;
+            }
         }
 
         /* Mobile Drawer Toggle Buttons */
@@ -1690,8 +1715,8 @@
         @media (min-width: 1024px) {
             .spec-nav-sidebar {
                 position: sticky;
-                top: 120px;
-                max-height: calc(100vh - 140px);
+                top: 155px;
+                max-height: calc(100vh - 175px);
                 overflow-y: auto;
                 overflow-x: hidden;
                 scrollbar-width: thin;
@@ -1924,8 +1949,8 @@
         @media (min-width: 1260px) {
             .spec-toc-sidebar {
                 position: sticky;
-                top: 120px;
-                max-height: calc(100vh - 140px);
+                top: 155px;
+                max-height: calc(100vh - 175px);
                 overflow-y: auto;
                 scrollbar-width: thin;
                 scrollbar-color: rgba(255, 255, 255, 0.12) transparent;

@@ -143,15 +143,14 @@ __STYLE__
                 Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.
             </p>
             <div class="hero-anchors" role="group" aria-label="Hero shortcuts">
-                <a href="#STD-CMD-001" class="hero-anchor-pill">
+                <a href="#" onclick="openAgentHub(); return false;" class="hero-anchor-pill">
                     <span id="i18n-hero-badge-mcp">⚡ AutoCraft MCP Gateway</span>
                 </a>
-                <button onclick="showMatrixView(event)" class="hero-anchor-pill highlight">
-                    <span id="i18n-hero-badge-matrix">📊 Live Compliance Telemetry</span>
-                    <span class="pill-metric">95.8%</span>
-                </button>
                 <a href="#STD-INPUT-001" class="hero-anchor-pill">
                     <span id="i18n-hero-badge-sim">🧪 Interactive Sandboxes</span>
+                </a>
+                <a href="#STD-GOV-001" class="hero-anchor-pill highlight">
+                    <span>🛡️ Zero AST Drift Guarantee</span>
                 </a>
             </div>
         </section>
@@ -186,21 +185,13 @@ __STYLE__
 
         <!-- Modernized Two-Row Controls Container -->
         <section class="controls-container" aria-label="Catalog Filtering &amp; Search" role="search">
-            <!-- Row 1: Search Box + Action Buttons -->
+            <!-- Row 1: Clean Dedicated Search Bar -->
             <div class="controls-top-row">
                 <div class="search-box">
                     <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     <input type="search" id="search" class="search-input" placeholder="Search standards, shortcuts (Ctrl+Tab), crates..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="searchbox" aria-label="Search specifications" aria-controls="grid" aria-describedby="visible-count">
                     <button id="search-clear-btn" class="search-clear-btn" onclick="clearSearch()" aria-label="Clear search input" title="Clear search">✕</button>
                     <div class="search-shortcut-badge" aria-hidden="true"><kbd>/</kbd></div>
-                </div>
-
-                <div class="controls-actions">
-                    <button class="action-btn matrix-action-btn" onclick="showMatrixView(event)" aria-label="Open Suite Compliance Matrix">
-                        <span class="btn-icon">📊</span>
-                        <span id="i18n-matrix-btn">Compliance Matrix</span>
-                        <span class="action-btn-badge">20 Apps</span>
-                    </button>
                 </div>
             </div>
 
@@ -473,15 +464,37 @@ __ITEMS__
 
     <!-- SPECIFICATION VIEWER (Craft.wiki 3-Column Documentation Architecture following Jakob's Law) -->
     <div id="spec-view" role="region" aria-label="Specification Document">
-        <!-- Sticky Navigation & Actions Toolbar -->
-        <nav class="reader-breadcrumb-bar" aria-label="Breadcrumb navigation">
-            <div class="reader-bar-left">
-                <!-- Mobile Toggle for Left Nav Drawer -->
-                <button class="spec-mobile-toggle-btn mobile-only" id="spec-drawer-toggle-btn" onclick="toggleSpecNavDrawer(event)" aria-label="Toggle standards navigation menu" aria-expanded="false">
-                    <span class="icon" aria-hidden="true">☰</span>
-                    <span class="btn-text" id="i18n-spec-nav-toggle">Standards</span>
-                    <span class="btn-badge">28</span>
-                </button>
+        <!-- Sticky Navigation & Actions Header (2-Row Dedicated Architecture) -->
+        <header class="reader-toolbar-container">
+            <!-- Row 1: Action Buttons & Drawer Toggles -->
+            <div class="reader-actions-row">
+                <div class="reader-actions-left">
+                    <!-- Drawer Toggles (shown on screens where sidebars are off-canvas) -->
+                    <button class="spec-mobile-toggle-btn mobile-only" id="spec-drawer-toggle-btn" onclick="toggleSpecNavDrawer(event)" aria-label="Toggle standards navigation menu" aria-expanded="false">
+                        <span class="icon" aria-hidden="true">☰</span>
+                        <span class="btn-text" id="i18n-spec-nav-toggle">Standards</span>
+                        <span class="btn-badge">28</span>
+                    </button>
+                    <button class="spec-mobile-toggle-btn mobile-only" id="spec-toc-toggle-btn" onclick="toggleSpecTocDrawer(event)" aria-label="Toggle Table of Contents" aria-expanded="false">
+                        <span class="icon" aria-hidden="true">📑</span>
+                        <span class="btn-text" id="i18n-spec-toc-toggle">On this page</span>
+                    </button>
+                </div>
+                <div class="reader-actions-right">
+                    <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
+                        <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Catalog</span>
+                    </button>
+                    <button class="reader-btn" id="copy-link-btn" onclick="copyCurrentLink()" aria-label="Copy direct specification link to clipboard">
+                        <span id="i18n-copy-text">Copy Link</span> 🔗
+                    </button>
+                    <a href="#" id="spec-gh-link" target="_blank" class="reader-btn" aria-label="View source file on GitHub (Opens in new window)">
+                        GitHub ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Row 2: Dedicated Breadcrumb Navigation Bar (Zero Overlap on Any Screen) -->
+            <nav class="reader-breadcrumbs-bar" aria-label="Breadcrumb navigation">
                 <div class="reader-breadcrumbs">
                     <ol>
                         <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
@@ -490,24 +503,8 @@ __ITEMS__
                         <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
                     </ol>
                 </div>
-            </div>
-            <div class="reader-actions">
-                <!-- Mobile Toggle for Right TOC Drawer -->
-                <button class="spec-mobile-toggle-btn mobile-only" id="spec-toc-toggle-btn" onclick="toggleSpecTocDrawer(event)" aria-label="Toggle Table of Contents" aria-expanded="false">
-                    <span class="icon" aria-hidden="true">📑</span>
-                    <span class="btn-text" id="i18n-spec-toc-toggle">On this page</span>
-                </button>
-                <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
-                    <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Catalog</span>
-                </button>
-                <button class="reader-btn" id="copy-link-btn" onclick="copyCurrentLink()" aria-label="Copy direct specification link to clipboard">
-                    <span id="i18n-copy-text">Copy Link</span> 🔗
-                </button>
-                <a href="#" id="spec-gh-link" target="_blank" class="reader-btn" aria-label="View source file on GitHub (Opens in new window)">
-                    GitHub ↗
-                </a>
-            </div>
-        </nav>
+            </nav>
+        </header>
 
         <!-- 3-Column Documentation Grid -->
         <div class="spec-doc-container">
