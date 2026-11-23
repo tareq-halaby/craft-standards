@@ -1272,7 +1272,7 @@
                             <div style="font-size:12.5px;color:var(--sl-color-text-muted);text-align:center;max-width:580px;">
                                 Press <strong>Ctrl+Tab</strong> to cycle tabs in Most Recently Used (LRU) order. Closing a dirty document (*) triggers the 3-button modal prompt.
                             </div>
-                            <div id="sim-tabs-bar" style="display:flex;gap:6px;background:#161B22;padding:8px;border-radius:8px;border:1px solid var(--sl-color-border);overflow-x:auto;max-width:100%;justify-content:center;">
+                            <div id="sim-tabs-bar" style="display:flex;gap:6px;background:var(--sl-color-surface-sunken);padding:8px;border-radius:8px;border:1px solid var(--sl-color-border);overflow-x:auto;max-width:100%;justify-content:center;">
                                 <div class="filter-chip active" id="sim-tab-0" style="font-size:12px;padding:6px 12px;cursor:pointer;" onclick="simSelectTab(0)">canvas.crft</div>
                                 <div class="filter-chip" id="sim-tab-1" style="font-size:12px;padding:6px 12px;cursor:pointer;" onclick="simSelectTab(1)">untitled-2.crft <span style="color:#F85149;">*</span></div>
                                 <div class="filter-chip" id="sim-tab-2" style="font-size:12px;padding:6px 12px;cursor:pointer;" onclick="simSelectTab(2)">vector_logo.svg</div>
@@ -1301,7 +1301,7 @@
                             <div style="font-size:12.5px;color:var(--sl-color-text-muted);text-align:center;max-width:580px;">
                                 DaVinci / Premiere shuttle standard: <strong>J</strong> = Reverse, <strong>K</strong> = Pause, <strong>L</strong> = Forward (1x, 2x, 4x, 8x). Audio gate mutes at &gt;2x.
                             </div>
-                            <div style="width:100%;max-width:540px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;">
+                            <div style="width:100%;max-width:540px;background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:16px;">
                                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
                                     <span style="font-family:var(--font-mono);font-size:16px;font-weight:700;color:#58A6FF;" id="sim-timecode">00:01:24:18</span>
                                     <span id="sim-shuttle-rate" class="nav-badge" style="background:#238636;">0x (Paused)</span>
@@ -1336,10 +1336,10 @@
                             <div style="font-size:12.5px;color:var(--sl-color-text-muted);text-align:center;max-width:580px;">
                                 Verifies that all file requests stay strictly confined inside the application's designated <code>AutomationRoot</code>.
                             </div>
-                            <div style="width:100%;max-width:540px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;">
+                            <div style="width:100%;max-width:540px;background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:16px;">
                                 <div style="font-size:11px;font-family:var(--font-mono);color:var(--sl-color-text-muted);margin-bottom:6px;">Designated Automation Root: <code>/app/sandbox/projects/demo/</code></div>
                                 <div style="display:flex;gap:8px;">
-                                    <input type="text" id="sim-confine-input" value="../../etc/shadow" style="flex:1;background:#161B22;border:1px solid #30363D;color:#FFF;padding:8px 12px;border-radius:6px;font-family:var(--font-mono);font-size:12px;">
+                                    <input type="text" id="sim-confine-input" value="../../etc/shadow" style="flex:1;background:var(--sl-color-card);border:1px solid var(--sl-color-border);color:var(--sl-color-heading);padding:8px 12px;border-radius:6px;font-family:var(--font-mono);font-size:12px;">
                                     <button class="reader-btn primary" onclick="runSimConfineCheck()">Verify Path</button>
                                 </div>
                             </div>
@@ -1985,7 +1985,7 @@
                 container.innerHTML = `
                     <div style="grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--sl-color-text-muted);background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;">
                         <div style="font-size:24px;margin-bottom:8px;">🔍</div>
-                        <div style="font-weight:600;color:#FFF;margin-bottom:4px;">No matching applications found</div>
+                        <div style="font-weight:600;color:var(--sl-color-heading);margin-bottom:4px;">No matching applications found</div>
                         <div style="font-size:13px;">Try adjusting your search query or domain filter</div>
                     </div>`;
                 return;
@@ -2163,7 +2163,7 @@
                             <span style="font-family:var(--font-display);font-size:16px;font-weight:700;color:#3FB950;">${compliancePct}% Suite Adoption</span>
                         </div>
                     </div>
-                    <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">${spec.title}</h3>
+                    <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--sl-color-heading);margin:0 0 6px 0;">${spec.title}</h3>
                     <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;line-height:1.5;">${spec.summary}</p>
                 </div>
 
@@ -2177,7 +2177,7 @@
                         return `
                             <div class="drilldown-app-card">
                                 <div>
-                                    <div style="font-weight:600;font-size:13px;color:#FFF;">${app.name}</div>
+                                    <div style="font-weight:600;font-size:13px;color:var(--sl-color-heading);">${app.name}</div>
                                     <div style="font-size:10px;font-family:var(--font-mono);color:var(--sl-color-text-muted);">${app.crate}</div>
                                 </div>
                                 <div>${renderMatrixBadge(status)}</div>
@@ -2245,7 +2245,7 @@
                 <div style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;overflow:hidden;">
                     <div style="padding:18px 20px;border-bottom:1px solid var(--sl-color-border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
                         <div>
-                            <h3 style="font-family:var(--font-display);font-size:16px;font-weight:700;color:#FFF;margin:0 0 4px 0;">⌨️ Universal Creative Shortcuts & Keymap Matrix</h3>
+                            <h3 style="font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--sl-color-heading);margin:0 0 4px 0;">⌨️ Universal Creative Shortcuts & Keymap Matrix</h3>
                             <p style="font-size:12.5px;color:var(--sl-color-text-muted);margin:0;">Standard chords, tool cycling keys, and modifier invariants compared across benchmark applications.</p>
                         </div>
                         <div style="font-size:12px;color:var(--sl-color-text-muted);">
@@ -2268,7 +2268,7 @@
                                 filtered.map(s => `
                                     <tr>
                                         <td><div style="font-size:13px;font-weight:700;">${s.chord}</div></td>
-                                        <td style="font-weight:600;color:#FFF;">${s.action}</td>
+                                        <td style="font-weight:600;color:var(--sl-color-heading);">${s.action}</td>
                                         <td>
                                             <div style="font-size:12px;color:var(--sl-color-text);">${s.app}</div>
                                             <div style="font-size:11px;color:#58A6FF;margin-top:2px;">🎯 ${s.benchmark}</div>
@@ -2296,7 +2296,7 @@
                 <div class="checklist-gen-wrapper" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--sl-color-border);padding-bottom:16px;">
                         <div>
-                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">🎯 PR Pre-Flight Checklist Generator</h3>
+                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--sl-color-heading);margin:0 0 6px 0;">🎯 PR Pre-Flight Checklist Generator</h3>
                             <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;">Generate a reference-app-aligned PR description for pull requests in the Storytold / ArtCraft monorepo.</p>
                         </div>
                         <button class="reader-btn primary" onclick="copyGeneratedChecklist()" id="copy-checklist-btn" style="padding:10px 18px;font-size:13px;">
@@ -2330,7 +2330,7 @@
                             <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);">Markdown Preview (Paste into GitHub PR Description):</span>
                             <span style="font-size:11px;color:#3FB950;font-weight:600;">✓ Aligned with Maintainer Review Criteria</span>
                         </div>
-                        <pre id="checklist-markdown-preview" style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;color:#E6EDF3;font-family:var(--font-mono);font-size:12px;line-height:1.6;white-space:pre-wrap;max-height:360px;overflow-y:auto;"></pre>
+                        <pre id="checklist-markdown-preview" style="background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:16px;color:var(--sl-color-text);font-family:var(--font-mono);font-size:12px;line-height:1.6;white-space:pre-wrap;max-height:360px;overflow-y:auto;"></pre>
                     </div>
                 </div>
             `;
@@ -2457,7 +2457,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                 <div class="checklist-gen-wrapper" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--sl-color-border);padding-bottom:16px;">
                         <div>
-                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">🧪 Pre-Flight Invariant Linter & Code Verifier</h3>
+                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--sl-color-heading);margin:0 0 6px 0;">🧪 Pre-Flight Invariant Linter & Code Verifier</h3>
                             <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;">Semantic linter: catches unshielded double-clicks, sandbox escapes, panicking parsers, and missing AccessKit roles before PR submission.</p>
                         </div>
                         <div style="display:flex;align-items:center;gap:8px;">
@@ -2478,11 +2478,11 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:20px;">
                         <div>
                             <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Rust Source Code to Verify:</label>
-                            <textarea id="linter-code-input" style="width:100%;height:280px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;color:#E6EDF3;font-family:var(--font-mono);font-size:12px;line-height:1.5;resize:vertical;" spellcheck="false" placeholder="Paste your Rust/egui function or component code here...">${LINTER_SAMPLES.unshielded}</textarea>
+                            <textarea id="linter-code-input" style="width:100%;height:280px;background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:14px;color:var(--sl-color-text);font-family:var(--font-mono);font-size:12px;line-height:1.5;resize:vertical;" spellcheck="false" placeholder="Paste your Rust/egui function or component code here...">${LINTER_SAMPLES.unshielded}</textarea>
                         </div>
                         <div>
                             <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Verification Telemetry & Diagnostic Report:</label>
-                            <div id="linter-report-output" style="height:280px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;overflow-y:auto;font-size:12.5px;line-height:1.6;">
+                            <div id="linter-report-output" style="height:280px;background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:16px;overflow-y:auto;font-size:12.5px;line-height:1.6;">
                                 <!-- Populated dynamically -->
                             </div>
                         </div>
@@ -2596,7 +2596,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                         ${violations.map(v => `
                             <div style="background:rgba(218,54,51,0.08);border:1px solid rgba(218,54,51,0.25);border-radius:6px;padding:12px;">
                                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-                                    <span style="font-weight:700;color:#FFF;font-size:12px;">${v.title}</span>
+                                    <span style="font-weight:700;color:var(--sl-color-heading);font-size:12px;">${v.title}</span>
                                     <a href="#${v.std}" onclick="openSpec('${v.std}')" style="font-family:var(--font-mono);font-size:11px;color:var(--sl-color-accent);font-weight:700;text-decoration:none;">${v.std} ↗</a>
                                 </div>
                                 <div style="font-size:11.5px;color:var(--sl-color-text-muted);line-height:1.4;">${v.desc}</div>
@@ -2604,7 +2604,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                         `).join('')}
                     </div>
                     ${recommendations.length > 0 ? `
-                        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #30363D;">
+                        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--sl-color-border);">
                             <div style="font-size:11.5px;font-weight:700;color:#58A6FF;text-transform:uppercase;margin-bottom:6px;">💡 Suggested Architecture Fix:</div>
                             <ul style="margin:0;padding-inline-start:18px;font-size:12px;color:var(--sl-color-text-muted);line-height:1.5;">
                                 ${recommendations.map(r => `<li>${r}</li>`).join('')}
@@ -2626,7 +2626,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                 <div class="checklist-gen-wrapper" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--sl-color-border);padding-bottom:16px;">
                         <div>
-                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">📦 Cargo.toml Dependency Resolver</h3>
+                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--sl-color-heading);margin:0 0 6px 0;">📦 Cargo.toml Dependency Resolver</h3>
                             <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;">Configure canonical ArtCraft crates, feature flags, and lockstep versions for desktop applications.</p>
                         </div>
                         <button class="reader-btn primary" onclick="copyCargoToml()" id="copy-cargo-btn" style="padding:10px 18px;font-size:13px;">
@@ -2637,7 +2637,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;margin-bottom:24px;">
                         <div>
                             <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:10px;">Select Required Capabilities:</label>
-                            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#FFF;">
+                            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--sl-color-heading);">
                                 <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
                                     <input type="checkbox" id="dep-widgets" checked onchange="updateCargoTomlPreview()">
                                     <span><strong>craft-widgets</strong> (UI controls, tool slots, theme tokens)</span>
@@ -2671,7 +2671,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
 
                         <div>
                             <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:10px;">Dependency Source Mode:</label>
-                            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;font-size:13px;color:#FFF;">
+                            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;font-size:13px;color:var(--sl-color-heading);">
                                 <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
                                     <input type="radio" name="dep-source" value="path" checked onchange="updateCargoTomlPreview()">
                                     <span><strong>Monorepo Path</strong> (<code>path = "../../crates/..."</code>)</span>
@@ -2696,7 +2696,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                             <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);">Generated Cargo.toml Block:</span>
                             <span style="font-size:11px;color:#3FB950;font-weight:600;">✓ Ready to drop into your crate</span>
                         </div>
-                        <pre id="cargo-toml-preview" style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;color:#E6EDF3;font-family:var(--font-mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;"></pre>
+                        <pre id="cargo-toml-preview" style="background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:16px;color:var(--sl-color-text);font-family:var(--font-mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;"></pre>
                     </div>
                 </div>
             `;
@@ -2922,7 +2922,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                         <div>
                             <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
                                 <span style="font-size:22px;">📡</span>
-                                <h3 style="margin:0;font-size:18px;font-weight:700;color:#FFF;">Live Cross-App Drift Radar &amp; Instant Patches</h3>
+                                <h3 style="margin:0;font-size:18px;font-weight:700;color:var(--sl-color-heading);">Live Cross-App Drift Radar &amp; Instant Patches</h3>
                                 <span class="nav-badge" style="background:#1F6FEB;color:#FFF;">Real Monorepo Scan</span>
                             </div>
                             <div style="font-size:13px;color:var(--sl-color-text-muted);max-width:760px;line-height:1.5;">
@@ -2938,17 +2938,17 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
 
                     <!-- Metrics -->
                     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-bottom:20px;">
-                        <div style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;">
+                        <div style="background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:14px;">
                             <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--sl-color-text-muted);letter-spacing:0.05em;">Drift Points Detected</div>
                             <div style="font-size:24px;font-weight:800;color:#FFA657;margin-top:4px;">${DRIFT_DATA.length}</div>
                             <div style="font-size:11.5px;color:var(--sl-color-text-muted);margin-top:2px;">Across 5 monorepo crates</div>
                         </div>
-                        <div style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;">
+                        <div style="background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:14px;">
                             <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--sl-color-text-muted);letter-spacing:0.05em;">Patch Coverage</div>
                             <div style="font-size:24px;font-weight:800;color:#3FB950;margin-top:4px;">100%</div>
                             <div style="font-size:11.5px;color:var(--sl-color-text-muted);margin-top:2px;">5 / 5 tested &amp; verified diffs</div>
                         </div>
-                        <div style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;">
+                        <div style="background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;padding:14px;">
                             <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--sl-color-text-muted);letter-spacing:0.05em;">Breaking Changes</div>
                             <div style="font-size:24px;font-weight:800;color:#58A6FF;margin-top:4px;">0</div>
                             <div style="font-size:11.5px;color:var(--sl-color-text-muted);margin-top:2px;">Zero public API breaks</div>
@@ -2974,9 +2974,9 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                                 <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
                                     <div>
                                         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                                            <span style="font-size:16px;font-weight:700;color:#FFF;">${item.app}</span>
-                                            <span class="nav-badge" style="background:#21262D;color:var(--sl-color-text-muted);">${item.domain}</span>
-                                            <a href="#${item.standard}" onclick="openSpec('${item.standard}'); return false;" class="nav-badge" style="background:#161B22;border:1px solid #30363D;color:#58A6FF;text-decoration:none;">
+                                            <span style="font-size:16px;font-weight:700;color:var(--sl-color-heading);">${item.app}</span>
+                                            <span class="nav-badge" style="background:var(--sl-color-surface-sunken);color:var(--sl-color-text-muted);">${item.domain}</span>
+                                            <a href="#${item.standard}" onclick="openSpec('${item.standard}'); return false;" class="nav-badge" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);color:var(--sl-color-accent);text-decoration:none;">
                                                 ${item.standard}: ${item.standardTitle}
                                             </a>
                                         </div>
@@ -2997,7 +2997,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                                     </div>
                                 </div>
 
-                                <div style="font-size:13px;color:#E6EDF3;line-height:1.5;margin-bottom:6px;">
+                                <div style="font-size:13px;color:var(--sl-color-text);line-height:1.5;margin-bottom:6px;">
                                     <strong>Identified Behavior:</strong> ${item.issue}
                                 </div>
                                 <div style="font-size:12px;color:var(--sl-color-text-muted);line-height:1.5;">
@@ -3005,12 +3005,12 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
                                 </div>
 
                                 <!-- Collapsible Patch Block -->
-                                <div id="drift-patch-block-${idx}" style="display:none;margin-top:14px;background:#0D1117;border:1px solid #30363D;border-radius:8px;overflow:hidden;">
-                                    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#161B22;border-bottom:1px solid #30363D;font-size:11.5px;font-family:var(--font-mono);color:var(--sl-color-text-muted);">
+                                <div id="drift-patch-block-${idx}" style="display:none;margin-top:14px;background:var(--sl-color-surface-sunken);border:1px solid var(--sl-color-border);border-radius:8px;overflow:hidden;">
+                                    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--sl-color-card);border-bottom:1px solid var(--sl-color-border);font-size:11.5px;font-family:var(--font-mono);color:var(--sl-color-text-muted);">
                                         <span>Unified Diff: ${item.targetFile}</span>
                                         <span style="color:#3FB950;">✓ Tested against egui 0.29+</span>
                                     </div>
-                                    <pre style="padding:14px;margin:0;font-family:var(--font-mono);font-size:12px;line-height:1.55;color:#E6EDF3;white-space:pre-wrap;overflow-x:auto;">${renderDiffHtml(item.patch)}</pre>
+                                    <pre style="padding:14px;margin:0;font-family:var(--font-mono);font-size:12px;line-height:1.55;color:var(--sl-color-text);white-space:pre-wrap;overflow-x:auto;">${renderDiffHtml(item.patch)}</pre>
                                 </div>
                             </div>
                         `;
@@ -3628,7 +3628,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
             if (tool === 'verify_component') {
                 stage.innerHTML = `
                     <div style="display:flex;flex-direction:column;gap:10px;">
-                        <label style="font-size:12px;font-weight:600;color:#FFF;">Component AST Code Sample to Audit:</label>
+                        <label style="font-size:12px;font-weight:600;color:var(--sl-color-heading);">Component AST Code Sample to Audit:</label>
                         <select id="mcp-sample-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
                             <option value="good">Compliant Code: Multi-Tool Slot with Double-Click Shielding (STD-INPUT-001)</option>
                             <option value="fs_violation">Violation Code: Direct std::fs usage violating Confined Sandboxing (STD-SHELL-003)</option>
@@ -3640,7 +3640,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
             } else if (tool === 'get_standard') {
                 stage.innerHTML = `
                     <div style="display:flex;flex-direction:column;gap:10px;">
-                        <label style="font-size:12px;font-weight:600;color:#FFF;">Target Standard Specification ID:</label>
+                        <label style="font-size:12px;font-weight:600;color:var(--sl-color-heading);">Target Standard Specification ID:</label>
                         <select id="mcp-spec-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
                             ${SPECS.map(s => `<option value="${s.id}">${s.id}: ${s.title}</option>`).join('')}
                         </select>
@@ -3650,7 +3650,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
             } else if (tool === 'generate_compliant_code') {
                 stage.innerHTML = `
                     <div style="display:flex;flex-direction:column;gap:10px;">
-                        <label style="font-size:12px;font-weight:600;color:#FFF;">Specification to Synthesize Boilerplate:</label>
+                        <label style="font-size:12px;font-weight:600;color:var(--sl-color-heading);">Specification to Synthesize Boilerplate:</label>
                         <select id="mcp-gen-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
                             <option value="STD-INPUT-001">STD-INPUT-001 (Multi-Tool Toolbar Slot Cycling)</option>
                             <option value="STD-NAV-001">STD-NAV-001 (Universal Document Tab Lifecycle)</option>
@@ -3663,7 +3663,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
             } else {
                 stage.innerHTML = `
                     <div style="display:flex;flex-direction:column;gap:10px;">
-                        <label style="font-size:12px;font-weight:600;color:#FFF;">Library Functional Domain:</label>
+                        <label style="font-size:12px;font-weight:600;color:var(--sl-color-heading);">Library Functional Domain:</label>
                         <select id="mcp-lib-select" class="drilldown-select" style="min-width:auto;width:100%;margin-bottom:6px;">
                             <option value="fs">Filesystem & Sandboxing (STD-SHELL-003)</option>
                             <option value="text">Unicode BiDi & RTL Galley (STD-I18N-001)</option>
@@ -3900,7 +3900,7 @@ pub fn open_project_file(root: &AutomationRoot, relative_path: &str) -> Result<s
             labEl.innerHTML = `
                 <div class="snippet-lab-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
                     <div style="display:flex;align-items:center;gap:8px;">
-                        <span style="font-weight:700;font-size:13px;color:#FFF;">🦀 Developer Recipes & Invariants</span>
+                        <span style="font-weight:700;font-size:13px;color:var(--sl-color-heading);">🦀 Developer Recipes & Invariants</span>
                         <div class="matrix-pivot-modes" style="display:inline-flex;padding:2px;gap:4px;">
                             <button class="matrix-pivot-btn active" id="tab-code-rust-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'rust')">Rust (egui)</button>
                             <button class="matrix-pivot-btn" id="tab-code-test-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'test')">TestKit (#[test])</button>
