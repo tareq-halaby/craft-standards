@@ -190,6 +190,9 @@ __STYLE__
                 <a href="#" onclick="showMatrixView(event, 'cargo'); return false;" class="hero-anchor-pill">
                     <span>📦 Cargo.toml Resolver</span>
                 </a>
+                <a href="#" onclick="showMatrixView(event, 'drift'); return false;" class="hero-anchor-pill">
+                    <span>📡 Cross-App Drift Radar</span>
+                </a>
                 <a href="#" onclick="openAgentHub(); return false;" class="hero-anchor-pill">
                     <span id="i18n-hero-badge-mcp">⚡ AutoCraft MCP Gateway</span>
                 </a>
@@ -392,6 +395,9 @@ __ITEMS__
                 <button class="matrix-pivot-btn" id="pivot-mode-cargo" onclick="setMatrixViewMode('cargo', this)" role="tab" aria-selected="false">
                     <span>📦 Cargo.toml Resolver</span>
                 </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-drift" onclick="setMatrixViewMode('drift', this)" role="tab" aria-selected="false">
+                    <span>📡 Live Drift Radar</span>
+                </button>
             </div>
         </div>
 
@@ -487,6 +493,11 @@ __ITEMS__
 
         <!-- Sub-view 7: Cargo.toml Dependency Generator -->
         <div id="matrix-cargo-container" style="display:none;margin-top:20px;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Sub-view 8: Cross-App Drift Radar -->
+        <div id="matrix-drift-container" style="display:none;margin-top:20px;">
             <!-- Populated dynamically -->
         </div>
     </main>
@@ -592,24 +603,24 @@ __ITEMS__
         <!-- 4 Key Value Metric Cards -->
         <div class="wiki-stats-bar" style="margin-bottom:36px;">
             <div class="wiki-stat-card" onclick="showMatrixView(event)" style="cursor:pointer;">
-                <div class="stat-number highlight">20+</div>
-                <div class="stat-label">Governed Desktop Apps</div>
-                <div class="stat-sublabel">PhotoCraft, FilmCraft, CADCraft...</div>
+                <div class="wiki-stat-num" style="color:var(--sl-color-accent);">20+</div>
+                <div class="wiki-stat-label">Governed Desktop Apps</div>
+                <div class="wiki-stat-sub">PhotoCraft, FilmCraft, CADCraft...</div>
             </div>
             <div class="wiki-stat-card" onclick="showMatrixView(event)" style="cursor:pointer;">
-                <div class="stat-number" style="color:#58A6FF;">28</div>
-                <div class="stat-label">Active Standard Contracts</div>
-                <div class="stat-sublabel">100% Machine-Executable Specs</div>
+                <div class="wiki-stat-num" style="color:var(--sl-color-accent);">28</div>
+                <div class="wiki-stat-label">Active Standard Contracts</div>
+                <div class="wiki-stat-sub">100% Machine-Executable Specs</div>
             </div>
             <div class="wiki-stat-card">
-                <div class="stat-number" style="color:#3FB950;">100%</div>
-                <div class="stat-label">Zero AST Drift Guarantee</div>
-                <div class="stat-sublabel">Automated Sentinel CI Gate</div>
+                <div class="wiki-stat-num" style="color:var(--sl-color-green);">100%</div>
+                <div class="wiki-stat-label">Zero AST Drift Guarantee</div>
+                <div class="wiki-stat-sub">Automated Sentinel CI Gate</div>
             </div>
             <div class="wiki-stat-card" onclick="openAgentHubModal()" style="cursor:pointer;">
-                <div class="stat-number" style="color:#D29922;">v0.2.0</div>
-                <div class="stat-label">AutoCraft MCP Stdio Protocol</div>
-                <div class="stat-sublabel">Claude Code, Cursor &amp; AutoCraft</div>
+                <div class="wiki-stat-num" style="color:var(--sl-color-yellow);">v0.2.0</div>
+                <div class="wiki-stat-label">AutoCraft MCP Stdio Protocol</div>
+                <div class="wiki-stat-sub">Claude Code, Cursor &amp; AutoCraft</div>
             </div>
         </div>
 
@@ -617,20 +628,20 @@ __ITEMS__
         <div style="display:flex; flex-direction:column; gap:24px; margin-bottom:48px;">
             <!-- Section 1: Executive Mission -->
             <div class="spec-card-full" style="background:var(--sl-color-card); border:1px solid var(--sl-color-border); border-radius:12px; padding:28px;">
-                <h2 style="font-size:20px; font-weight:700; color:#FFF; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                <h2 style="font-size:20px; font-weight:700; color:var(--sl-color-heading); margin-bottom:12px; display:flex; align-items:center; gap:8px;">
                     <span>🎯</span> The Mission: End Erroneous UI Fragmentation
                 </h2>
-                <p style="color:#C9D1D9; font-size:14.5px; line-height:1.7; margin-bottom:14px;">
+                <p style="color:var(--sl-color-text); font-size:14.5px; line-height:1.7; margin-bottom:14px;">
                     Storytold develops over 20 creative, CAD, video, and productivity desktop applications in Rust. With over 6,000 contributors, independent development teams naturally solve common problems in subtly divergent ways: keymaps clash, dialog dismissals invert button orders, and timeline scrubbers behave unpredictably.
                 </p>
-                <p style="color:#C9D1D9; font-size:14.5px; line-height:1.7;">
+                <p style="color:var(--sl-color-text); font-size:14.5px; line-height:1.7;">
                     <strong>ArtCraft Standards (<kbd>craft-standards</kbd>)</strong> establishes an authoritative, contract-enforced foundation. Every application adheres to identical ergonomic muscle memory, AccessKit accessibility trees, BiDi spatial mirroring, and sandbox invariants—enforced automatically before any code can merge.
                 </p>
             </div>
 
             <!-- Section 2: Before vs. After Comparison -->
             <div class="spec-card-full" style="background:var(--sl-color-card); border:1px solid var(--sl-color-border); border-radius:12px; padding:28px;">
-                <h2 style="font-size:20px; font-weight:700; color:#FFF; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                <h2 style="font-size:20px; font-weight:700; color:var(--sl-color-heading); margin-bottom:16px; display:flex; align-items:center; gap:8px;">
                     <span>⚖️</span> Monorepo Transformation: Before vs. After
                 </h2>
                 <div style="overflow-x:auto;">
@@ -638,35 +649,35 @@ __ITEMS__
                         <thead>
                             <tr style="border-bottom:1px solid var(--sl-color-border); text-align:start;">
                                 <th style="padding:10px 14px; color:var(--sl-color-text-muted);">Capability</th>
-                                <th style="padding:10px 14px; color:#F85149;">Legacy Disjointed Monorepo</th>
-                                <th style="padding:10px 14px; color:#3FB950;">Unified ArtCraft Standards (v0.2.0)</th>
+                                <th style="padding:10px 14px; color:var(--sl-color-red);">Legacy Disjointed Monorepo</th>
+                                <th style="padding:10px 14px; color:var(--sl-color-green);">Unified ArtCraft Standards (v0.2.0)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">Tool Cycling &amp; Hotkeys</td>
+                            <tr style="border-bottom:1px solid var(--sl-color-border);">
+                                <td style="padding:12px 14px; font-weight:600; color:var(--sl-color-heading);">Tool Cycling &amp; Hotkeys</td>
                                 <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Each app re-invented hotkeys; frequent collisions between PhotoCraft and CADCraft.</td>
-                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-INPUT-001:</strong> Universal <code>[V, M, B]</code> tool slot cycling and spring modifiers across all 20 apps.</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text);"><strong>STD-INPUT-001:</strong> Universal <code>[V, M, B]</code> tool slot cycling and spring modifiers across all 20 apps.</td>
                             </tr>
-                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">Accessibility (AccessKit)</td>
+                            <tr style="border-bottom:1px solid var(--sl-color-border);">
+                                <td style="padding:12px 14px; font-weight:600; color:var(--sl-color-heading);">Accessibility (AccessKit)</td>
                                 <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Manual ad-hoc tagging; screen readers broken in timeline and canvas views.</td>
-                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-A11Y-001:</strong> Mandatory AccessKit node hierarchy and 7:1 AAA contrast enforced via headless CI audits.</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text);"><strong>STD-A11Y-001:</strong> Mandatory AccessKit node hierarchy and 7:1 AAA contrast enforced via headless CI audits.</td>
                             </tr>
-                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">BiDi &amp; RTL Mirroring</td>
+                            <tr style="border-bottom:1px solid var(--sl-color-border);">
+                                <td style="padding:12px 14px; font-weight:600; color:var(--sl-color-heading);">BiDi &amp; RTL Mirroring</td>
                                 <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Incomplete text-only translation; toolbars and timelines misaligned in Arabic/Hebrew.</td>
-                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-I18N-001:</strong> Full shell spatial inversion with directional CSS properties and egui layout galley shaping.</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text);"><strong>STD-I18N-001:</strong> Full shell spatial inversion with directional CSS properties and egui layout galley shaping.</td>
                             </tr>
-                            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">File I/O Sandboxing</td>
+                            <tr style="border-bottom:1px solid var(--sl-color-border);">
+                                <td style="padding:12px 14px; font-weight:600; color:var(--sl-color-heading);">File I/O Sandboxing</td>
                                 <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Raw <code>std::fs</code> calls caused path traversal vulnerabilities and broke automated agents.</td>
-                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>STD-SHELL-003:</strong> Sandboxed <code>craft_fs::AutomationRoot</code> restricts I/O to explicitly mounted directories.</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text);"><strong>STD-SHELL-003:</strong> Sandboxed <code>craft_fs::AutomationRoot</code> restricts I/O to explicitly mounted directories.</td>
                             </tr>
                             <tr>
-                                <td style="padding:12px 14px; font-weight:600; color:#FFF;">Autonomous AI Agents</td>
+                                <td style="padding:12px 14px; font-weight:600; color:var(--sl-color-heading);">Autonomous AI Agents</td>
                                 <td style="padding:12px 14px; color:var(--sl-color-text-muted);">Agents hallucinated non-standard APIs; maintainers spent hours manually correcting PRs.</td>
-                                <td style="padding:12px 14px; color:#C9D1D9;"><strong>AutoCraft MCP Gateway:</strong> Claude Code, Cursor, and AutoCraft query standard rules over stdio before emitting code.</td>
+                                <td style="padding:12px 14px; color:var(--sl-color-text);"><strong>AutoCraft MCP Gateway:</strong> Claude Code, Cursor, and AutoCraft query standard rules over stdio before emitting code.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -675,32 +686,32 @@ __ITEMS__
 
             <!-- Section 3: The 7 Invariant Pillars -->
             <div class="spec-card-full" style="background:var(--sl-color-card); border:1px solid var(--sl-color-border); border-radius:12px; padding:28px;">
-                <h2 style="font-size:20px; font-weight:700; color:#FFF; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                <h2 style="font-size:20px; font-weight:700; color:var(--sl-color-heading); margin-bottom:16px; display:flex; align-items:center; gap:8px;">
                     <span>🏛️</span> The 7 Architectural Pillars
                 </h2>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
-                        <h3 style="font-size:15px; font-weight:600; color:#58A6FF; margin-bottom:6px;">01 · Interaction &amp; Gestures</h3>
+                    <div style="background:var(--sl-color-surface); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:var(--sl-color-accent); margin-bottom:6px;">01 · Interaction &amp; Gestures</h3>
                         <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Slot cycling, spring tools, canvas physics, and 14-stop gradient color proofing.</p>
                     </div>
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
-                        <h3 style="font-size:15px; font-weight:600; color:#58A6FF; margin-bottom:6px;">02 · Navigation &amp; Layout</h3>
+                    <div style="background:var(--sl-color-surface); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:var(--sl-color-accent); margin-bottom:6px;">02 · Navigation &amp; Layout</h3>
                         <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Universal document tab switching, dock collapsing, arrow-key scrubs, and JKL timecodes.</p>
                     </div>
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
-                        <h3 style="font-size:15px; font-weight:600; color:#3FB950; margin-bottom:6px;">03 · Accessibility (a11y)</h3>
+                    <div style="background:var(--sl-color-surface); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:var(--sl-color-green); margin-bottom:6px;">03 · Accessibility (a11y)</h3>
                         <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Automated AccessKit tree audits, 7:1 AAA contrast ratios, keyboard rings, and reduced motion.</p>
                     </div>
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
-                        <h3 style="font-size:15px; font-weight:600; color:#D29922; margin-bottom:6px;">04 · Internationalization (i18n)</h3>
+                    <div style="background:var(--sl-color-surface); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:var(--sl-color-yellow); margin-bottom:6px;">04 · Internationalization (i18n)</h3>
                         <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Full shell BiDi mirroring, Arabic/Hebrew typography, and locale-aware numeral formatting.</p>
                     </div>
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
-                        <h3 style="font-size:15px; font-weight:600; color:#F85149; margin-bottom:6px;">05 · Shell &amp; Sandboxing</h3>
+                    <div style="background:var(--sl-color-surface); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:var(--sl-color-red); margin-bottom:6px;">05 · Shell &amp; Sandboxing</h3>
                         <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Clipboard interchange, dialog button hierarchies, dirty state recovery, and confined file access.</p>
                     </div>
-                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
-                        <h3 style="font-size:15px; font-weight:600; color:#A371F7; margin-bottom:6px;">06 · Unified Shared Libs</h3>
+                    <div style="background:var(--sl-color-surface); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px;">
+                        <h3 style="font-size:15px; font-weight:600; color:var(--sl-color-purple); margin-bottom:6px;">06 · Unified Shared Libs</h3>
                         <p style="font-size:13px; color:var(--sl-color-text-muted); line-height:1.5;">Keymap normalization, widget primitives, host font activation, GPU lifecycles, and The Keep Rule.</p>
                     </div>
                     <div style="background:rgba(255,255,255,0.03); border:1px solid var(--sl-color-border); border-radius:8px; padding:16px; grid-column:1/-1;">
@@ -959,7 +970,7 @@ __ITEMS__
                 <!-- Panel 1: AutoCraft Pipeline -->
                 <div class="hub-panel active" id="hub-panel-pipeline" role="tabpanel">
                     <div class="pipeline-guide-card">
-                        <h3 style="color:#FFF;font-size:16px;margin:0 0 8px 0;">How AutoCraft's 9-Stage Pipeline Enforces Craft Standards</h3>
+                        <h3 style="color:var(--sl-color-heading);font-size:16px;margin:0 0 8px 0;">How AutoCraft's 9-Stage Pipeline Enforces Craft Standards</h3>
                         <p style="color:var(--sl-color-text-muted);font-size:13px;line-height:1.5;margin:0 0 16px 0;">Based on <a href="https://github.com/storytold/autocraft/blob/main/docs/pipeline.md" target="_blank" style="color:var(--sl-color-accent);text-decoration:none;">storytold/autocraft/docs/pipeline.md</a>, Storytold's backlog harness runs automated agent stages where human maintainer judgment is the primary bottleneck. <code>craft-standards-mcp</code> serves as the authoritative ground-truth rule provider:</p>
                         
                         <div class="pipeline-stages-grid">
@@ -1012,7 +1023,7 @@ __ITEMS__
                         <div class="agent-rule-card">
                             <div class="rule-card-header">
                                 <div>
-                                    <h4 style="margin:0 0 4px 0;color:#FFF;font-size:14px;">Claude Code &amp; AutoCraft (<code>CLAUDE.md</code>)</h4>
+                                    <h4 style="margin:0 0 4px 0;color:var(--sl-color-heading);font-size:14px;">Claude Code &amp; AutoCraft (<code>CLAUDE.md</code>)</h4>
                                     <p style="margin:0;font-size:11.5px;color:var(--sl-color-text-muted);">Authoritative instruction prompt for Anthropic Claude CLI and AutoCraft harness.</p>
                                 </div>
                                 <button class="copy-code-btn" onclick="copySnippet('claude-rules', this)">Copy CLAUDE.md</button>
@@ -1030,7 +1041,7 @@ __ITEMS__
                         <div class="agent-rule-card">
                             <div class="rule-card-header">
                                 <div>
-                                    <h4 style="margin:0 0 4px 0;color:#FFF;font-size:14px;">Cursor IDE (<code>.cursorrules</code>)</h4>
+                                    <h4 style="margin:0 0 4px 0;color:var(--sl-color-heading);font-size:14px;">Cursor IDE (<code>.cursorrules</code>)</h4>
                                     <p style="margin:0;font-size:11.5px;color:var(--sl-color-text-muted);">Optimized prompt rules for Cursor AI editor across all 20 Craft apps.</p>
                                 </div>
                                 <button class="copy-code-btn" onclick="copySnippet('cursor-rules', this)">Copy .cursorrules</button>
@@ -1048,7 +1059,7 @@ Always adhere strictly to the 28 Craft Standards (https://tareq-halaby.github.io
                         <div class="agent-rule-card">
                             <div class="rule-card-header">
                                 <div>
-                                    <h4 style="margin:0 0 4px 0;color:#FFF;font-size:14px;">Google Antigravity &amp; Open Skills (<code>SKILL.md</code>)</h4>
+                                    <h4 style="margin:0 0 4px 0;color:var(--sl-color-heading);font-size:14px;">Google Antigravity &amp; Open Skills (<code>SKILL.md</code>)</h4>
                                     <p style="margin:0;font-size:11.5px;color:var(--sl-color-text-muted);">Antigravity skill definition for autonomous agent pairing.</p>
                                 </div>
                                 <button class="copy-code-btn" onclick="copySnippet('antigravity-rules', this)">Copy SKILL.md</button>
@@ -1071,7 +1082,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
                 <div class="hub-panel" id="hub-panel-playground" role="tabpanel" style="display:none;">
                     <div class="mcp-playground-layout">
                         <div class="mcp-tool-selector">
-                            <label for="mcp-tool-select" style="font-size:12.5px;font-weight:600;color:#FFF;">Select MCP Tool to Test:</label>
+                            <label for="mcp-tool-select" style="font-size:12.5px;font-weight:600;color:var(--sl-color-heading);">Select MCP Tool to Test:</label>
                             <select id="mcp-tool-select" class="drilldown-select" onchange="loadMcpToolForm(this.value)">
                                 <option value="verify_component">verify_component (Audit AST code against standards)</option>
                                 <option value="get_standard">get_standard (Inspect invariant schema by ID)</option>
@@ -1102,14 +1113,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
         <div class="cmd-palette-box" style="max-width:640px;">
             <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--sl-color-border);">
                 <div>
-                    <h3 style="margin:0;font-family:var(--font-display);font-size:16px;color:#FFF;">🛡️ Monorepo Contributor Shields &amp; Badges</h3>
+                    <h3 style="margin:0;font-family:var(--font-display);font-size:16px;color:var(--sl-color-heading);">🛡️ Monorepo Contributor Shields &amp; Badges</h3>
                     <p style="margin:2px 0 0 0;font-size:12px;color:var(--sl-color-text-muted);">Embed verified compliance telemetry in your repository README</p>
                 </div>
                 <button class="modal-close-btn" onclick="closeBadgeModal()" aria-label="Close Badges Modal">✕</button>
             </div>
             <div style="padding:20px;display:flex;flex-direction:column;gap:16px;">
                 <div>
-                    <label for="badge-app-select" style="font-size:12px;font-weight:600;color:#FFF;display:block;margin-bottom:6px;">Select Governed Application:</label>
+                    <label for="badge-app-select" style="font-size:12px;font-weight:600;color:var(--sl-color-heading);display:block;margin-bottom:6px;">Select Governed Application:</label>
                     <select id="badge-app-select" class="drilldown-select" onchange="updateBadgePreview(this.value)" style="width:100%;">
                         <!-- Populated dynamically from APPS_COMPLIANCE -->
                     </select>
@@ -1128,6 +1139,11 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             </div>
         </div>
     </div>
+
+    <!-- Floating Back to Top Button -->
+    <button class="back-to-top-btn" id="back-to-top-btn" onclick="scrollToTop()" title="Back to top" aria-label="Scroll back to top of page">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
 
     <script id="specs-data" type="application/json">
 __SPECS_JSON__

@@ -10,7 +10,7 @@ fn main() {
     match command {
         "audit" => run_audit(),
         "list" => run_list(),
-        "drift-scan" => run_drift_scan(),
+        "drift-scan" => run_drift_scan(args.get(2).map(String::as_str)),
         "report" => run_html_report(),
         "testkit" => run_testkit(args.get(2).map(String::as_str)),
         "checklist" => run_pr_checklist(args.get(2).map(String::as_str), args.get(3).map(String::as_str)),
@@ -167,7 +167,7 @@ fn workspace_root() -> PathBuf {
     path
 }
 
-fn run_drift_scan() {
+fn run_drift_scan(filter: Option<&str>) {
     println!("🔍 ArtCraft Cross-App Drift Scanner");
     let ws = workspace_root();
     println!("Scanning sibling applications in {:?}...\n", ws);
@@ -219,6 +219,37 @@ fn run_drift_scan() {
     println!(" • Ctrl+Tab: Only PhotoCraft implements tab switching; 4 apps completely lack it.");
     println!(" • Accessibility: EffectCraft and WordCraft have isolated a11y superpowers; others lack naming.");
     println!(" • RTL: PhotoCraft (shell mirroring) and DesignCraft (BiDi text) have split solutions.");
+
+    println!("\n📦 Ready Patches Available (run 'cargo xtask drift-scan --patch'):");
+    println!(" 1. VectorCraft: Shield rapid double-click in toolbar (STD-INPUT-001)");
+    println!(" 2. PhotoCraft:  Add ToolSlot long-press & keyboard cycling (STD-INPUT-001)");
+    println!(" 3. DesignCraft: Add Ctrl+Tab LRU tab stack switcher (STD-NAV-001)");
+    println!(" 4. EffectCraft: Mirror compositing timeline for BiDi / RTL (STD-I18N-001)");
+    println!(" 5. WordCraft:   Add dirty document close prompt guard (STD-NAV-001)");
+
+    if filter == Some("--patch") || filter == Some("-p") || filter == Some("patch") {
+        println!("\n=======================================================");
+        println!("  UNIFIED DIFF PATCHES (Ready to review & merge)");
+        println!("=======================================================\n");
+
+        println!("--- VectorCraft: crates/vectorcraft-ui/src/toolbar.rs (STD-INPUT-001) ---");
+        println!("@@ -42,3 +42,7 @@");
+        println!("- if response.double_clicked() {{ self.open_tool_properties_dialog(tool_id); }}");
+        println!("+ let is_cycling = ui.input(|i| i.modifiers.alt) || self.last_cycle_instant.elapsed().as_millis() < 300;");
+        println!("+ if response.double_clicked() && !is_cycling {{ self.open_tool_properties_dialog(tool_id); }}\n");
+
+        println!("--- DesignCraft: crates/designcraft-ui/src/tab_bar.rs (STD-NAV-001) ---");
+        println!("@@ -18,0 +19,5 @@");
+        println!("+ if ui.input_mut(|i| i.consume_key(egui::Modifiers::CTRL, egui::Key::Tab)) {{");
+        println!("+     if let Some(next_doc) = self.lru_stack.peek_next() {{ self.activate_document(next_doc); }}");
+        println!("+ }}\n");
+
+        println!("--- EffectCraft: crates/effectcraft-ui/src/compositor.rs (STD-I18N-001) ---");
+        println!("@@ -55,2 +55,5 @@");
+        println!("- ui.horizontal(|ui| {{");
+        println!("+ let layout = if ui.ctx().is_rtl() {{ egui::Layout::right_to_left(egui::Align::Center) }} else {{ egui::Layout::left_to_right(egui::Align::Center) }};");
+        println!("+ ui.with_layout(layout, |ui| {{\n");
+    }
 }
 
 fn check_file_exists(base: &Path, file_name: &str) -> bool {

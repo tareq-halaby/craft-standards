@@ -1680,16 +1680,17 @@
         /* Sticky Navigation & Actions Header (2-Row Dedicated Architecture) */
         .reader-toolbar-container {
             position: sticky;
-            top: 56px;
+            top: 60px;
             z-index: 90;
             background: rgba(11, 13, 19, 0.96);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--sl-color-border);
         }
-        @media (min-width: 768px) {
+        @media (max-width: 859px) {
             .reader-toolbar-container {
-                top: 64px;
+                position: relative;
+                top: 0;
             }
         }
 
@@ -2725,13 +2726,20 @@
             flex-wrap: wrap;
         }
         .matrix-pivot-modes {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 6px;
-            background: #11141D;
+            background: var(--sl-color-surface);
             border: 1px solid var(--sl-color-border);
             padding: 5px;
             border-radius: 10px;
+            overflow-x: auto;
+            max-width: 100%;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .matrix-pivot-modes::-webkit-scrollbar {
+            display: none;
         }
         .matrix-pivot-btn {
             background: transparent;
@@ -2747,6 +2755,9 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-height: 38px;
         }
         .matrix-pivot-btn:hover {
             color: #FFF;
@@ -3768,4 +3779,107 @@
         [data-theme="light"] .cmd-palette-item.active {
             background: #F3F4F6;
             color: #0969DA;
+        }
+
+        /* Floating Back to Top Button */
+        .back-to-top-btn {
+            position: fixed;
+            bottom: 24px;
+            inset-inline-end: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #1F6FEB;
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(12px);
+            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease, box-shadow 0.15s ease;
+            z-index: 95;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .back-to-top-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top-btn:hover {
+            background: #388BFD;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(31, 111, 235, 0.5);
+        }
+        .back-to-top-btn:active {
+            transform: translateY(1px);
+        }
+        @media (max-width: 640px) {
+            .back-to-top-btn {
+                bottom: 18px;
+                inset-inline-end: 18px;
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        [data-theme="light"] .matrix-pivot-modes {
+            background: #EAEFF5;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .matrix-pivot-btn {
+            color: #4B5563;
+        }
+        [data-theme="light"] .matrix-pivot-btn:hover {
+            color: #111827;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        [data-theme="light"] .matrix-pivot-btn.active {
+            color: #FFF;
+            background: #1F6FEB;
+        }
+        [data-theme="light"] .matrix-column-pivot-strip {
+            background: #F3F4F6;
+            border-bottom-color: rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .reader-toolbar-container {
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .reader-actions-row {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        [data-theme="light"] .reader-btn {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.12);
+            color: #1F2328;
+        }
+        [data-theme="light"] .reader-btn:hover {
+            background: #F3F4F6;
+            color: #0969DA;
+        }
+        [data-theme="light"] .reader-btn.primary {
+            background: #1F6FEB;
+            color: #FFFFFF;
+            border-color: #1F6FEB;
+        }
+        [data-theme="light"] .reader-breadcrumbs {
+            color: #57606A;
+        }
+        [data-theme="light"] .reader-breadcrumbs a {
+            color: #0969DA;
+        }
+        [data-theme="light"] .reader-breadcrumbs .current {
+            color: #1F2328;
+        }
+        [data-theme="light"] .markdown-body pre {
+            background: #F6F8FA;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        [data-theme="light"] .markdown-body :not(pre) > code {
+            background: rgba(0, 0, 0, 0.06);
+            color: #CF222E;
         }
