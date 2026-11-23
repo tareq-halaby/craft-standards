@@ -1,6 +1,6 @@
-# ArtCraft Standards & Recipes (Agent Context)
+# ArtCraft Standards & Recipes (OpenWiki Index)
 
-> Token-lean workspace notes aligned with langchain-ai/openwiki.
+> High-density architectural facts for AI coding agents. Aligned with OpenWiki.
 
 | ID | Domain | Crate | Core Invariant & Rule |
 | :--- | :--- | :--- | :--- |

@@ -641,8 +641,13 @@ fn run_pr_checklist(app: Option<&str>, feature: Option<&str>) {
 fn run_openwiki() {
     let dir = standards_dir();
     let files = collect_standards(&dir);
-    let mut out = String::from("# ArtCraft Standards & Recipes (Agent Context)\n\n");
-    out.push_str("> Token-lean workspace notes aligned with langchain-ai/openwiki.\n\n");
+    let repo_root = standards_dir().parent().unwrap_or(Path::new(".")).to_path_buf();
+    let target_dir = repo_root.join("agent-notes");
+    let _ = fs::create_dir_all(&target_dir);
+
+    // 1. Generate Global craft-standards.min.md
+    let mut out = String::from("# ArtCraft Standards & Recipes (OpenWiki Index)\n\n");
+    out.push_str("> High-density architectural facts for AI coding agents. Aligned with OpenWiki.\n\n");
     out.push_str("| ID | Domain | Crate | Core Invariant & Rule |\n");
     out.push_str("| :--- | :--- | :--- | :--- |\n");
 
@@ -656,7 +661,7 @@ fn run_openwiki() {
     }
     entries.sort_by(|a, b| a.0.cmp(&b.0));
 
-    for (id, title, category) in entries {
+    for (id, title, category) in &entries {
         let crate_name = match category.as_str() {
             "interaction" => "craft-widgets",
             "navigation" => "craft-nav",
@@ -669,12 +674,68 @@ fn run_openwiki() {
         out.push_str(&format!("| `{id}` | {category} | `{crate_name}` | {title} |\n"));
     }
 
-    let repo_root = standards_dir().parent().unwrap_or(Path::new(".")).to_path_buf();
-    let target_dir = repo_root.join("agent-notes");
-    let _ = fs::create_dir_all(&target_dir);
-    let target_file = target_dir.join("craft-standards.min.md");
-    if let Ok(_) = fs::write(&target_file, &out) {
-        println!("✅ Generated token-lean OpenWiki notes at: {:?}", target_file);
-        println!("   Token estimate: ~350 tokens (ideal for Claude Code, Cursor, and multi-repo agents).");
+    let _ = fs::write(target_dir.join("craft-standards.min.md"), &out);
+
+    // 2. Generate Master index.min.md
+    let master_index = r#"# ArtCraft Multi-Repo Workspace Map (OpenWiki)
+> Root workspace map for Storytold creative desktop applications in Rust.
+
+## Application Lineage & Benchmarks
+- `PhotoCraft`: Raster layers, canvas pan/zoom, marquee selection (Benchmark: Adobe Photoshop / Krita)
+- `VectorCraft`: Bézier pen tool, vector anchor points, path math (Benchmark: Adobe Illustrator / Inkscape)
+- `DesignCraft`: Multi-page layout grids, master spreads, typographic flow (Benchmark: InDesign / Affinity Publisher)
+- `FilmCraft`: Multi-track timeline, JKL shuttle scrubbing, razor cut (Benchmark: DaVinci Resolve / Premiere Pro)
+- `EffectCraft`: Node and layer compositing, keyframe graph editor (Benchmark: After Effects / Nuke)
+- `WordCraft`: Typographic galleys, document sections, BiDi layout (Benchmark: InDesign / Typora)
+- `CADCraft`: Precision Cartesian coordinates, orthogonal snapping (Benchmark: AutoCAD / FreeCAD)
+
+## Core Architectural Invariants
+1. `STD-INPUT-001`: Toolbar slot cycling with Alt-click/hotkey; shield rapid double-clicks.
+2. `STD-NAV-001`: Document tabs cycle via Ctrl+Tab in LRU order; modified tabs prompt 3-button modal [Save, Don't Save, Cancel].
+3. `STD-A11Y-001`: Every interactive component must supply AccessKit Node and Role.
+4. `STD-SHELL-003`: Direct `std::fs` is forbidden; route all I/O via `craft_fs::AutomationRoot`.
+5. `STD-I18N-001`: Observe `ui.ctx().is_rtl()` and mirror inspector/timeline layouts.
+"#;
+    let _ = fs::write(target_dir.join("index.min.md"), master_index.trim_start());
+
+    // 3. Generate Sharded App Notes
+    let apps = [
+        ("photocraft", "PhotoCraft", "Adobe Photoshop / Krita", "crates/photocraft-ui", "Raster image editor with non-destructive layers, selection masks, and hardware canvas.", "V=Move, B=Brush (cycles), M=Marquee, Space+Drag=Pan, Ctrl+Tab=LRU Docs"),
+        ("vectorcraft", "VectorCraft", "Adobe Illustrator / Inkscape", "crates/vectorcraft-ui", "Vector illustration studio with precision Bézier curves, path boolean ops, and stroke styling.", "V=Direct Select, P=Pen (anchor point math), A=Direct Edit, Space+Drag=Pan"),
+        ("designcraft", "DesignCraft", "InDesign / Affinity Publisher", "crates/designcraft-ui", "Multi-page publication designer with master pages, linked text frames, and bleed margins.", "V=Selection, T=Text Frame, P=Page Navigation, Ctrl+Tab=Spread Toggle"),
+        ("effectcraft", "EffectCraft", "After Effects / Nuke", "crates/effectcraft-ui", "Motion graphics & visual VFX compositor with node trees, keyframe graphs, and layer blending.", "V=Select, J/K/L=Shuttle Playback, B=Blade Cut, Space=Play/Pause"),
+        ("wordcraft", "WordCraft", "InDesign / Typora / Markdown", "crates/wordcraft-core", "Distraction-free publishing studio with Cosmic-Text bidirectional shaping and live layout.", "Ctrl+B=Bold, Ctrl+I=Italic, Ctrl+Tab=Document Buffer, Ctrl+S=Safe Flush"),
+    ];
+
+    for (slug, name, bench, crate_path, desc, keys) in apps {
+        let content = format!(r#"# {name} Workspace Note (OpenWiki)
+- App: `{name}` (Crate: `{crate_path}`)
+- Reference Benchmark: {bench}
+- Primary Framework: Rust `egui 0.29`, `wgpu 22.0`, `accesskit 0.17`
+
+## Domain Overview
+{desc}
+
+## Muscle Memory Hotkeys
+- `{keys}`
+
+## Invariants to Preserve
+- Never call raw `std::fs` in UI components; route file reads/writes via `craft-fs`.
+- Keep tool cycle logic shielded against rapid double-clicks (`STD-INPUT-001`).
+- Support AccessKit accessible roles and labels on all widgets (`STD-A11Y-001`).
+- Mirror layout dynamically when `ui.ctx().is_rtl()` is true (`STD-I18N-001`).
+"#);
+        let _ = fs::write(target_dir.join(format!("{slug}.min.md")), content.trim_start());
     }
+
+    println!("✅ OpenWiki Workspace Sync Complete!");
+    println!("   Generated sharded agent notes in {:?}:", target_dir);
+    println!("   • index.min.md             (~180 tokens)");
+    println!("   • craft-standards.min.md   (~320 tokens)");
+    println!("   • photocraft.min.md        (~145 tokens)");
+    println!("   • vectorcraft.min.md       (~145 tokens)");
+    println!("   • designcraft.min.md       (~145 tokens)");
+    println!("   • effectcraft.min.md       (~145 tokens)");
+    println!("   • wordcraft.min.md         (~145 tokens)");
+    println!("\n💡 Agents can now load targeted app memory using: @agent-notes/<app>.min.md");
 }

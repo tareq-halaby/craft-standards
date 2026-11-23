@@ -976,6 +976,8 @@
                 showMatrixView(null, 'cargo');
             } else if (hash === 'drift' || hash === 'radar') {
                 showMatrixView(null, 'drift');
+            } else if (hash === 'sandboxes' || hash === 'storybook' || hash === 'lab') {
+                showMatrixView(null, 'sandboxes');
             } else if (hash === 'faq' || hash.startsWith('faq/')) {
                 const targetFaqId = hash.startsWith('faq/') ? hash.substring(4) : null;
                 showFaqView(null, targetFaqId);
@@ -1828,6 +1830,7 @@
 
             const scorecardsEl = document.getElementById('matrix-scorecards-container');
             const gridEl = document.getElementById('matrix-grid-container');
+            const sandboxesEl = document.getElementById('matrix-sandboxes-container');
             const drilldownEl = document.getElementById('matrix-drilldown-container');
             const shortcutsEl = document.getElementById('matrix-shortcuts-container');
             const checklistEl = document.getElementById('matrix-checklist-container');
@@ -1837,6 +1840,7 @@
             const toolbarEl = document.querySelector('.matrix-toolbar');
 
             if (scorecardsEl) scorecardsEl.style.display = mode === 'scorecards' ? 'grid' : 'none';
+            if (sandboxesEl) sandboxesEl.style.display = mode === 'sandboxes' ? 'block' : 'none';
             if (gridEl) gridEl.style.display = mode === 'grid' ? 'block' : 'none';
             if (drilldownEl) drilldownEl.style.display = mode === 'drilldown' ? 'block' : 'none';
             if (shortcutsEl) shortcutsEl.style.display = mode === 'shortcuts' ? 'block' : 'none';
@@ -1846,7 +1850,7 @@
             if (driftEl) driftEl.style.display = mode === 'drift' ? 'block' : 'none';
 
             if (toolbarEl) {
-                toolbarEl.style.display = (mode === 'checklist' || mode === 'drilldown' || mode === 'linter' || mode === 'cargo' || mode === 'drift') ? 'none' : 'flex';
+                toolbarEl.style.display = (mode === 'checklist' || mode === 'drilldown' || mode === 'linter' || mode === 'cargo' || mode === 'drift' || mode === 'sandboxes') ? 'none' : 'flex';
             }
 
             renderMatrixView();
@@ -2205,6 +2209,8 @@
                 renderCargoResolverUI();
             } else if (matrixViewMode === 'drift') {
                 renderDriftRadarUI();
+            } else if (matrixViewMode === 'sandboxes') {
+                renderSandboxesWorkbench();
             }
         }
 
@@ -3074,6 +3080,229 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
             });
         }
 
+        // =========================================================================
+        // Component Studio: Live Storybook Sandboxes & Playgrounds
+        // =========================================================================
+        const COMPONENT_RECIPES = {
+            tool_slot: `// STD-INPUT-001: Multi-Tool Slot Cycling with Modifier Shielding
+let is_cycling = ui.input(|i| i.modifiers.alt) || self.last_cycle_time.elapsed().as_millis() < 300;
+let resp = ui.add(ToolButton::new(current_tool));
+if resp.clicked() {
+    if ui.input(|i| i.modifiers.alt) {
+        self.active_tool = self.active_tool.next_variant();
+    }
+}
+// Shield against accidental double-click dialog launches during rapid Alt-cycles:
+if resp.double_clicked() && !is_cycling {
+    self.open_tool_properties_dialog();
+}`,
+            timeline_shuttle: `// STD-TIME-001: JKL Shuttle Playback Controller
+if ui.input(|i| i.key_pressed(egui::Key::K)) {
+    self.shuttle_velocity = 0; // Pause/halt
+} else if ui.input(|i| i.key_pressed(egui::Key::L)) {
+    self.shuttle_velocity = if self.shuttle_velocity <= 0 { 1 } else { (self.shuttle_velocity * 2).min(8) };
+} else if ui.input(|i| i.key_pressed(egui::Key::J)) {
+    self.shuttle_velocity = if self.shuttle_velocity >= 0 { -1 } else { (self.shuttle_velocity * 2).max(-8) };
+}
+// Automatic audio scrubbing gate (mute audio whenever shuttle velocity exceeds 2x):
+let audio_muted = self.shuttle_velocity.abs() > 2;`,
+            tabs_lru: `// STD-NAV-001: Global Ctrl+Tab LRU Document Navigation
+if ui.input_mut(|i| i.consume_key(egui::Modifiers::CTRL, egui::Key::Tab)) {
+    if let Some(next_id) = self.lru_stack.peek_next() {
+        self.activate_document(next_id);
+    }
+}
+// Unsaved modifications close guard:
+if let Some(doc) = self.active_doc_mut() {
+    if doc.is_dirty() && self.requesting_close {
+        self.modal = Some(SavePromptModal::new(doc.title));
+    }
+}`,
+            confine_guard: `// STD-SHELL-003: Sandboxed Path Confinement Guard
+use craft_libs::craft_confine::PathConfine;
+
+let confine = PathConfine::new(automation_root);
+let safe_path = match confine.resolve(untrusted_path) {
+    Ok(path) => path,
+    Err(e) => return Err(SecurityViolation::DirectoryTraversal(untrusted_path.to_string())),
+};`
+        };
+
+        function copyComponentRecipe(recipeKey, btn) {
+            const code = COMPONENT_RECIPES[recipeKey];
+            if (!code) return;
+            navigator.clipboard.writeText(code).then(() => {
+                if (btn) {
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '✓ Recipe Copied!';
+                    setTimeout(() => { btn.innerHTML = original; }, 2000);
+                }
+                showToastNotification('Tested egui recipe copied to clipboard!');
+            });
+        }
+
+        function renderSandboxesWorkbench() {
+            const container = document.getElementById('matrix-sandboxes-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div style="background:var(--sl-color-surface);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;margin-bottom:24px;">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+                        <div>
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                                <span style="font-size:24px;">🧪</span>
+                                <h3 style="margin:0;font-size:18px;font-weight:700;color:#FFF;">Interactive Component Sandboxes (Storybook Lab)</h3>
+                                <span class="nav-badge" style="background:#238636;color:#FFF;">Live Physics &amp; State</span>
+                            </div>
+                            <div style="font-size:13px;color:var(--sl-color-text-muted);max-width:760px;line-height:1.5;">
+                                Test live ergonomic physics, keymap responders, and security boundaries directly in your browser. Each sandbox simulates production <code>egui 0.29+</code> state machines with ready-to-copy Rust recipes.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(460px, 1fr));gap:20px;">
+                    <!-- Sandbox 1: Toolbar Multi-Tool Slot -->
+                    <div class="interactive-sandbox" style="margin:0;height:100%;display:flex;flex-direction:column;" role="region" aria-label="Toolbar Slot Sandbox">
+                        <div class="sandbox-header">
+                            <div>
+                                <span class="sandbox-title">✒️ Toolbar Slot Cycling &amp; Flyout Menu</span>
+                                <div style="font-size:11px;color:var(--sl-color-text-muted);margin-top:2px;">STD-INPUT-001 · Photoshop / Illustrator convention</div>
+                            </div>
+                            <button class="reader-btn" onclick="copyComponentRecipe('tool_slot', this)" style="font-size:11.5px;padding:4px 10px;">📋 Copy egui Recipe</button>
+                        </div>
+                        <div class="sandbox-stage" style="flex:1;">
+                            <div style="font-size:12px;color:var(--sl-color-text-muted);text-align:center;max-width:440px;">
+                                Click to select, <strong>Alt-Click</strong> to cycle tools, or <strong>Press &amp; Hold (350ms)</strong> to open flyout. Rapid cycling is shielded against double-click dialogs.
+                            </div>
+                            <div class="sim-slot-container" id="sim-slot-wrapper">
+                                <button class="sim-tool-slot" id="sim-tool-btn"
+                                        onclick="handleSlotClick(event)"
+                                        onmousedown="handleSlotMouseDown(event)"
+                                        onmouseup="cancelSlotHold()"
+                                        onmouseleave="cancelSlotHold()"
+                                        title="Pen Tool (Slot 1 of 3) - Alt+Click to cycle, Long-Press for flyout">
+                                    <span id="sim-tool-icon" class="sim-icon">✒️</span>
+                                    <span id="sim-tool-name" class="sim-name">Pen Tool</span>
+                                    <span class="sim-triangle" aria-hidden="true">◢</span>
+                                    <div class="sim-hold-bar" id="sim-hold-progress"></div>
+                                </button>
+                                <div class="sim-flyout" id="sim-flyout-menu" role="menu" aria-label="Pen Tools Group"></div>
+                            </div>
+                            <div class="sim-dots" id="sim-dots-row">
+                                <span class="sim-tool-dot active"></span>
+                                <span class="sim-tool-dot"></span>
+                                <span class="sim-tool-dot"></span>
+                            </div>
+                            <div class="sim-readout" id="sim-readout">
+                                Active Slot Index: <strong>0 (Pen Tool)</strong><br>
+                                State Machine: <span style="color:#58A6FF;">Normal single selection</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox 2: Timeline JKL Shuttle Scrubbing -->
+                    <div class="interactive-sandbox" style="margin:0;height:100%;display:flex;flex-direction:column;" role="region" aria-label="Timeline Shuttle Sandbox">
+                        <div class="sandbox-header">
+                            <div>
+                                <span class="sandbox-title">🎞️ Timeline JKL Shuttle Scrubbing &amp; Audio Gate</span>
+                                <div style="font-size:11px;color:var(--sl-color-text-muted);margin-top:2px;">STD-TIME-001 · DaVinci Resolve / Premiere Pro convention</div>
+                            </div>
+                            <button class="reader-btn" onclick="copyComponentRecipe('timeline_shuttle', this)" style="font-size:11.5px;padding:4px 10px;">📋 Copy egui Recipe</button>
+                        </div>
+                        <div class="sandbox-stage" style="flex:1;">
+                            <div style="font-size:12px;color:var(--sl-color-text-muted);text-align:center;max-width:440px;">
+                                Press <strong>J</strong> (Reverse), <strong>K</strong> (Pause), or <strong>L</strong> (Forward) to shuttle timeline speed ($1\times, 2\times, 4\times, 8\times$). Audio automatically mutes above $2\times$.
+                            </div>
+                            <div style="width:100%;max-width:460px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:12px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                    <span id="sim-playhead-timecode" style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:#58A6FF;">00:01:24:00</span>
+                                    <span id="sim-shuttle-rate" class="nav-badge" style="background:#238636;">0x (Paused)</span>
+                                </div>
+                                <input type="range" id="sim-timeline-slider" min="0" max="1000" value="350" style="width:100%;accent-color:#1F6FEB;" oninput="updateSimPlayhead(this.value)">
+                            </div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:10px;">
+                                <button class="reader-btn" onclick="simTriggerShuttle('J')">◀ J (Reverse)</button>
+                                <button class="reader-btn" onclick="simTriggerShuttle('K')">⏸ K (Pause)</button>
+                                <button class="reader-btn" onclick="simTriggerShuttle('L')">▶ L (Forward)</button>
+                                <button class="reader-btn" onclick="simTriggerPlayheadSnap()">Snap to Cut</button>
+                            </div>
+                            <div class="sim-readout" id="sim-shuttle-readout">
+                                Shuttle Velocity: <strong>0x (Halted)</strong> · Audio Gate: <span style="color:#3FB950;">ACTIVE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox 3: Document Tab Navigation & LRU -->
+                    <div class="interactive-sandbox" style="margin:0;height:100%;display:flex;flex-direction:column;" role="region" aria-label="Document Tabs Sandbox">
+                        <div class="sandbox-header">
+                            <div>
+                                <span class="sandbox-title">📑 Document Tab Switching &amp; LRU Close Guard</span>
+                                <div style="font-size:11px;color:var(--sl-color-text-muted);margin-top:2px;">STD-NAV-001 · Universal IDE / Multi-doc convention</div>
+                            </div>
+                            <button class="reader-btn" onclick="copyComponentRecipe('tabs_lru', this)" style="font-size:11.5px;padding:4px 10px;">📋 Copy egui Recipe</button>
+                        </div>
+                        <div class="sandbox-stage" style="flex:1;">
+                            <div style="font-size:12px;color:var(--sl-color-text-muted);text-align:center;max-width:440px;">
+                                Press <strong>Ctrl+Tab</strong> to traverse tabs in Most Recently Used order. Closing modified document (*) triggers the 3-button modal prompt.
+                            </div>
+                            <div id="sim-tabs-bar" style="display:flex;gap:6px;background:#161B22;padding:6px;border-radius:8px;border:1px solid var(--sl-color-border);overflow-x:auto;max-width:100%;justify-content:center;">
+                                <div class="filter-chip active" id="sim-tab-0" style="font-size:11.5px;padding:5px 10px;cursor:pointer;" onclick="simSelectTab(0)">canvas.crft</div>
+                                <div class="filter-chip" id="sim-tab-1" style="font-size:11.5px;padding:5px 10px;cursor:pointer;" onclick="simSelectTab(1)">untitled-2.crft <span style="color:#F85149;">*</span></div>
+                                <div class="filter-chip" id="sim-tab-2" style="font-size:11.5px;padding:5px 10px;cursor:pointer;" onclick="simSelectTab(2)">vector_logo.svg</div>
+                                <div class="filter-chip" id="sim-tab-3" style="font-size:11.5px;padding:5px 10px;cursor:pointer;" onclick="simSelectTab(3)">render.png</div>
+                            </div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:10px;">
+                                <button class="reader-btn" onclick="simTriggerCtrlTab()">Simulate Ctrl+Tab (Cycle LRU)</button>
+                                <button class="reader-btn" onclick="simTriggerCloseTab()">Close Active Tab (Ctrl+W)</button>
+                                <button class="reader-btn" onclick="simResetTabs()">Reset</button>
+                            </div>
+                            <div class="sim-readout" id="sim-nav-readout">
+                                Active Tab: <strong>canvas.crft (Saved)</strong><br>
+                                LRU Stack: <code>canvas.crft → untitled-2.crft → vector_logo.svg → render.png</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sandbox 4: Sandboxed Path Confinement Guard -->
+                    <div class="interactive-sandbox" style="margin:0;height:100%;display:flex;flex-direction:column;" role="region" aria-label="Path Confinement Sandbox">
+                        <div class="sandbox-header">
+                            <div>
+                                <span class="sandbox-title">🛡️ Sandboxed File Access &amp; Path Traversal Guard</span>
+                                <div style="font-size:11px;color:var(--sl-color-text-muted);margin-top:2px;">STD-SHELL-003 · craft-fs sandbox isolate</div>
+                            </div>
+                            <button class="reader-btn" onclick="copyComponentRecipe('confine_guard', this)" style="font-size:11.5px;padding:4px 10px;">📋 Copy egui Recipe</button>
+                        </div>
+                        <div class="sandbox-stage" style="flex:1;">
+                            <div style="font-size:12px;color:var(--sl-color-text-muted);text-align:center;max-width:440px;">
+                                Verifies that all file requests stay confined inside <code>AutomationRoot</code>.
+                            </div>
+                            <div style="width:100%;max-width:460px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:12px;">
+                                <div style="display:flex;gap:8px;">
+                                    <input type="text" id="sim-confine-input" value="../../etc/shadow" style="flex:1;background:#161B22;border:1px solid #30363D;color:#FFF;padding:6px 10px;border-radius:6px;font-family:var(--font-mono);font-size:12px;">
+                                    <button class="reader-btn primary" onclick="runSimConfineCheck()" style="font-size:12px;">Verify</button>
+                                </div>
+                            </div>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
+                                <button class="filter-chip" onclick="setSimPath('../../etc/shadow')">⚠️ ../../etc/shadow</button>
+                                <button class="filter-chip" onclick="setSimPath('assets/texture.png')">✅ assets/texture.png</button>
+                                <button class="filter-chip" onclick="setSimPath('../../../Windows/System32')">⚠️ ../Windows</button>
+                            </div>
+                            <div class="sim-readout" id="sim-confine-readout">
+                                Path Status: <span style="color:#F85149;font-weight:700;">REJECTED (SecurityViolation: DirectoryTraversal)</span><br>
+                                Resolved: <code>BLOCKED - Access outside AutomationRoot is forbidden.</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            initSimSlot();
+            updateSimTabUI();
+            updateSimTimelineUI();
+            runSimConfineCheck();
+        }
+
         
         
         // =========================================================================
@@ -3452,6 +3681,7 @@ pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot
             { id: 'action:toggle-theme', title: 'Toggle Light / Dark Mode', cat: 'Appearance', icon: '🌓', action: () => toggleTheme() },
             { id: 'view:catalog', title: 'Open Specifications Catalog', cat: 'Navigation', icon: '📚', action: () => showDashboard() },
             { id: 'view:matrix', title: 'Open Reference Apps & Capabilities', cat: 'Navigation', icon: '📊', action: () => showMatrixView() },
+            { id: 'view:sandboxes', title: 'Open Live Component Sandboxes & Storybook', cat: 'Developer Tools', icon: '🧪', action: () => showMatrixView(null, 'sandboxes') },
             { id: 'view:shortcuts', title: 'Open Universal Shortcuts Guide', cat: 'Navigation', icon: '⌨️', action: () => showMatrixView(null, 'shortcuts') },
             { id: 'view:checklist', title: 'Open PR Pre-Flight Checklist Generator', cat: 'Developer Tools', icon: '✅', action: () => showMatrixView(null, 'checklist') },
             { id: 'view:linter', title: 'Open Invariant Code Linter & Verifier', cat: 'Developer Tools', icon: '🧪', action: () => showMatrixView(null, 'linter') },

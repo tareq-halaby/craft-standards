@@ -4,10 +4,10 @@
   </a>
 </p>
 
-<h1 align="center">ArtCraft Standards &amp; Reference App Guide (`craft-standards`)</h1>
+<h1 align="center">ArtCraft Component Studio &amp; Storybook (`craft-standards`)</h1>
 
 <p align="center">
-  <b>Practical UI Recipes, Shared Crates &amp; Reference-App Mappings for the 20+ ArtCraft Creative Desktop Applications.</b>
+  <b>Interactive UI Physics Sandboxes, Tested Component Recipes &amp; Developer Workstation for the 20+ ArtCraft Desktop Applications in Rust (egui 0.29+ / wgpu).</b>
 </p>
 
 <p align="center">
