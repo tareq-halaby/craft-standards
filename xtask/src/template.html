@@ -743,6 +743,9 @@ __ITEMS__
             <!-- Row 1: Action Buttons & Drawer Toggles -->
             <div class="reader-actions-row">
                 <div class="reader-actions-left">
+                    <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
+                        <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Back to Catalog</span>
+                    </button>
                     <!-- Drawer Toggles (shown on screens where sidebars are off-canvas) -->
                     <button class="spec-mobile-toggle-btn mobile-only" id="spec-drawer-toggle-btn" onclick="toggleSpecNavDrawer(event)" aria-label="Toggle standards navigation menu" aria-expanded="false">
                         <span class="icon" aria-hidden="true">☰</span>
@@ -755,9 +758,6 @@ __ITEMS__
                     </button>
                 </div>
                 <div class="reader-actions-right">
-                    <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
-                        <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Catalog</span>
-                    </button>
                     <button class="reader-btn" id="copy-lean-btn" onclick="copyCurrentLeanPrompt()" title="Copy Lean Agent Prompt (< 100 tokens)" aria-label="Copy Lean Agent Prompt (< 100 tokens)">
                         <span>⚡</span> <span id="i18n-copy-lean-text">Lean Prompt</span>
                     </button>

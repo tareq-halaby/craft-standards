@@ -143,7 +143,7 @@
             setTxt('i18n-suggestions-label', t.suggestionsLabel);
 
             // Specification Reader View
-            setTxt('i18n-back-btn-text', t.backBtn);
+            setTxt('i18n-back-btn-text', t.matrixBackBtn || t.backBtn || 'Back to Catalog');
             setTxt('i18n-copy-text', t.copyLink);
             setTxt('i18n-copy-lean-text', t.copyLeanPrompt ? t.copyLeanPrompt.replace(/^⚡\s*/, '') : 'Lean Prompt');
             setTxt('i18n-crate-label', t.canonicalCrate);

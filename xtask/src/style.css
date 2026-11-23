@@ -1704,6 +1704,9 @@
             padding: 8px 16px;
             gap: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
         }
         @media (min-width: 768px) {
             .reader-actions-row {
@@ -1733,26 +1736,29 @@
 
         /* Row 2: Dedicated Breadcrumb Bar (Zero Overlap on Any Screen Size) */
         .reader-breadcrumbs-bar {
-            padding: 8px 16px;
-            background: rgba(0, 0, 0, 0.35);
+            padding: 6px 16px 12px;
+            background: transparent !important;
             display: flex;
             align-items: center;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
         }
         .reader-breadcrumbs-bar::-webkit-scrollbar {
             display: none;
         }
         @media (min-width: 768px) {
             .reader-breadcrumbs-bar {
-                padding: 8px 24px;
+                padding: 6px 24px 12px;
             }
         }
         @media (min-width: 1200px) {
             .reader-breadcrumbs-bar {
-                padding: 8px 32px;
+                padding: 6px 32px 12px;
             }
         }
 
@@ -1818,30 +1824,41 @@
             color: var(--sl-color-white);
             background: var(--sl-color-card-hover);
         }
+        #top-back-btn,
         .reader-btn.primary {
             background: #1F6FEB;
             border-color: #388BFD;
             color: #FFF;
             font-weight: 600;
+            max-width: fit-content;
+            width: fit-content;
+            flex-shrink: 0;
+            white-space: nowrap;
         }
         .reader-btn.primary:hover { background: #388BFD; }
 
-        /* W3C Accessible Breadcrumbs Pattern */
+        /* W3C Accessible Breadcrumbs Pattern (Pill Container, Auto Max-Width) */
         .reader-breadcrumbs {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 11px;
+            font-size: 11.5px;
             font-family: var(--font-mono);
+            padding: 5px 12px;
+            background: var(--sl-color-surface-sunken);
+            border: 1px solid var(--sl-color-border);
+            border-radius: 8px;
+            max-width: fit-content;
+            width: fit-content;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
-            padding-bottom: 2px;
             scrollbar-width: none;
+            transition: all 0.2s ease;
         }
         .reader-breadcrumbs::-webkit-scrollbar { display: none; }
         @media (min-width: 768px) {
-            .reader-breadcrumbs { font-size: 13px; gap: 8px; overflow-x: visible; }
+            .reader-breadcrumbs { font-size: 12.5px; gap: 8px; padding: 6px 14px; }
         }
         .reader-breadcrumbs ol {
             display: flex;
@@ -1863,7 +1880,8 @@
         }
         .reader-breadcrumbs a:hover { text-decoration: underline; }
         .reader-breadcrumbs .sep { color: var(--sl-color-text-muted); }
-        .reader-breadcrumbs [aria-current="page"] {
+        .reader-breadcrumbs [aria-current="page"],
+        .reader-breadcrumbs .current {
             color: var(--sl-color-white);
             font-weight: 600;
         }
@@ -3869,13 +3887,24 @@
             border-color: #1F6FEB;
         }
         [data-theme="light"] .reader-breadcrumbs {
-            color: #57606A;
+            background: #FFFFFF !important;
+            border: 1px solid rgba(0, 0, 0, 0.1) !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            color: #57606A !important;
         }
         [data-theme="light"] .reader-breadcrumbs a {
-            color: #0969DA;
+            color: #0969DA !important;
         }
-        [data-theme="light"] .reader-breadcrumbs .current {
-            color: #1F2328;
+        [data-theme="light"] .reader-breadcrumbs .sep {
+            color: #8C959F !important;
+        }
+        [data-theme="light"] .reader-breadcrumbs .current,
+        [data-theme="light"] .reader-breadcrumbs [aria-current="page"] {
+            color: #0F141C !important;
+            font-weight: 600;
+        }
+        [data-theme="light"] .reader-breadcrumbs-bar {
+            background: transparent !important;
         }
         [data-theme="light"] .markdown-body pre {
             background: #F6F8FA;

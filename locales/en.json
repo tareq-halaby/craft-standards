@@ -39,7 +39,7 @@
   "noMatchesDesc": "We couldn't find any standards matching \"{query}\".",
   "clearSearchBtn": "Clear search and filters",
   "suggestionsLabel": "Try searching by:",
-  "backBtn": "Catalog",
+  "backBtn": "Back to Catalog",
   "copyLink": "Copy Link",
   "copied": "Copied! ✓",
   "canonicalCrate": "Canonical Crate:",
