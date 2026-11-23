@@ -229,6 +229,8 @@ The repository provides a zero-dependency, standalone portal deployed live at:
 - **Reference App Lineage & Capabilities**: App scorecards with industry benchmarks (Photoshop, DaVinci, AutoCAD), shared crate matrix, and practical UI recipes.
 - **⌨️ Universal Shortcuts Guide**: Cross-app keymap comparison table mapping muscle memory from reference tools.
 - **✅ PR Pre-Flight Checklist Generator**: 1-click generator for benchmark-aligned GitHub pull request descriptions.
+- **🧪 Invariant Linter & Code Verifier**: In-browser static analyzer catching unshielded double-clicks, sandbox escapes (`std::fs`), and panicking parsers before PR review.
+- **📦 Cargo.toml Dependency Resolver**: 1-click generator for canonical ArtCraft crates, feature flags, and lockstep versions.
 - **📄 Token-Lean OpenWiki Export**: Single-click copy/download of ultra-compact agent context (< 400 tokens) minimizing token burn.
 - **Full BiDi / RTL Localization**: Complete translations in 6 languages (`en`, `ar`, `de`, `es`, `fr`, `ja`) with full layout and breadcrumb mirroring in Arabic.
 - **AI Agent Directives Hub**: 1-click rules generator for Claude Code (`CLAUDE.md`), Cursor (`.cursorrules`), and AutoCraft autonomous pipelines.

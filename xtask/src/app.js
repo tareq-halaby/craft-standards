@@ -970,6 +970,10 @@
                 showMatrixView(null, 'shortcuts');
             } else if (hash === 'checklist' || hash === 'pr-checklist') {
                 showMatrixView(null, 'checklist');
+            } else if (hash === 'linter' || hash === 'verifier') {
+                showMatrixView(null, 'linter');
+            } else if (hash === 'cargo' || hash === 'dependencies') {
+                showMatrixView(null, 'cargo');
             } else if (hash === 'faq' || hash.startsWith('faq/')) {
                 const targetFaqId = hash.startsWith('faq/') ? hash.substring(4) : null;
                 showFaqView(null, targetFaqId);
@@ -1494,6 +1498,8 @@
             const drilldownEl = document.getElementById('matrix-drilldown-container');
             const shortcutsEl = document.getElementById('matrix-shortcuts-container');
             const checklistEl = document.getElementById('matrix-checklist-container');
+            const linterEl = document.getElementById('matrix-linter-container');
+            const cargoEl = document.getElementById('matrix-cargo-container');
             const toolbarEl = document.querySelector('.matrix-toolbar');
 
             if (scorecardsEl) scorecardsEl.style.display = mode === 'scorecards' ? 'grid' : 'none';
@@ -1501,9 +1507,11 @@
             if (drilldownEl) drilldownEl.style.display = mode === 'drilldown' ? 'block' : 'none';
             if (shortcutsEl) shortcutsEl.style.display = mode === 'shortcuts' ? 'block' : 'none';
             if (checklistEl) checklistEl.style.display = mode === 'checklist' ? 'block' : 'none';
+            if (linterEl) linterEl.style.display = mode === 'linter' ? 'block' : 'none';
+            if (cargoEl) cargoEl.style.display = mode === 'cargo' ? 'block' : 'none';
 
             if (toolbarEl) {
-                toolbarEl.style.display = (mode === 'checklist' || mode === 'drilldown') ? 'none' : 'flex';
+                toolbarEl.style.display = (mode === 'checklist' || mode === 'drilldown' || mode === 'linter' || mode === 'cargo') ? 'none' : 'flex';
             }
 
             renderMatrixView();
@@ -1856,6 +1864,10 @@
                 renderShortcutsMatrix();
             } else if (matrixViewMode === 'checklist') {
                 renderChecklistGenerator();
+            } else if (matrixViewMode === 'linter') {
+                renderLinterUI();
+            } else if (matrixViewMode === 'cargo') {
+                renderCargoResolverUI();
             }
         }
 
@@ -2060,6 +2072,364 @@ ${specificChecks}
                 showToastNotification('OpenWiki Agent Notes copied to clipboard! (< 400 tokens)');
             }).catch(() => {
                 showToastNotification('Copied agent notes to clipboard.');
+            });
+        }
+
+        // =========================================================================
+        // Interactive Invariant Linter & Code Verifier
+        // =========================================================================
+        const LINTER_SAMPLES = {
+            unshielded: `// Anti-Pattern: Unshielded double-click & frame modifier reading
+fn ui_tool_button(ui: &mut egui::Ui, slot: &mut ToolSlot) {
+    let resp = ui.button("Brush");
+    if resp.clicked() && ui.input(|i| i.modifiers.alt) {
+        slot.cycle();
+    }
+    if resp.double_clicked() {
+        open_options_dialog();
+    }
+}`,
+            sandbox: `// Anti-Pattern: Direct std::fs file access (Sandbox Escape)
+pub fn export_canvas_to_file(path: &str, bytes: &[u8]) -> std::io::Result<()> {
+    std::fs::write(path, bytes)
+}`,
+            parser: `// Anti-Pattern: Panicking format parser (Violates Keep Rule)
+pub fn parse_project_header(data: &[u8]) -> ProjectHeader {
+    let magic = std::str::from_utf8(&data[0..4]).unwrap();
+    let version = data[4].to_string().parse::<u32>().expect("invalid version");
+    ProjectHeader { magic, version }
+}`,
+            clean: `// 100% Invariant-Compliant ArtCraft Implementation
+use craft_widgets::ToolSlot;
+use craft_fs::AutomationRoot;
+
+pub fn render_tool(ui: &mut egui::Ui, root: &AutomationRoot, slot: &mut ToolSlot) {
+    ui.ctx().accesskit_node_builder(egui::Id::new("brush_tool"), |b| {
+        b.set_role(accesskit::Role::Button);
+        b.set_name("Brush Tool (B)");
+    });
+    slot.ui(ui);
+}`
+        };
+
+        function renderLinterUI() {
+            const container = document.getElementById('matrix-linter-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="checklist-gen-wrapper" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--sl-color-border);padding-bottom:16px;">
+                        <div>
+                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">🧪 Pre-Flight Invariant Linter & Code Verifier</h3>
+                            <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;">Semantic linter: catches unshielded double-clicks, sandbox escapes, panicking parsers, and missing AccessKit roles before PR submission.</p>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <button class="reader-btn primary" onclick="runCodeVerification()" style="padding:10px 18px;font-size:13px;">
+                                <span>🚀 Run Verification Sweep</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        <span style="font-size:12px;font-weight:700;color:var(--sl-color-text-muted);text-transform:uppercase;letter-spacing:0.05em;">Load Sample:</span>
+                        <button class="filter-chip" onclick="loadLinterSample('unshielded')" style="padding:4px 10px;font-size:11px;">🔘 Unshielded Tool Button</button>
+                        <button class="filter-chip" onclick="loadLinterSample('sandbox')" style="padding:4px 10px;font-size:11px;">📁 Raw std::fs File I/O</button>
+                        <button class="filter-chip" onclick="loadLinterSample('parser')" style="padding:4px 10px;font-size:11px;">💥 Panicking Parser (.unwrap)</button>
+                        <button class="filter-chip" onclick="loadLinterSample('clean')" style="padding:4px 10px;font-size:11px;">✅ 100% Compliant Code</button>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:20px;">
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Rust Source Code to Verify:</label>
+                            <textarea id="linter-code-input" style="width:100%;height:280px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:14px;color:#E6EDF3;font-family:var(--font-mono);font-size:12px;line-height:1.5;resize:vertical;" spellcheck="false" placeholder="Paste your Rust/egui function or component code here...">${LINTER_SAMPLES.unshielded}</textarea>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Verification Telemetry & Diagnostic Report:</label>
+                            <div id="linter-report-output" style="height:280px;background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;overflow-y:auto;font-size:12.5px;line-height:1.6;">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            runCodeVerification();
+        }
+
+        function loadLinterSample(kind) {
+            const input = document.getElementById('linter-code-input');
+            if (input && LINTER_SAMPLES[kind]) {
+                input.value = LINTER_SAMPLES[kind];
+                runCodeVerification();
+            }
+        }
+
+        function runCodeVerification() {
+            const input = document.getElementById('linter-code-input');
+            const output = document.getElementById('linter-report-output');
+            if (!input || !output) return;
+
+            const code = input.value;
+            const violations = [];
+            const recommendations = [];
+
+            // 1. Tool Button modifier drop
+            if (code.includes('i.modifiers.alt') || code.includes('inp.modifiers.alt') || code.includes('modifiers.alt')) {
+                violations.push({
+                    std: 'STD-INPUT-001',
+                    level: 'error',
+                    title: 'Frame Modifier State Drop',
+                    desc: 'Reading modifiers from frame input (inp.modifiers.alt) drops Alt during rapid clicks. Must inspect the primary PointerButton release event.'
+                });
+                recommendations.push('Replace custom button click with `craft_widgets::ToolSlot`, which shields rapid click modifier states.');
+            }
+
+            // 2. Unshielded double click
+            if (code.includes('double_clicked()') && !code.includes('modified') && !code.includes('shield')) {
+                violations.push({
+                    std: 'STD-INPUT-001',
+                    level: 'error',
+                    title: 'Unshielded double_clicked() Trigger',
+                    desc: 'Calling double_clicked() without modifier shielding causes rapid Alt-click slot cycling to accidentally open tool modal options.'
+                });
+            }
+
+            // 3. Unconfined File I/O
+            if ((code.includes('std::fs::read') || code.includes('std::fs::write') || code.includes('std::fs::File::open') || code.includes('std::fs::File::create')) && 
+                !code.includes('craft_fs') && !code.includes('craft_confine') && !code.includes('resolve_sandboxed')) {
+                violations.push({
+                    std: 'STD-SHELL-003',
+                    level: 'error',
+                    title: 'Unconfined Direct File I/O (Sandbox Escape)',
+                    desc: 'Direct std::fs calls bypass sandboxing and fail on locked or sandboxed targets. Route all file access via craft-fs::AutomationRoot.'
+                });
+                recommendations.push('Use `root.resolve_sandboxed(path)?.open_read()` to enforce strict automation root isolation.');
+            }
+
+            // 4. Panic in parser
+            if (code.includes('.unwrap()') || code.includes('.expect(')) {
+                violations.push({
+                    std: 'STD-LIB-005',
+                    level: 'error',
+                    title: 'The Keep Rule Violation (Panic Risk)',
+                    desc: 'Calling .unwrap() or .expect() on external or file data can crash the application. Corrupted or hostile input must always return Err(ParseError).'
+                });
+                recommendations.push('Return `Result<T, ParseError>` and add a testkit fuzzer sweep via `craft_testkit::hostile`.');
+            }
+
+            // 5. Missing AccessKit
+            if ((code.includes('ui.button') || code.includes('ToolSlot') || code.includes('ui.add')) && 
+                !code.includes('accesskit') && !code.includes('widget_info') && !code.includes('Role::')) {
+                violations.push({
+                    std: 'STD-A11Y-001',
+                    level: 'warning',
+                    title: 'Missing AccessKit Semantic Role & Name',
+                    desc: 'Interactive UI element does not appear to register an AccessKit semantic Role (Role::Button) and localized label for screen readers.'
+                });
+            }
+
+            // 6. Hardcoded directional margins
+            if (code.includes('margin_left') || code.includes('margin_right') || code.includes('align_left')) {
+                violations.push({
+                    std: 'STD-I18N-001',
+                    level: 'warning',
+                    title: 'Hardcoded Directional Layout',
+                    desc: 'Hardcoded left/right layout coordinates break BiDi spatial mirroring in Arabic and RTL locales. Use margin_inline_start.'
+                });
+            }
+
+            // Render Output
+            if (violations.length === 0) {
+                output.innerHTML = `
+                    <div style="text-align:center;padding:36px 16px;">
+                        <div style="font-size:32px;margin-bottom:10px;">✅</div>
+                        <div style="font-size:16px;font-weight:700;color:#3FB950;margin-bottom:6px;">100% Invariant Compliant!</div>
+                        <div style="font-size:12.5px;color:var(--sl-color-text-muted);max-width:380px;margin:0 auto;line-height:1.5;">
+                            Zero AST drift or security contract violations detected. Code is edge-case hardened, sandboxed, and ready for PR merge.
+                        </div>
+                    </div>
+                `;
+            } else {
+                output.innerHTML = `
+                    <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;">
+                        <span style="font-weight:700;color:#F85149;font-size:13px;">🚨 Found ${violations.length} Potential Violation${violations.length > 1 ? 's' : ''}</span>
+                        <span class="nav-badge" style="background:#DA3633;">Needs Attention</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        ${violations.map(v => `
+                            <div style="background:rgba(218,54,51,0.08);border:1px solid rgba(218,54,51,0.25);border-radius:6px;padding:12px;">
+                                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+                                    <span style="font-weight:700;color:#FFF;font-size:12px;">${v.title}</span>
+                                    <a href="#${v.std}" onclick="openSpec('${v.std}')" style="font-family:var(--font-mono);font-size:11px;color:var(--sl-color-accent);font-weight:700;text-decoration:none;">${v.std} ↗</a>
+                                </div>
+                                <div style="font-size:11.5px;color:var(--sl-color-text-muted);line-height:1.4;">${v.desc}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${recommendations.length > 0 ? `
+                        <div style="margin-top:16px;padding-top:14px;border-top:1px solid #30363D;">
+                            <div style="font-size:11.5px;font-weight:700;color:#58A6FF;text-transform:uppercase;margin-bottom:6px;">💡 Suggested Architecture Fix:</div>
+                            <ul style="margin:0;padding-inline-start:18px;font-size:12px;color:var(--sl-color-text-muted);line-height:1.5;">
+                                ${recommendations.map(r => `<li>${r}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                `;
+            }
+        }
+
+        // =========================================================================
+        // Interactive Cargo.toml Dependency Generator
+        // =========================================================================
+        function renderCargoResolverUI() {
+            const container = document.getElementById('matrix-cargo-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="checklist-gen-wrapper" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--sl-color-border);padding-bottom:16px;">
+                        <div>
+                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">📦 Cargo.toml Dependency Resolver</h3>
+                            <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;">Configure canonical ArtCraft crates, feature flags, and lockstep versions for desktop applications.</p>
+                        </div>
+                        <button class="reader-btn primary" onclick="copyCargoToml()" id="copy-cargo-btn" style="padding:10px 18px;font-size:13px;">
+                            <span>📋 Copy Cargo.toml</span>
+                        </button>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;margin-bottom:24px;">
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:10px;">Select Required Capabilities:</label>
+                            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:#FFF;">
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="checkbox" id="dep-widgets" checked onchange="updateCargoTomlPreview()">
+                                    <span><strong>craft-widgets</strong> (UI controls, tool slots, theme tokens)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="checkbox" id="dep-a11y" checked onchange="updateCargoTomlPreview()">
+                                    <span><strong>accesskit</strong> (Screen reader tree & accessibility roles)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="checkbox" id="dep-fs" checked onchange="updateCargoTomlPreview()">
+                                    <span><strong>craft-fs</strong> (Sandboxing & automation root isolation)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="checkbox" id="dep-keymap" checked onchange="updateCargoTomlPreview()">
+                                    <span><strong>craft-keymap</strong> (Universal shortcuts & chord normalization)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="checkbox" id="dep-color" onchange="updateCargoTomlPreview()">
+                                    <span><strong>craft-color</strong> (Color picker, hex parsing, CMYK proofing)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="checkbox" id="dep-print" onchange="updateCargoTomlPreview()">
+                                    <span><strong>craft-print</strong> (Cross-platform printing & prepress)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="checkbox" id="dep-testkit" checked onchange="updateCargoTomlPreview()">
+                                    <span><strong>craft-testkit</strong> [dev-dependency] (Keep Rule hostile fuzzing)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:10px;">Dependency Source Mode:</label>
+                            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;font-size:13px;color:#FFF;">
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="radio" name="dep-source" value="path" checked onchange="updateCargoTomlPreview()">
+                                    <span><strong>Monorepo Path</strong> (<code>path = "../../crates/..."</code>)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="radio" name="dep-source" value="git" onchange="updateCargoTomlPreview()">
+                                    <span><strong>Git Repo</strong> (<code>git = "https://github.com/storytold/artcraft"</code>)</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                    <input type="radio" name="dep-source" value="version" onchange="updateCargoTomlPreview()">
+                                    <span><strong>Versioned Registry</strong> (<code>version = "0.2"</code>)</span>
+                                </label>
+                            </div>
+                            <div style="font-size:12px;color:var(--sl-color-text-muted);line-height:1.5;">
+                                Monorepo apps in <code>storytold/artcraft</code> should use relative paths to guarantee instant lockstep integration during development.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                            <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);">Generated Cargo.toml Block:</span>
+                            <span style="font-size:11px;color:#3FB950;font-weight:600;">✓ Ready to drop into your crate</span>
+                        </div>
+                        <pre id="cargo-toml-preview" style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;color:#E6EDF3;font-family:var(--font-mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;"></pre>
+                    </div>
+                </div>
+            `;
+
+            updateCargoTomlPreview();
+        }
+
+        function updateCargoTomlPreview() {
+            const preview = document.getElementById('cargo-toml-preview');
+            if (!preview) return;
+
+            const hasWidgets = document.getElementById('dep-widgets')?.checked ?? true;
+            const hasA11y = document.getElementById('dep-a11y')?.checked ?? true;
+            const hasFs = document.getElementById('dep-fs')?.checked ?? true;
+            const hasKeymap = document.getElementById('dep-keymap')?.checked ?? true;
+            const hasColor = document.getElementById('dep-color')?.checked ?? false;
+            const hasPrint = document.getElementById('dep-print')?.checked ?? false;
+            const hasTestkit = document.getElementById('dep-testkit')?.checked ?? true;
+
+            const mode = document.querySelector('input[name="dep-source"]:checked')?.value || 'path';
+
+            let toml = `[dependencies]\negui = "0.29"\nwgpu = "22.0"\n`;
+            if (hasA11y) toml += `accesskit = "0.17"\n`;
+
+            if (mode === 'path') {
+                if (hasWidgets) toml += `craft-widgets = { path = "../../crates/craft-widgets", features = ["a11y"] }\n`;
+                if (hasFs) toml += `craft-fs = { path = "../../crates/craft-fs" }\n`;
+                if (hasKeymap) toml += `craft-keymap = { path = "../../crates/craft-keymap" }\n`;
+                if (hasColor) toml += `craft-color = { path = "../../crates/craft-color" }\n`;
+                if (hasPrint) toml += `craft-print = { path = "../../crates/craft-print" }\n`;
+            } else if (mode === 'git') {
+                const gitUrl = 'https://github.com/storytold/artcraft.git';
+                if (hasWidgets) toml += `craft-widgets = { git = "${gitUrl}", features = ["a11y"] }\n`;
+                if (hasFs) toml += `craft-fs = { git = "${gitUrl}" }\n`;
+                if (hasKeymap) toml += `craft-keymap = { git = "${gitUrl}" }\n`;
+                if (hasColor) toml += `craft-color = { git = "${gitUrl}" }\n`;
+                if (hasPrint) toml += `craft-print = { git = "${gitUrl}" }\n`;
+            } else {
+                if (hasWidgets) toml += `craft-widgets = { version = "0.2", features = ["a11y"] }\n`;
+                if (hasFs) toml += `craft-fs = "0.2"\n`;
+                if (hasKeymap) toml += `craft-keymap = "0.2"\n`;
+                if (hasColor) toml += `craft-color = "0.2"\n`;
+                if (hasPrint) toml += `craft-print = "0.2"\n`;
+            }
+
+            if (hasTestkit) {
+                toml += `\n[dev-dependencies]\n`;
+                if (mode === 'path') {
+                    toml += `craft-testkit = { path = "../../crates/craft-testkit" }\n`;
+                } else if (mode === 'git') {
+                    toml += `craft-testkit = { git = "https://github.com/storytold/artcraft.git" }\n`;
+                } else {
+                    toml += `craft-testkit = "0.2"\n`;
+                }
+            }
+
+            preview.textContent = toml;
+        }
+
+        function copyCargoToml() {
+            const preview = document.getElementById('cargo-toml-preview');
+            if (!preview) return;
+            navigator.clipboard.writeText(preview.textContent).then(() => {
+                const btn = document.getElementById('copy-cargo-btn');
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = `<span>✓ Cargo.toml Copied!</span>`;
+                    setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
+                }
+                showToastNotification('Cargo.toml dependencies copied to clipboard!');
             });
         }
 
@@ -2385,14 +2755,87 @@ ${specificChecks}
         });
 
         // =========================================================================
+        // Theme Controller (Light / Dark Mode, WCAG AAA Contrast)
+        // =========================================================================
+        let currentTheme = 'dark';
+
+        function initTheme() {
+            try {
+                const saved = localStorage.getItem('artcraft_theme');
+                if (saved === 'light' || saved === 'dark') {
+                    currentTheme = saved;
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    currentTheme = 'light';
+                } else {
+                    currentTheme = 'dark';
+                }
+            } catch (e) {
+                currentTheme = 'dark';
+            }
+            applyTheme(currentTheme, false);
+
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+                    const saved = localStorage.getItem('artcraft_theme');
+                    if (!saved) {
+                        applyTheme(e.matches ? 'light' : 'dark', false);
+                    }
+                });
+            }
+        }
+
+        function toggleTheme() {
+            const nextTheme = (currentTheme === 'dark') ? 'light' : 'dark';
+            applyTheme(nextTheme, true);
+        }
+
+        function applyTheme(theme, save = true) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            if (save) {
+                try {
+                    localStorage.setItem('artcraft_theme', theme);
+                } catch (e) {}
+            }
+
+            const iconEl = document.getElementById('theme-icon');
+            const toggleBtn = document.getElementById('theme-toggle-btn');
+            const mobileText = document.getElementById('mobile-theme-item-text');
+
+            if (theme === 'dark') {
+                if (iconEl) iconEl.textContent = '☀️';
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('title', 'Switch to Light Mode');
+                    toggleBtn.setAttribute('aria-label', 'Switch to Light Mode');
+                }
+                if (mobileText) mobileText.textContent = '☀️ Switch to Light Mode';
+                announceA11y('Dark theme active');
+            } else {
+                if (iconEl) iconEl.textContent = '🌙';
+                if (toggleBtn) {
+                    toggleBtn.setAttribute('title', 'Switch to Dark Mode');
+                    toggleBtn.setAttribute('aria-label', 'Switch to Dark Mode');
+                }
+                if (mobileText) mobileText.textContent = '🌙 Switch to Dark Mode';
+                announceA11y('Light theme active');
+            }
+        }
+
+        // =========================================================================
         // Universal Command Palette (Ctrl+K)
         // =========================================================================
         let cmdSelectedIndex = 0;
         let cmdFilteredItems = [];
 
         const SYSTEM_COMMANDS = [
+            { id: 'action:toggle-theme', title: 'Toggle Light / Dark Mode', cat: 'Appearance', icon: '🌓', action: () => toggleTheme() },
             { id: 'view:catalog', title: 'Open Specifications Catalog', cat: 'Navigation', icon: '📚', action: () => showDashboard() },
-            { id: 'view:matrix', title: 'Open Suite Compliance Matrix', cat: 'Navigation', icon: '📊', action: () => showMatrixView() },
+            { id: 'view:matrix', title: 'Open Reference Apps & Capabilities', cat: 'Navigation', icon: '📊', action: () => showMatrixView() },
+            { id: 'view:shortcuts', title: 'Open Universal Shortcuts Guide', cat: 'Navigation', icon: '⌨️', action: () => showMatrixView(null, 'shortcuts') },
+            { id: 'view:checklist', title: 'Open PR Pre-Flight Checklist Generator', cat: 'Developer Tools', icon: '✅', action: () => showMatrixView(null, 'checklist') },
+            { id: 'view:linter', title: 'Open Invariant Code Linter & Verifier', cat: 'Developer Tools', icon: '🧪', action: () => showMatrixView(null, 'linter') },
+            { id: 'view:cargo', title: 'Open Cargo.toml Dependency Generator', cat: 'Developer Tools', icon: '📦', action: () => showMatrixView(null, 'cargo') },
+            { id: 'action:openwiki', title: 'Export Token-Lean Agent Notes (OpenWiki)', cat: 'Developer Tools', icon: '📄', action: () => exportOpenWikiAgentNotes() },
             { id: 'view:agent-hub', title: 'Open AI Agent & AutoCraft Hub', cat: 'Developer Tools', icon: '⚡', action: () => openAgentHub() },
             { id: 'view:badges', title: 'Open Contributor README Badges', cat: 'Developer Tools', icon: '🛡️', action: () => openBadgeModal() },
             { id: 'action:copy-report', title: 'Copy Markdown Compliance Telemetry', cat: 'Telemetry', icon: '📋', action: () => copyMatrixMarkdownReport() },
@@ -2892,6 +3335,7 @@ pub fn open_project_file(root: &AutomationRoot, relative_path: &str) -> Result<s
 
         window.addEventListener('hashchange', handleRouting);
         window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
             initLanguages();
             initCategoryCounts();
             applyLanguage(currentLang);

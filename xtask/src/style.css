@@ -1,7 +1,11 @@
-        :root {
+        :root, [data-theme="dark"] {
             --sl-color-bg: #0B0D13;
+            --sl-color-header-bg: rgba(11, 13, 19, 0.94);
             --sl-color-card: #131722;
             --sl-color-card-hover: #181D2B;
+            --sl-color-surface: #11141D;
+            --sl-color-surface-hover: #161B22;
+            --sl-color-surface-sunken: #0D1117;
             --sl-color-border: rgba(255, 255, 255, 0.08);
             --sl-color-border-hover: rgba(255, 255, 255, 0.2);
             --sl-color-text: #C9D1D9;
@@ -13,10 +17,33 @@
             --sl-color-green: #3FB950;
             --sl-color-yellow: #D29922;
             --sl-color-red: #F85149;
+            --sl-shadow-dropdown: 0 16px 36px rgba(0, 0, 0, 0.5);
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             --font-display: 'Archivo', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             --font-serif: 'Instrument Serif', Georgia, serif;
             --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+
+        [data-theme="light"] {
+            --sl-color-bg: #F4F6F9;
+            --sl-color-header-bg: rgba(255, 255, 255, 0.94);
+            --sl-color-card: #FFFFFF;
+            --sl-color-card-hover: #F8F9FA;
+            --sl-color-surface: #EEF2F6;
+            --sl-color-surface-hover: #E3E8EE;
+            --sl-color-surface-sunken: #E9ECEF;
+            --sl-color-border: rgba(0, 0, 0, 0.1);
+            --sl-color-border-hover: rgba(0, 0, 0, 0.22);
+            --sl-color-text: #24292F;
+            --sl-color-text-muted: #57606A;
+            --sl-color-white: #0F141C;
+            --sl-color-accent: #0969DA;
+            --sl-color-accent-soft: rgba(9, 105, 218, 0.12);
+            --sl-color-purple: #8250DF;
+            --sl-color-green: #1A7F37;
+            --sl-color-yellow: #9A6700;
+            --sl-color-red: #CF222E;
+            --sl-shadow-dropdown: 0 12px 28px rgba(0, 0, 0, 0.12);
         }
 
         /* Prevent horizontal overflow globally */
@@ -349,6 +376,23 @@
         }
         @media (min-width: 600px) {
             .agent-btn-text { display: inline; }
+        }
+
+        /* Light / Dark Mode Toggle Button */
+        .theme-toggle-btn {
+            font-size: 15px;
+            padding: 8px 10px;
+            min-width: 38px;
+            min-height: 38px;
+        }
+        .theme-toggle-btn .theme-icon {
+            display: inline-block;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none;
+            line-height: 1;
+        }
+        .theme-toggle-btn:hover .theme-icon {
+            transform: rotate(20deg) scale(1.15);
         }
 
         /* i18n Language Selector Dropdown */
@@ -3557,4 +3601,171 @@
         }
         [dir="rtl"] .faq-toggle-icon {
             margin-inline-start: auto;
+        }
+
+        /* =========================================================================
+           Light Theme Explicit Adaptations & Contrast Hardening (STD-A11Y-002)
+           ========================================================================= */
+        [data-theme="light"] .wiki-header {
+            background: rgba(255, 255, 255, 0.94);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .nav-segmented-toggle {
+            background: #EAEFF5;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .nav-view-btn {
+            color: #4B5563;
+        }
+        [data-theme="light"] .nav-view-btn:hover {
+            color: #111827;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        [data-theme="light"] .nav-view-btn.active {
+            color: #FFFFFF;
+            background: #1F6FEB;
+            box-shadow: 0 1px 4px rgba(31, 111, 235, 0.3);
+        }
+        [data-theme="light"] .nav-icon-action-btn,
+        [data-theme="light"] .lang-btn {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.12);
+            color: #1F2328;
+        }
+        [data-theme="light"] .nav-icon-action-btn:hover,
+        [data-theme="light"] .lang-btn:hover {
+            background: #F3F4F6;
+            border-color: rgba(0, 0, 0, 0.22);
+            color: #0969DA;
+        }
+        [data-theme="light"] .agent-hub-btn {
+            background: rgba(9, 105, 218, 0.08);
+            border-color: rgba(9, 105, 218, 0.25);
+            color: #0969DA;
+        }
+        [data-theme="light"] .agent-hub-btn:hover {
+            background: rgba(9, 105, 218, 0.16);
+            border-color: #0969DA;
+            color: #0969DA;
+        }
+        [data-theme="light"] .lang-dropdown,
+        [data-theme="light"] .mobile-dropdown-menu,
+        [data-theme="light"] .cmd-palette-box,
+        [data-theme="light"] .agent-hub-box,
+        [data-theme="light"] .badge-modal-box {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.14);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+        }
+        [data-theme="light"] .mobile-dropdown-item,
+        [data-theme="light"] .lang-option {
+            color: #1F2328;
+        }
+        [data-theme="light"] .mobile-dropdown-item:hover,
+        [data-theme="light"] .lang-option:hover {
+            background: #F3F4F6;
+            color: #0969DA;
+        }
+        [data-theme="light"] .mobile-dropdown-item.highlight {
+            color: #0969DA;
+            background: rgba(9, 105, 218, 0.08);
+        }
+        [data-theme="light"] .mobile-dropdown-sep {
+            border-top-color: rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .mobile-menu-backdrop {
+            background: rgba(15, 20, 28, 0.35);
+        }
+        [data-theme="light"] .standard-tile,
+        [data-theme="light"] .wiki-stat-card {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        [data-theme="light"] .standard-tile:hover,
+        [data-theme="light"] .wiki-stat-card:hover {
+            background: #FFFFFF;
+            border-color: rgba(9, 105, 218, 0.35);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+        }
+        [data-theme="light"] .search-box {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.12);
+        }
+        [data-theme="light"] .search-input {
+            color: #1F2328;
+        }
+        [data-theme="light"] .filter-chip {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #4B5563;
+        }
+        [data-theme="light"] .filter-chip:hover {
+            background: #F3F4F6;
+            color: #111827;
+        }
+        [data-theme="light"] .filter-chip.active {
+            background: #1F6FEB;
+            color: #FFFFFF;
+            border-color: #1F6FEB;
+        }
+        [data-theme="light"] .spec-reader-container,
+        [data-theme="light"] .spec-body,
+        [data-theme="light"] .matrix-view,
+        [data-theme="light"] .faq-view,
+        [data-theme="light"] .about-view {
+            color: #1F2328;
+        }
+        [data-theme="light"] .spec-header {
+            background: #FFFFFF;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .spec-title,
+        [data-theme="light"] .tile-title,
+        [data-theme="light"] .wiki-title,
+        [data-theme="light"] .wiki-brand,
+        [data-theme="light"] .stat-num {
+            color: #0F141C;
+        }
+        [data-theme="light"] .hero-anchor-pill {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.12);
+            color: #1F2328;
+        }
+        [data-theme="light"] .hero-anchor-pill:hover {
+            background: #F3F4F6;
+            color: #0969DA;
+        }
+        [data-theme="light"] .hero-anchor-pill.highlight {
+            background: rgba(9, 105, 218, 0.08);
+            border-color: rgba(9, 105, 218, 0.3);
+            color: #0969DA;
+        }
+        [data-theme="light"] .faq-item {
+            background: #FFFFFF;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .faq-header-row {
+            color: #0F141C;
+        }
+        [data-theme="light"] .matrix-table th {
+            background: #F3F4F6;
+            color: #1F2328;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .matrix-table td {
+            border-color: rgba(0, 0, 0, 0.06);
+            background: #FFFFFF;
+        }
+        [data-theme="light"] .cmd-palette-input {
+            color: #1F2328;
+            border-bottom-color: rgba(0, 0, 0, 0.08);
+        }
+        [data-theme="light"] .cmd-palette-item {
+            color: #1F2328;
+        }
+        [data-theme="light"] .cmd-palette-item:hover,
+        [data-theme="light"] .cmd-palette-item.active {
+            background: #F3F4F6;
+            color: #0969DA;
         }

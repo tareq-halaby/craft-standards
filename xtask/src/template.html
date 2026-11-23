@@ -6,6 +6,20 @@
     <title>ArtCraft Standards | Universal Ergonomic Contracts</title>
     <link rel="icon" href="assets/artcraft-studio.svg" type="image/svg+xml">
     
+    <!-- Instant Theme Initializer (Prevents flashing) -->
+    <script>
+        (function() {
+            try {
+                var savedTheme = localStorage.getItem('artcraft_theme');
+                if (savedTheme === 'light' || savedTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', savedTheme);
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            } catch (e) {}
+        })();
+    </script>
+    
     <!-- Google Fonts: Inter, Archivo, Geist Mono, Instrument Serif -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,6 +84,11 @@ __STYLE__
                     <span class="agent-btn-text">Agent &amp; MCP</span>
                 </button>
 
+                <!-- Theme Toggle Button (Dark / Light Mode) -->
+                <button class="nav-icon-action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Switch Light / Dark Mode" aria-label="Switch Light / Dark Mode">
+                    <span class="theme-icon" id="theme-icon" aria-hidden="true">☀️</span>
+                </button>
+
                 <!-- Language Selector -->
                 <div class="lang-picker" id="lang-picker-container">
                     <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
@@ -107,6 +126,9 @@ __STYLE__
                         <span>⋮</span>
                     </button>
                     <div class="mobile-dropdown-menu" id="mobile-dropdown-menu" role="menu">
+                        <a class="mobile-dropdown-item" href="#" onclick="toggleTheme(); closeMobileMenu(); return false;">
+                            <span id="mobile-theme-item-text">☀️ Switch Light/Dark Mode</span>
+                        </a>
                         <a class="mobile-dropdown-item" href="#" onclick="openAgentHub(); closeMobileMenu(); return false;">
                             <span>⚡ AI Agent &amp; AutoCraft Hub</span>
                         </a>
@@ -159,8 +181,14 @@ __STYLE__
                 <a href="#" onclick="showMatrixView(event, 'checklist'); return false;" class="hero-anchor-pill highlight">
                     <span>✅ PR Checklist Generator</span>
                 </a>
+                <a href="#" onclick="showMatrixView(event, 'linter'); return false;" class="hero-anchor-pill">
+                    <span>🧪 Invariant Linter</span>
+                </a>
                 <a href="#" onclick="showMatrixView(event, 'shortcuts'); return false;" class="hero-anchor-pill">
                     <span>⌨️ Universal Shortcuts Guide</span>
+                </a>
+                <a href="#" onclick="showMatrixView(event, 'cargo'); return false;" class="hero-anchor-pill">
+                    <span>📦 Cargo.toml Resolver</span>
                 </a>
                 <a href="#" onclick="openAgentHub(); return false;" class="hero-anchor-pill">
                     <span id="i18n-hero-badge-mcp">⚡ AutoCraft MCP Gateway</span>
@@ -358,6 +386,12 @@ __ITEMS__
                 <button class="matrix-pivot-btn" id="pivot-mode-checklist" onclick="setMatrixViewMode('checklist', this)" role="tab" aria-selected="false">
                     <span>✅ PR Checklist Generator</span>
                 </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-linter" onclick="setMatrixViewMode('linter', this)" role="tab" aria-selected="false">
+                    <span>🧪 Invariant Linter</span>
+                </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-cargo" onclick="setMatrixViewMode('cargo', this)" role="tab" aria-selected="false">
+                    <span>📦 Cargo.toml Resolver</span>
+                </button>
             </div>
         </div>
 
@@ -443,6 +477,16 @@ __ITEMS__
 
         <!-- Sub-view 5: PR Pre-Flight Checklist Generator -->
         <div id="matrix-checklist-container" style="display:none;margin-top:20px;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Sub-view 6: Invariant Linter & Code Verifier -->
+        <div id="matrix-linter-container" style="display:none;margin-top:20px;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Sub-view 7: Cargo.toml Dependency Generator -->
+        <div id="matrix-cargo-container" style="display:none;margin-top:20px;">
             <!-- Populated dynamically -->
         </div>
     </main>
