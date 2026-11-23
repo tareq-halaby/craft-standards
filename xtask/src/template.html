@@ -738,14 +738,21 @@ __ITEMS__
 
     <!-- SPECIFICATION VIEWER (Craft.wiki 3-Column Documentation Architecture following Jakob's Law) -->
     <div id="spec-view" role="region" aria-label="Specification Document">
-        <!-- Sticky Navigation & Actions Header (2-Row Dedicated Architecture) -->
+        <!-- Sticky Navigation & Actions Header (Single Unified Navigation Bar) -->
         <header class="reader-toolbar-container">
-            <!-- Row 1: Action Buttons & Drawer Toggles -->
             <div class="reader-actions-row">
                 <div class="reader-actions-left">
                     <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
                         <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Back to Catalog</span>
                     </button>
+                    <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                        <ol>
+                            <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                            <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
+                            <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
+                            <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
+                        </ol>
+                    </nav>
                     <!-- Drawer Toggles (shown on screens where sidebars are off-canvas) -->
                     <button class="spec-mobile-toggle-btn mobile-only" id="spec-drawer-toggle-btn" onclick="toggleSpecNavDrawer(event)" aria-label="Toggle standards navigation menu" aria-expanded="false">
                         <span class="icon" aria-hidden="true">☰</span>
@@ -769,18 +776,6 @@ __ITEMS__
                     </a>
                 </div>
             </div>
-
-            <!-- Row 2: Dedicated Breadcrumb Navigation Bar (Zero Overlap on Any Screen) -->
-            <nav class="reader-breadcrumbs-bar" aria-label="Breadcrumb navigation">
-                <div class="reader-breadcrumbs">
-                    <ol>
-                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
-                    </ol>
-                </div>
-            </nav>
         </header>
 
         <!-- 3-Column Documentation Grid -->

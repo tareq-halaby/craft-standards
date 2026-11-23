@@ -1729,34 +1729,36 @@
             }
         }
 
-        /* Row 1: Action Controls & Mobile Drawer Toggles */
+        /* Single Unified Navigation Bar (Unified with Matrix, FAQ, and Overview Architecture) */
         .reader-actions-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 16px;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 16px;
+            gap: 12px;
             max-width: 1600px;
             margin: 0 auto;
             width: 100%;
         }
         @media (min-width: 768px) {
             .reader-actions-row {
-                padding: 10px 24px;
+                padding: 12px 24px;
+                gap: 16px;
             }
         }
         @media (min-width: 1200px) {
             .reader-actions-row {
-                padding: 10px 32px;
+                padding: 12px 32px;
             }
         }
 
         .reader-actions-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             flex-wrap: wrap;
+            min-width: 0;
+            flex: 1 1 auto;
         }
 
         .reader-actions-right {
@@ -1765,34 +1767,7 @@
             gap: 8px;
             flex-shrink: 0;
             margin-inline-start: auto;
-        }
-
-        /* Row 2: Dedicated Breadcrumb Bar (Zero Overlap on Any Screen Size) */
-        .reader-breadcrumbs-bar {
-            padding: 6px 16px 12px;
-            background: transparent !important;
-            display: flex;
-            align-items: center;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        .reader-breadcrumbs-bar::-webkit-scrollbar {
-            display: none;
-        }
-        @media (min-width: 768px) {
-            .reader-breadcrumbs-bar {
-                padding: 6px 24px 12px;
-            }
-        }
-        @media (min-width: 1200px) {
-            .reader-breadcrumbs-bar {
-                padding: 6px 32px 12px;
-            }
+            flex-wrap: wrap;
         }
 
         /* Mobile Drawer Toggle Buttons */
@@ -1863,7 +1838,7 @@
             border-color: #388BFD;
             color: #FFF;
             font-weight: 600;
-            max-width: fit-content;
+            max-width: min(100%, fit-content);
             width: fit-content;
             flex-shrink: 0;
             white-space: nowrap;
@@ -1881,7 +1856,7 @@
             background: var(--sl-color-surface-sunken);
             border: 1px solid var(--sl-color-border);
             border-radius: 8px;
-            max-width: fit-content;
+            max-width: min(100%, fit-content);
             width: fit-content;
             overflow-x: auto;
             white-space: nowrap;
@@ -3902,9 +3877,6 @@
             background: rgba(255, 255, 255, 0.96);
             border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
-        [data-theme="light"] .reader-actions-row {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
         [data-theme="light"] .reader-btn {
             background: #FFFFFF;
             border-color: rgba(0, 0, 0, 0.12);
@@ -3935,9 +3907,6 @@
         [data-theme="light"] .reader-breadcrumbs [aria-current="page"] {
             color: #0F141C !important;
             font-weight: 600;
-        }
-        [data-theme="light"] .reader-breadcrumbs-bar {
-            background: transparent !important;
         }
         [data-theme="light"] .markdown-body pre {
             background: #F6F8FA;
@@ -5359,14 +5328,21 @@
 
     <!-- SPECIFICATION VIEWER (Craft.wiki 3-Column Documentation Architecture following Jakob's Law) -->
     <div id="spec-view" role="region" aria-label="Specification Document">
-        <!-- Sticky Navigation & Actions Header (2-Row Dedicated Architecture) -->
+        <!-- Sticky Navigation & Actions Header (Single Unified Navigation Bar) -->
         <header class="reader-toolbar-container">
-            <!-- Row 1: Action Buttons & Drawer Toggles -->
             <div class="reader-actions-row">
                 <div class="reader-actions-left">
                     <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
                         <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Back to Catalog</span>
                     </button>
+                    <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
+                        <ol>
+                            <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
+                            <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
+                            <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
+                            <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
+                        </ol>
+                    </nav>
                     <!-- Drawer Toggles (shown on screens where sidebars are off-canvas) -->
                     <button class="spec-mobile-toggle-btn mobile-only" id="spec-drawer-toggle-btn" onclick="toggleSpecNavDrawer(event)" aria-label="Toggle standards navigation menu" aria-expanded="false">
                         <span class="icon" aria-hidden="true">☰</span>
@@ -5390,18 +5366,6 @@
                     </a>
                 </div>
             </div>
-
-            <!-- Row 2: Dedicated Breadcrumb Navigation Bar (Zero Overlap on Any Screen) -->
-            <nav class="reader-breadcrumbs-bar" aria-label="Breadcrumb navigation">
-                <div class="reader-breadcrumbs">
-                    <ol>
-                        <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><a href="#" onclick="showDashboard(event)">standards</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><a href="#" id="bc-cat-link" onclick="filterFromBreadcrumb(event)">06-unified-libs</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><span class="current" id="bc-file" aria-current="page">STD-LIB-002-keymap-architecture.md</span></li>
-                    </ol>
-                </div>
-            </nav>
         </header>
 
         <!-- 3-Column Documentation Grid -->

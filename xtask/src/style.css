@@ -1696,34 +1696,36 @@
             }
         }
 
-        /* Row 1: Action Controls & Mobile Drawer Toggles */
+        /* Single Unified Navigation Bar (Unified with Matrix, FAQ, and Overview Architecture) */
         .reader-actions-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 16px;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 16px;
+            gap: 12px;
             max-width: 1600px;
             margin: 0 auto;
             width: 100%;
         }
         @media (min-width: 768px) {
             .reader-actions-row {
-                padding: 10px 24px;
+                padding: 12px 24px;
+                gap: 16px;
             }
         }
         @media (min-width: 1200px) {
             .reader-actions-row {
-                padding: 10px 32px;
+                padding: 12px 32px;
             }
         }
 
         .reader-actions-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             flex-wrap: wrap;
+            min-width: 0;
+            flex: 1 1 auto;
         }
 
         .reader-actions-right {
@@ -1732,34 +1734,7 @@
             gap: 8px;
             flex-shrink: 0;
             margin-inline-start: auto;
-        }
-
-        /* Row 2: Dedicated Breadcrumb Bar (Zero Overlap on Any Screen Size) */
-        .reader-breadcrumbs-bar {
-            padding: 6px 16px 12px;
-            background: transparent !important;
-            display: flex;
-            align-items: center;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            max-width: 1600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        .reader-breadcrumbs-bar::-webkit-scrollbar {
-            display: none;
-        }
-        @media (min-width: 768px) {
-            .reader-breadcrumbs-bar {
-                padding: 6px 24px 12px;
-            }
-        }
-        @media (min-width: 1200px) {
-            .reader-breadcrumbs-bar {
-                padding: 6px 32px 12px;
-            }
+            flex-wrap: wrap;
         }
 
         /* Mobile Drawer Toggle Buttons */
@@ -1830,7 +1805,7 @@
             border-color: #388BFD;
             color: #FFF;
             font-weight: 600;
-            max-width: fit-content;
+            max-width: min(100%, fit-content);
             width: fit-content;
             flex-shrink: 0;
             white-space: nowrap;
@@ -1848,7 +1823,7 @@
             background: var(--sl-color-surface-sunken);
             border: 1px solid var(--sl-color-border);
             border-radius: 8px;
-            max-width: fit-content;
+            max-width: min(100%, fit-content);
             width: fit-content;
             overflow-x: auto;
             white-space: nowrap;
@@ -3869,9 +3844,6 @@
             background: rgba(255, 255, 255, 0.96);
             border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
-        [data-theme="light"] .reader-actions-row {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
         [data-theme="light"] .reader-btn {
             background: #FFFFFF;
             border-color: rgba(0, 0, 0, 0.12);
@@ -3902,9 +3874,6 @@
         [data-theme="light"] .reader-breadcrumbs [aria-current="page"] {
             color: #0F141C !important;
             font-weight: 600;
-        }
-        [data-theme="light"] .reader-breadcrumbs-bar {
-            background: transparent !important;
         }
         [data-theme="light"] .markdown-body pre {
             background: #F6F8FA;
