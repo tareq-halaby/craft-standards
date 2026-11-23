@@ -27,113 +27,120 @@ __STYLE__
     <!-- a11y: Polite screen reader live region -->
     <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- HEADER (Responsive, Mobile-First, Segmented Control) -->
+    <!-- HEADER (Responsive, Mobile-First, Segmented Control & Sub-Navigation) -->
     <header class="wiki-header" role="banner">
-        <div class="wiki-header-start">
-            <a class="wiki-brand" href="#" onclick="showDashboard(event)" aria-label="ArtCraft Standards Home">
-                <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="28" height="28">
-                <span class="wiki-brand-text">ArtCraft <em id="i18n-brand-sub">Standards</em></span>
-                <span class="wiki-brand-badge">portal</span>
-            </a>
-            <!-- Responsive Segmented View Switcher -->
-            <div class="nav-segmented-toggle" role="tablist" aria-label="Portal View Switcher">
-                <button class="nav-view-btn active" id="nav-btn-catalog" onclick="showDashboard(event)" role="tab" aria-selected="true" title="Specifications Catalog">
-                    <span id="i18n-nav-catalog">Catalog</span>
-                </button>
-                <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)" role="tab" aria-selected="false" title="Suite Compliance Matrix">
-                    <span id="i18n-nav-matrix">Matrix</span>
-                    <span class="nav-badge" id="nav-matrix-badge">20+</span>
-                </button>
-                <button class="nav-view-btn" id="nav-btn-faq" onclick="showFaqView(event)" role="tab" aria-selected="false" title="Frequently Asked Questions">
-                    <span id="i18n-nav-faq">FAQ</span>
-                </button>
-                <button class="nav-view-btn" id="nav-btn-about" onclick="showAboutView(event)" role="tab" aria-selected="false" title="Introduction &amp; Architecture Overview">
-                    <span id="i18n-nav-about">Overview</span>
-                </button>
+        <div class="wiki-header-primary">
+            <div class="wiki-header-start">
+                <a class="wiki-brand" href="#" onclick="showDashboard(event)" aria-label="ArtCraft Standards Home">
+                    <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="28" height="28">
+                    <span class="wiki-brand-text">ArtCraft <em id="i18n-brand-sub">Standards</em></span>
+                    <span class="wiki-brand-badge">portal</span>
+                </a>
             </div>
-        </div>
 
-        <div class="wiki-header-end">
-            <!-- Quick Command Palette Trigger (Ctrl+K) -->
-            <button class="nav-icon-action-btn cmd-btn" onclick="openCommandPalette()" title="Command Palette &amp; Quick Finder (Ctrl+K)" aria-label="Open Command Palette (Ctrl+K)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <span class="cmd-pill"><kbd>⌘K</kbd></span>
-            </button>
-
-            <!-- Agent & MCP Hub Trigger -->
-            <button class="nav-icon-action-btn agent-hub-btn" onclick="openAgentHub()" title="AI Agent Directives &amp; AutoCraft MCP Hub" aria-label="Open AI Agent &amp; AutoCraft MCP Hub">
-                <span class="agent-sparkle">⚡</span>
-                <span class="agent-btn-text">Agent &amp; MCP</span>
-            </button>
-
-            <!-- Language Selector -->
-            <div class="lang-picker" id="lang-picker-container">
-                <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
-                    <span id="current-lang-flag">🇺🇸</span>
-                    <span id="current-lang-code">EN</span>
-                    <span class="lang-arrow" aria-hidden="true">▾</span>
-                </button>
-                <div class="lang-dropdown" id="lang-dropdown-menu" role="listbox" aria-label="Language Selector">
-                    <!-- Populated dynamically from LOCALES -->
+            <!-- Responsive View Switcher (Dedicated sub-nav row on mobile, beside brand on desktop) -->
+            <nav class="header-nav-slot" aria-label="Portal View Switcher">
+                <div class="nav-segmented-toggle" role="tablist">
+                    <button class="nav-view-btn active" id="nav-btn-catalog" onclick="showDashboard(event)" role="tab" aria-selected="true" title="Specifications Catalog">
+                        <span id="i18n-nav-catalog">Catalog</span>
+                    </button>
+                    <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)" role="tab" aria-selected="false" title="Suite Compliance Matrix">
+                        <span id="i18n-nav-matrix">Matrix</span>
+                        <span class="nav-badge" id="nav-matrix-badge">20+</span>
+                    </button>
+                    <button class="nav-view-btn" id="nav-btn-faq" onclick="showFaqView(event)" role="tab" aria-selected="false" title="Frequently Asked Questions">
+                        <span id="i18n-nav-faq">FAQ</span>
+                    </button>
+                    <button class="nav-view-btn" id="nav-btn-about" onclick="showAboutView(event)" role="tab" aria-selected="false" title="Introduction &amp; Architecture Overview">
+                        <span id="i18n-nav-about">Overview</span>
+                    </button>
                 </div>
-            </div>
+            </nav>
 
-            <!-- Desktop-Only Secondary Links (Auto-hidden on mobile screens to prevent horizontal overflow) -->
-            <div class="desktop-nav-links">
-                <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                    <span class="link-text">Wiki</span>
-                </a>
-                <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community" aria-label="ArtCraft Discord Community">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
-                    <span class="link-text">Discord</span>
-                </a>
-                <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository" aria-label="GitHub Repository">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                    <span class="link-text">GitHub</span>
-                </a>
-                <a class="wiki-header-cta" href="https://artcraft.dev" target="_blank" title="Open ArtCraft Studio">
-                    <span>Studio</span> ↗
-                </a>
-            </div>
-
-            <!-- Mobile Overflow Menu Button (< 860px) -->
-            <div class="mobile-menu-container">
-                <button class="nav-icon-action-btn mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open More Options Menu" aria-expanded="false" id="mobile-menu-trigger">
-                    <span>⋮</span>
+            <div class="wiki-header-end">
+                <!-- Quick Command Palette Trigger (Ctrl+K) -->
+                <button class="nav-icon-action-btn cmd-btn" onclick="openCommandPalette()" title="Command Palette &amp; Quick Finder (Ctrl+K)" aria-label="Open Command Palette (Ctrl+K)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span class="cmd-pill"><kbd>⌘K</kbd></span>
                 </button>
-                <div class="mobile-dropdown-menu" id="mobile-dropdown-menu" role="menu">
-                    <a class="mobile-dropdown-item" href="#" onclick="openAgentHub(); closeMobileMenu(); return false;">
-                        <span>⚡ AI Agent &amp; AutoCraft Hub</span>
+
+                <!-- Agent & MCP Hub Trigger -->
+                <button class="nav-icon-action-btn agent-hub-btn" onclick="openAgentHub()" title="AI Agent Directives &amp; AutoCraft MCP Hub" aria-label="Open AI Agent &amp; AutoCraft MCP Hub">
+                    <span class="agent-sparkle">⚡</span>
+                    <span class="agent-btn-text">Agent &amp; MCP</span>
+                </button>
+
+                <!-- Language Selector -->
+                <div class="lang-picker" id="lang-picker-container">
+                    <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
+                        <span id="current-lang-flag">🇺🇸</span>
+                        <span id="current-lang-code">EN</span>
+                        <span class="lang-arrow" aria-hidden="true">▾</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown-menu" role="listbox" aria-label="Language Selector">
+                        <!-- Populated dynamically from LOCALES -->
+                    </div>
+                </div>
+
+                <!-- Desktop-Only Secondary Links (Auto-hidden on mobile screens to prevent horizontal overflow) -->
+                <div class="desktop-nav-links">
+                    <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        <span class="link-text">Wiki</span>
                     </a>
-                    <a class="mobile-dropdown-item" href="#" onclick="openCommandPalette(); closeMobileMenu(); return false;">
-                        <span>⌘ Quick Command Finder (Ctrl+K)</span>
+                    <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community" aria-label="ArtCraft Discord Community">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
+                        <span class="link-text">Discord</span>
                     </a>
-                    <a class="mobile-dropdown-item" href="#" onclick="showAboutView(event); closeMobileMenu(); return false;">
-                        <span>🏛️ Introduction &amp; Overview</span>
+                    <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository" aria-label="GitHub Repository">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                        <span class="link-text">GitHub</span>
                     </a>
-                    <a class="mobile-dropdown-item" href="#" onclick="openBadgeModal(); closeMobileMenu(); return false;">
-                        <span>🛡️ Contributor README Badges</span>
-                    </a>
-                    <hr class="mobile-dropdown-sep">
-                    <a class="mobile-dropdown-item" href="https://github.com/storytold/autocraft/blob/main/docs/pipeline.md" target="_blank">
-                        <span>🔄 AutoCraft Pipeline Guide ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item" href="https://craft.wiki" target="_blank">
-                        <span>📖 Craft Wiki ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item" href="https://discord.gg/artcraft" target="_blank">
-                        <span>💬 Community Discord ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item" href="https://github.com/tareq-halaby/craft-standards" target="_blank">
-                        <span>🐙 Standards GitHub Repo ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item highlight" href="https://artcraft.dev" target="_blank">
-                        <span>🎨 ArtCraft Studio ↗</span>
+                    <a class="wiki-header-cta" href="https://artcraft.dev" target="_blank" title="Open ArtCraft Studio">
+                        <span>Studio</span> ↗
                     </a>
                 </div>
+
+                <!-- Mobile Overflow Menu Button (< 860px) -->
+                <div class="mobile-menu-container">
+                    <button class="nav-icon-action-btn mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open More Options Menu" aria-expanded="false" id="mobile-menu-trigger">
+                        <span>⋮</span>
+                    </button>
+                    <div class="mobile-dropdown-menu" id="mobile-dropdown-menu" role="menu">
+                        <a class="mobile-dropdown-item" href="#" onclick="openAgentHub(); closeMobileMenu(); return false;">
+                            <span>⚡ AI Agent &amp; AutoCraft Hub</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="#" onclick="openCommandPalette(); closeMobileMenu(); return false;">
+                            <span>⌘ Quick Command Finder (Ctrl+K)</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="#" onclick="showAboutView(event); closeMobileMenu(); return false;">
+                            <span>🏛️ Introduction &amp; Overview</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="#" onclick="openBadgeModal(); closeMobileMenu(); return false;">
+                            <span>🛡️ Contributor README Badges</span>
+                        </a>
+                        <hr class="mobile-dropdown-sep">
+                        <a class="mobile-dropdown-item" href="https://github.com/storytold/autocraft/blob/main/docs/pipeline.md" target="_blank">
+                            <span>🔄 AutoCraft Pipeline Guide ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="https://craft.wiki" target="_blank">
+                            <span>📖 Craft Wiki ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="https://discord.gg/artcraft" target="_blank">
+                            <span>💬 Community Discord ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="https://github.com/tareq-halaby/craft-standards" target="_blank">
+                            <span>🐙 Standards GitHub Repo ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item highlight" href="https://artcraft.dev" target="_blank">
+                            <span>🎨 ArtCraft Studio ↗</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+        <!-- Mobile menu backdrop for easy tap-out dismissal -->
+        <div class="mobile-menu-backdrop" id="mobile-menu-backdrop" onclick="closeMobileMenu()" aria-hidden="true"></div>
     </header>
 
     <!-- DASHBOARD VIEW -->
@@ -149,17 +156,17 @@ __STYLE__
                 Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.
             </p>
             <div class="hero-anchors" role="group" aria-label="Hero shortcuts">
+                <a href="#" onclick="showMatrixView(event, 'checklist'); return false;" class="hero-anchor-pill highlight">
+                    <span>✅ PR Checklist Generator</span>
+                </a>
+                <a href="#" onclick="showMatrixView(event, 'shortcuts'); return false;" class="hero-anchor-pill">
+                    <span>⌨️ Universal Shortcuts Guide</span>
+                </a>
                 <a href="#" onclick="openAgentHub(); return false;" class="hero-anchor-pill">
                     <span id="i18n-hero-badge-mcp">⚡ AutoCraft MCP Gateway</span>
                 </a>
-                <a href="#STD-INPUT-001" class="hero-anchor-pill">
-                    <span id="i18n-hero-badge-sim">🧪 Interactive Sandboxes</span>
-                </a>
-                <a href="#STD-GOV-001" class="hero-anchor-pill highlight">
-                    <span id="i18n-hero-badge-drift">🛡️ Zero AST Drift Guarantee</span>
-                </a>
                 <a href="#" onclick="showAboutView(event); return false;" class="hero-anchor-pill">
-                    <span id="i18n-hero-badge-about">📖 Introduction &amp; Overview</span>
+                    <span id="i18n-hero-badge-about">📖 Companion Overview</span>
                 </a>
             </div>
         </section>
@@ -286,12 +293,15 @@ __ITEMS__
                 <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
                     <ol>
                         <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><span class="current" aria-current="page">compliance-matrix</span></li>
+                        <li><span class="current" aria-current="page">reference-apps-and-recipes</span></li>
                     </ol>
                 </nav>
             </div>
             <div class="page-header-nav-right">
-                <button class="reader-btn" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Compliance Report to clipboard">
+                <button class="reader-btn" id="matrix-openwiki-btn" onclick="exportOpenWikiAgentNotes()" title="Export OpenWiki Token-Lean Agent Notes (< 400 tokens)" aria-label="Export OpenWiki Token-Lean Agent Notes">
+                    <span>📄</span> <span>Export Agent Notes</span>
+                </button>
+                <button class="reader-btn" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Report to clipboard">
                     <span>📋</span> <span id="matrix-export-btn-text">Copy Markdown Report</span>
                 </button>
             </div>
@@ -341,6 +351,12 @@ __ITEMS__
                 </button>
                 <button class="matrix-pivot-btn" id="pivot-mode-drilldown" onclick="setMatrixViewMode('drilldown', this)" role="tab" aria-selected="false">
                     <span>🎯 Practical UI Recipes</span>
+                </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-shortcuts" onclick="setMatrixViewMode('shortcuts', this)" role="tab" aria-selected="false">
+                    <span>⌨️ Shortcuts Guide</span>
+                </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-checklist" onclick="setMatrixViewMode('checklist', this)" role="tab" aria-selected="false">
+                    <span>✅ PR Checklist Generator</span>
                 </button>
             </div>
         </div>
@@ -418,6 +434,16 @@ __ITEMS__
             <div id="drilldown-content" class="drilldown-content-card">
                 <!-- Populated dynamically -->
             </div>
+        </div>
+
+        <!-- Sub-view 4: Universal Shortcuts Matrix -->
+        <div id="matrix-shortcuts-container" style="display:none;margin-top:20px;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Sub-view 5: PR Pre-Flight Checklist Generator -->
+        <div id="matrix-checklist-container" style="display:none;margin-top:20px;">
+            <!-- Populated dynamically -->
         </div>
     </main>
 

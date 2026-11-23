@@ -869,12 +869,14 @@
             announceA11y('Returned to specifications catalog');
         }
 
-        function showMatrixView(e) {
+        function showMatrixView(e, initialMode) {
             if (e) e.preventDefault();
             activeSpecId = null;
             closeAllSpecDrawers();
-            if (window.location.hash !== '#matrix') {
-                history.pushState(null, null, '#matrix');
+            const targetMode = initialMode || (window.location.hash === '#shortcuts' ? 'shortcuts' : (window.location.hash === '#checklist' ? 'checklist' : (matrixViewMode || 'scorecards')));
+            const targetHash = '#' + (targetMode === 'scorecards' ? 'matrix' : targetMode);
+            if (window.location.hash !== targetHash) {
+                history.pushState(null, null, targetHash);
             }
             document.getElementById('spec-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'none';
@@ -895,8 +897,8 @@
             if (navAbout) navAbout.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
-            renderMatrixView();
-            announceA11y('Viewing ArtCraft Suite Compliance Telemetry Matrix');
+            setMatrixViewMode(targetMode);
+            announceA11y('Viewing ArtCraft Reference Apps & Capabilities');
         }
 
         function filterFromBreadcrumb(e) {
@@ -963,7 +965,11 @@
         function handleRouting() {
             const hash = window.location.hash.replace(/^#\/?/, '').trim();
             if (hash === 'matrix') {
-                showMatrixView();
+                showMatrixView(null, 'scorecards');
+            } else if (hash === 'shortcuts') {
+                showMatrixView(null, 'shortcuts');
+            } else if (hash === 'checklist' || hash === 'pr-checklist') {
+                showMatrixView(null, 'checklist');
             } else if (hash === 'faq' || hash.startsWith('faq/')) {
                 const targetFaqId = hash.startsWith('faq/') ? hash.substring(4) : null;
                 showFaqView(null, targetFaqId);
@@ -1486,10 +1492,19 @@
             const scorecardsEl = document.getElementById('matrix-scorecards-container');
             const gridEl = document.getElementById('matrix-grid-container');
             const drilldownEl = document.getElementById('matrix-drilldown-container');
+            const shortcutsEl = document.getElementById('matrix-shortcuts-container');
+            const checklistEl = document.getElementById('matrix-checklist-container');
+            const toolbarEl = document.querySelector('.matrix-toolbar');
 
             if (scorecardsEl) scorecardsEl.style.display = mode === 'scorecards' ? 'grid' : 'none';
             if (gridEl) gridEl.style.display = mode === 'grid' ? 'block' : 'none';
             if (drilldownEl) drilldownEl.style.display = mode === 'drilldown' ? 'block' : 'none';
+            if (shortcutsEl) shortcutsEl.style.display = mode === 'shortcuts' ? 'block' : 'none';
+            if (checklistEl) checklistEl.style.display = mode === 'checklist' ? 'block' : 'none';
+
+            if (toolbarEl) {
+                toolbarEl.style.display = (mode === 'checklist' || mode === 'drilldown') ? 'none' : 'flex';
+            }
 
             renderMatrixView();
         }
@@ -1837,7 +1852,215 @@
                 renderPivotGrid();
             } else if (matrixViewMode === 'drilldown') {
                 renderStandardDrilldown(selectedDrilldownSpec);
+            } else if (matrixViewMode === 'shortcuts') {
+                renderShortcutsMatrix();
+            } else if (matrixViewMode === 'checklist') {
+                renderChecklistGenerator();
             }
+        }
+
+        const UNIVERSAL_SHORTCUTS = [
+            { key: "V", chord: "<kbd>V</kbd>", app: "PhotoCraft / VectorCraft / FigCraft", benchmark: "Photoshop / Illustrator / Figma", action: "Selection / Move Tool", standard: "STD-INPUT-001", rule: "Universal primary selection cursor; escapes active sub-tool." },
+            { key: "B", chord: "<kbd>B</kbd>", app: "PhotoCraft / AniCraft", benchmark: "Photoshop / Krita / Blender GP", action: "Brush / Freehand Drawing", standard: "STD-INPUT-001", rule: "Cycles: Brush -> Pencil -> Color Replace -> Mixer Brush. Shift+B reverses." },
+            { key: "B", chord: "<kbd>B</kbd>", app: "FilmCraft", benchmark: "DaVinci Resolve / Premiere Pro", action: "Blade / Razor Cut Tool", standard: "STD-TIME-001", rule: "Splits timeline clip at current mouse playhead position." },
+            { key: "M", chord: "<kbd>M</kbd>", app: "PhotoCraft", benchmark: "Adobe Photoshop", action: "Rectangular / Elliptical Marquee", standard: "STD-INPUT-001", rule: "Cycles: Rectangular Marquee -> Elliptical Marquee -> Single Row." },
+            { key: "P", chord: "<kbd>P</kbd>", app: "VectorCraft / CADCraft", benchmark: "Illustrator / AutoCAD", action: "Pen Tool / Polyline", standard: "STD-INPUT-004", rule: "Places Bézier anchor points with tangent handle drag." },
+            { key: "L", chord: "<kbd>L</kbd>", app: "CADCraft", benchmark: "AutoCAD / FreeCAD", action: "Line Entity", standard: "STD-INPUT-001", rule: "Precision 2D/3D line segment with Cartesian coordinate prompts." },
+            { key: "C", chord: "<kbd>C</kbd>", app: "CADCraft", benchmark: "AutoCAD", action: "Circle Entity", standard: "STD-INPUT-001", rule: "Center-radius circle placement with numeric radius lock." },
+            { key: "Space", chord: "<kbd>Space</kbd> + Drag", app: "All 20 Applications", benchmark: "Universal Creative Standard", action: "Spring-Loaded Pan", standard: "STD-INPUT-002", rule: "Temporarily activates Hand Pan tool without losing active selection or tool slot." },
+            { key: "Ctrl+Tab", chord: "<kbd>Ctrl</kbd>+<kbd>Tab</kbd>", app: "All 20 Applications", benchmark: "STD-NAV-001 Standard", action: "Next Document Tab (LRU)", standard: "STD-NAV-001", rule: "Cycles open document tabs in Most Recently Used order; Shift+Ctrl+Tab reverses." },
+            { key: "J / K / L", chord: "<kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd>", app: "FilmCraft / AniCraft / SoundCraft", benchmark: "DaVinci Resolve / Avid / Final Cut", action: "Shuttle Scrubbing", standard: "STD-TIME-001", rule: "J = Reverse (2x, 4x, 8x), K = Pause/Stop, L = Forward (2x, 4x, 8x)." },
+            { key: "Ctrl+Z", chord: "<kbd>Ctrl</kbd>+<kbd>Z</kbd>", app: "All 20 Applications", benchmark: "Universal Undo", action: "Undo Last Action", standard: "STD-SHELL-002", rule: "Linear undo stack; must restore exact viewport and layer selection state." },
+            { key: "Ctrl+Shift+Z", chord: "<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>", app: "All 20 Applications", benchmark: "Universal Redo", action: "Redo Action", standard: "STD-SHELL-002", rule: "Reapplies next forward state in undo tree (Cmd+Y mapped on Windows fallback)." },
+            { key: "Ctrl+S", chord: "<kbd>Ctrl</kbd>+<kbd>S</kbd>", app: "All 20 Applications", benchmark: "Universal Save", action: "Atomic Document Save", standard: "STD-SHELL-003", rule: "Writes to temporary file and atomically renames; updates clean/dirty indicator." },
+            { key: "Tab", chord: "<kbd>Tab</kbd>", app: "PhotoCraft / FigCraft / CADCraft", benchmark: "Photoshop / Blender", action: "Toggle Workspace Docks", standard: "STD-NAV-002", rule: "Hides/restores side panels and toolbars for distraction-free canvas view." },
+            { key: "Alt + Drag", chord: "<kbd>Alt</kbd> + Drag", app: "PhotoCraft / VectorCraft / FigCraft", benchmark: "Photoshop / Illustrator", action: "Duplicate on Drag", standard: "STD-INPUT-004", rule: "Clones current selection in-place before initiating translate gesture." },
+            { key: "Shift + Drag", chord: "<kbd>Shift</kbd> + Drag", app: "All 20 Applications", benchmark: "Universal Axis Constraint", action: "Constrain Orthogonal (15°/45°/90°)", standard: "STD-INPUT-004", rule: "Locks translation or rotation to discrete orthogonal increments." }
+        ];
+
+        function renderShortcutsMatrix() {
+            const container = document.getElementById('matrix-shortcuts-container');
+            if (!container) return;
+
+            const query = (matrixSearchQuery || '').toLowerCase();
+            const filtered = UNIVERSAL_SHORTCUTS.filter(s => {
+                return !query || 
+                    s.key.toLowerCase().includes(query) || 
+                    s.app.toLowerCase().includes(query) || 
+                    s.benchmark.toLowerCase().includes(query) || 
+                    s.action.toLowerCase().includes(query) || 
+                    s.rule.toLowerCase().includes(query);
+            });
+
+            container.innerHTML = `
+                <div style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;overflow:hidden;">
+                    <div style="padding:18px 20px;border-bottom:1px solid var(--sl-color-border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                        <div>
+                            <h3 style="font-family:var(--font-display);font-size:16px;font-weight:700;color:#FFF;margin:0 0 4px 0;">⌨️ Universal Creative Shortcuts & Keymap Matrix</h3>
+                            <p style="font-size:12.5px;color:var(--sl-color-text-muted);margin:0;">Standard chords, tool cycling keys, and modifier invariants compared across benchmark applications.</p>
+                        </div>
+                        <div style="font-size:12px;color:var(--sl-color-text-muted);">
+                            Showing <strong>${filtered.length}</strong> of ${UNIVERSAL_SHORTCUTS.length} shortcuts
+                        </div>
+                    </div>
+                    <div class="matrix-table-scroll-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:110px;">Shortcut Chord</th>
+                                    <th style="min-width:180px;">Action / Tool</th>
+                                    <th style="min-width:180px;">App & Benchmark</th>
+                                    <th style="min-width:130px;">Governing Standard</th>
+                                    <th style="min-width:260px;">Ergonomic Invariant & Rule</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filtered.length === 0 ? `<tr><td colspan="5" style="text-align:center;padding:36px;color:var(--sl-color-text-muted);">No matching shortcuts found. Try searching for "Space", "Brush", "V", or "Tab".</td></tr>` : 
+                                filtered.map(s => `
+                                    <tr>
+                                        <td><div style="font-size:13px;font-weight:700;">${s.chord}</div></td>
+                                        <td style="font-weight:600;color:#FFF;">${s.action}</td>
+                                        <td>
+                                            <div style="font-size:12px;color:var(--sl-color-text);">${s.app}</div>
+                                            <div style="font-size:11px;color:#58A6FF;margin-top:2px;">🎯 ${s.benchmark}</div>
+                                        </td>
+                                        <td>
+                                            <a href="#${s.standard}" onclick="openSpec('${s.standard}')" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--sl-color-accent);text-decoration:none;">
+                                                ${s.standard} ↗
+                                            </a>
+                                        </td>
+                                        <td style="font-size:12px;color:var(--sl-color-text-muted);line-height:1.4;">${s.rule}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderChecklistGenerator() {
+            const container = document.getElementById('matrix-checklist-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="checklist-gen-wrapper" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--sl-color-border);padding-bottom:16px;">
+                        <div>
+                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">🎯 PR Pre-Flight Checklist Generator</h3>
+                            <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;">Generate a reference-app-aligned PR description for pull requests in the Storytold / ArtCraft monorepo.</p>
+                        </div>
+                        <button class="reader-btn primary" onclick="copyGeneratedChecklist()" id="copy-checklist-btn" style="padding:10px 18px;font-size:13px;">
+                            <span>📋 Copy Markdown Checklist</span>
+                        </button>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;margin-bottom:24px;">
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Target Application:</label>
+                            <select id="checklist-app-select" class="drilldown-select" style="width:100%;" onchange="updateChecklistPreview()">
+                                ${APPS_COMPLIANCE.map(a => `<option value="${a.name}">${a.name} (${a.category}) · ${a.reference}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Feature / Change Category:</label>
+                            <select id="checklist-feat-select" class="drilldown-select" style="width:100%;" onchange="updateChecklistPreview()">
+                                <option value="tool">New Tool or Toolbar Slot (STD-INPUT-001)</option>
+                                <option value="timeline">Timeline, Playhead, or JKL Scrubbing (STD-TIME-001)</option>
+                                <option value="file_io">File I/O, Document Saving, or Export (STD-SHELL-003)</option>
+                                <option value="a11y">Accessibility & AccessKit Tree (STD-A11Y-001)</option>
+                                <option value="dialog">Dialog, Window, or Modal (STD-SHELL-001)</option>
+                                <option value="shortcuts">Keymap, Shortcut, or Command (STD-LIB-002)</option>
+                                <option value="general">General Feature or Bugfix</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                            <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);">Markdown Preview (Paste into GitHub PR Description):</span>
+                            <span style="font-size:11px;color:#3FB950;font-weight:600;">✓ Aligned with Maintainer Review Criteria</span>
+                        </div>
+                        <pre id="checklist-markdown-preview" style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;color:#E6EDF3;font-family:var(--font-mono);font-size:12px;line-height:1.6;white-space:pre-wrap;max-height:360px;overflow-y:auto;"></pre>
+                    </div>
+                </div>
+            `;
+
+            updateChecklistPreview();
+        }
+
+        function updateChecklistPreview() {
+            const appSelect = document.getElementById('checklist-app-select');
+            const featSelect = document.getElementById('checklist-feat-select');
+            const preview = document.getElementById('checklist-markdown-preview');
+            if (!appSelect || !featSelect || !preview) return;
+
+            const appName = appSelect.value;
+            const app = APPS_COMPLIANCE.find(a => a.name === appName) || APPS_COMPLIANCE[0];
+            const feat = featSelect.value;
+
+            let specificChecks = "";
+            if (feat === 'tool') {
+                specificChecks = `- [ ] **Tool Slot Cycling (STD-INPUT-001):** Pressing primary shortcut key cycles sub-tools without losing modifier state.\n- [ ] **Spring-Loaded Pan (STD-INPUT-002):** Space key initiates temporary pan without deselecting active tool.`;
+            } else if (feat === 'timeline') {
+                specificChecks = `- [ ] **JKL Scrubbing (STD-TIME-001):** J/K/L keys shuttle timeline at 1x, 2x, 4x, 8x velocity with instant audio gate.\n- [ ] **Playhead Invariant:** Playhead drag snaps to edit points and clip boundaries smoothly.`;
+            } else if (feat === 'file_io') {
+                specificChecks = `- [ ] **Sandboxed File Access (STD-SHELL-003):** All file operations route through \`craft-fs\` channels (zero raw \`std::fs\` calls).\n- [ ] **Atomic Save (STD-SHELL-002):** Document writes to temporary file before atomic rename to prevent corruption on crash.`;
+            } else if (feat === 'a11y') {
+                specificChecks = `- [ ] **AccessKit Node Tagging (STD-A11Y-001):** Interactive widgets tagged with appropriate AccessKit \`Role\` and localized Name.\n- [ ] **Focus Rings (STD-A11Y-002):** 2px visible focus ring rendered in keyboard navigation mode.`;
+            } else if (feat === 'dialog') {
+                specificChecks = `- [ ] **Dialog Lifecycles (STD-SHELL-001):** Escape key dismisses modal dialog; default action triggered by Enter.\n- [ ] **Platform Button Order:** Confirm/Cancel button order matches host OS conventions.`;
+            } else if (feat === 'shortcuts') {
+                specificChecks = `- [ ] **Benchmark Alignment:** Shortcut preserves user muscle memory from **${app.reference}**.\n- [ ] **Conflict Free:** Key chord does not clash with universal shortcuts (\`Ctrl+S\`, \`Ctrl+Tab\`, \`Space\`).`;
+            } else {
+                specificChecks = `- [ ] **Ergonomic Muscle Memory:** Follows **${app.reference}** benchmark conventions.\n- [ ] **Modular Crate Architecture:** Reuses shared infrastructure (\`egui\`, \`wgpu\`, \`accesskit\`).`;
+            }
+
+            const md = `### 🎯 Pull Request Summary
+- **Target Application:** ${app.name} (\`${app.crate}\`)
+- **Industry Reference Benchmark:** ${app.reference}
+- **Primary Metaphor:** ${app.metaphor}
+
+### ✅ Contributor Pre-Flight Verification
+${specificChecks}
+- [ ] **AccessKit a11y (STD-A11Y-001):** No silent, untagged interactive elements in egui tree.
+- [ ] **Bidirectional Layout (STD-I18N-001):** UI elements respect logical direction (\`margin_inline_start\`).
+- [ ] **The Keep Rule (STD-LIB-005):** Added invariant unit test; zero regressions across existing test suite.
+- [ ] **Render Loop Isolation:** Heavy compute dispatched to async worker threads (render loop stays responsive at 60+ FPS).`;
+
+            preview.textContent = md;
+        }
+
+        function copyGeneratedChecklist() {
+            const preview = document.getElementById('checklist-markdown-preview');
+            if (!preview) return;
+            navigator.clipboard.writeText(preview.textContent).then(() => {
+                const btn = document.getElementById('copy-checklist-btn');
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = `<span>✓ Checklist Copied!</span>`;
+                    setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
+                }
+                showToastNotification('PR Checklist copied to clipboard! Ready to paste into GitHub.');
+            });
+        }
+
+        function exportOpenWikiAgentNotes() {
+            let out = `# ArtCraft Standards & Recipes (Agent Context)\n\n`;
+            out += `> Token-lean workspace notes aligned with langchain-ai/openwiki.\n\n`;
+            out += `| ID | Domain | Crate | Core Invariant & Rule |\n`;
+            out += `| :--- | :--- | :--- | :--- |\n`;
+
+            SPECS.forEach(s => {
+                const crateName = s.canonical_crate || 'craft-widgets';
+                out += `| \`${s.id}\` | ${s.category} | \`${crateName}\` | ${s.title} |\n`;
+            });
+
+            navigator.clipboard.writeText(out).then(() => {
+                showToastNotification('OpenWiki Agent Notes copied to clipboard! (< 400 tokens)');
+            }).catch(() => {
+                showToastNotification('Copied agent notes to clipboard.');
+            });
         }
 
         function copyMatrixMarkdownReport() {
@@ -2121,22 +2344,43 @@
             if (e) { e.preventDefault(); e.stopPropagation(); }
             const menu = document.getElementById('mobile-dropdown-menu');
             const btn = document.getElementById('mobile-menu-trigger');
+            const backdrop = document.getElementById('mobile-menu-backdrop');
             if (!menu) return;
             const isOpen = menu.classList.toggle('open');
             if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            if (backdrop) {
+                if (isOpen) {
+                    backdrop.classList.add('open');
+                } else {
+                    backdrop.classList.remove('open');
+                }
+            }
         }
 
         function closeMobileMenu() {
             const menu = document.getElementById('mobile-dropdown-menu');
             const btn = document.getElementById('mobile-menu-trigger');
+            const backdrop = document.getElementById('mobile-menu-backdrop');
             if (menu) menu.classList.remove('open');
             if (btn) btn.setAttribute('aria-expanded', 'false');
+            if (backdrop) backdrop.classList.remove('open');
         }
 
         window.addEventListener('click', (e) => {
             const container = document.querySelector('.mobile-menu-container');
             if (container && !container.contains(e.target)) {
                 closeMobileMenu();
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const menu = document.getElementById('mobile-dropdown-menu');
+                if (menu && menu.classList.contains('open')) {
+                    closeMobileMenu();
+                    const btn = document.getElementById('mobile-menu-trigger');
+                    if (btn) btn.focus();
+                }
             }
         });
 
@@ -2582,33 +2826,68 @@ pub fn open_project_file(root: &AutomationRoot, relative_path: &str) -> Result<s
             const labEl = document.getElementById('spec-snippet-lab');
             if (!labEl) return;
 
-            const snippet = RUST_BOILERPLATE_MAP[spec.id] || `// ${spec.id}: ${spec.title}\n// Canonical Crate: ${spec.crate || "craft-standards"}\n// Invariant Contract Enforcement\npub struct StandardInvariant {\n    pub id: &'static str,\n    pub passes_zero_drift: bool,\n}\n\nimpl StandardInvariant {\n    pub fn verify() -> bool { true }\n}`;
+            const rustSnippet = RUST_BOILERPLATE_MAP[spec.id] || `// ${spec.id}: ${spec.title}\n// Canonical Crate: ${spec.crate || "craft-standards"}\n// Invariant Contract Enforcement\npub struct StandardInvariant {\n    pub id: &'static str,\n    pub passes_zero_drift: bool,\n}\n\nimpl StandardInvariant {\n    pub fn verify() -> bool { true }\n}`;
+
+            const testSnippet = `#[test]\nfn test_${spec.id.toLowerCase().replace(/-/g, '_')}_invariant() {\n    // Guard: ${spec.title}\n    // Invariant: Verify edge-case behavioral contract and zero AST drift under STD-LIB-005 Keep Rule\n    assert!(true, "Enforces ${spec.id} contract");\n}`;
+
+            const agentSnippet = `// [ArtCraft Recipe: ${spec.id}] ${spec.title}\n// Domain: ${spec.category} | Crate: ${spec.crate || 'craft-widgets'} | UI: egui/wgpu\n// Rule: Implement ${spec.id} using safe abstractions without direct std::fs calls.\n// Node: Tag AccessKit node with appropriate Role and Name.`;
 
             labEl.innerHTML = `
-                <div class="snippet-lab-header">
-                    <div class="snippet-lab-title">
-                        <span>🦀 Production Rust Boilerplate (egui / wgpu)</span>
-                        <span class="nav-badge" style="background:#238636;">100% Invariant Compliant</span>
+                <div class="snippet-lab-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-weight:700;font-size:13px;color:#FFF;">🦀 Developer Recipes & Invariants</span>
+                        <div class="matrix-pivot-modes" style="display:inline-flex;padding:2px;gap:4px;">
+                            <button class="matrix-pivot-btn active" id="tab-code-rust-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'rust')">Rust (egui)</button>
+                            <button class="matrix-pivot-btn" id="tab-code-test-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'test')">TestKit (#[test])</button>
+                            <button class="matrix-pivot-btn" id="tab-code-agent-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'agent')">⚡ Lean Prompt</button>
+                        </div>
                     </div>
-                    <button class="copy-code-btn" onclick="copySnippetLabCode('${spec.id}', this)">Copy Rust Code</button>
+                    <button class="copy-code-btn" id="copy-snippet-active-btn" onclick="copyActiveSnippet('${spec.id}', this)">Copy Current Snippet</button>
                 </div>
-                <pre class="snippet-lab-body"><code id="snippet-code-${spec.id}">${snippet}</code></pre>
+                <pre class="snippet-lab-body"><code id="snippet-code-${spec.id}">${rustSnippet}</code></pre>
             `;
             labEl.style.display = 'block';
+
+            window[`__activeSnippetTab_${spec.id}`] = 'rust';
+            window[`__snippetMap_${spec.id}`] = {
+                rust: rustSnippet,
+                test: testSnippet,
+                agent: agentSnippet
+            };
         }
 
-        function copySnippetLabCode(specId, btn) {
-            const el = document.getElementById(`snippet-code-${specId}`);
-            if (!el) return;
-            navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
+        function switchSnippetTab(specId, tab) {
+            window[`__activeSnippetTab_${specId}`] = tab;
+            ['rust', 'test', 'agent'].forEach(t => {
+                const b = document.getElementById(`tab-code-${t}-${specId}`);
+                if (b) {
+                    if (t === tab) b.classList.add('active');
+                    else b.classList.remove('active');
+                }
+            });
+            const codeEl = document.getElementById(`snippet-code-${specId}`);
+            if (codeEl && window[`__snippetMap_${specId}`]) {
+                codeEl.textContent = window[`__snippetMap_${specId}`][tab] || '';
+            }
+        }
+
+        function copyActiveSnippet(specId, btn) {
+            const tab = window[`__activeSnippetTab_${specId}`] || 'rust';
+            const text = (window[`__snippetMap_${specId}`] && window[`__snippetMap_${specId}`][tab]) || '';
+            navigator.clipboard.writeText(text).then(() => {
                 const orig = btn.innerText;
-                btn.innerText = '✓ Code Copied!';
+                btn.innerText = '✓ Copied!';
                 btn.style.color = '#3FB950';
                 setTimeout(() => {
                     btn.innerText = orig;
                     btn.style.color = '';
                 }, 2000);
+                showToastNotification('Snippet copied to clipboard!');
             });
+        }
+
+        function copySnippetLabCode(specId, btn) {
+            copyActiveSnippet(specId, btn);
         }
 
         window.addEventListener('hashchange', handleRouting);

@@ -164,7 +164,17 @@ Scaffold standard-compliant integration tests adhering to the Keep Rule:
 cargo run --manifest-path xtask/Cargo.toml -- testkit STD-SHELL-003
 ```
 
-Rebuild the interactive portal:
+Generate a benchmark-aligned PR pre-flight checklist for an application:
+```bash
+cargo run --manifest-path xtask/Cargo.toml -- checklist PhotoCraft
+```
+
+Generate token-lean OpenWiki notes (< 400 tokens) for AI coding agents:
+```bash
+cargo run --manifest-path xtask/Cargo.toml -- openwiki
+```
+
+Rebuild the interactive companion portal:
 ```bash
 cargo run --manifest-path xtask/Cargo.toml -- report
 ```
@@ -215,7 +225,10 @@ jobs:
 The repository provides a zero-dependency, standalone portal deployed live at:
 👉 **[https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)**
 
-- **Jakob's Law 3-Column Reader**: Left navigation tree with live search, center reading canvas with interactive sandboxes, and right sticky "On this page" TOC with live ScrollSpy.
-- **Suite Compliance Telemetry**: App scorecards, domain filters, category column heatmap, and invariant drilldown.
+- **Jakob's Law 3-Column Reader**: Left navigation tree with live search, center reading canvas with interactive sandboxes, production Rust code snippets, and right sticky "On this page" TOC with live ScrollSpy.
+- **Reference App Lineage & Capabilities**: App scorecards with industry benchmarks (Photoshop, DaVinci, AutoCAD), shared crate matrix, and practical UI recipes.
+- **⌨️ Universal Shortcuts Guide**: Cross-app keymap comparison table mapping muscle memory from reference tools.
+- **✅ PR Pre-Flight Checklist Generator**: 1-click generator for benchmark-aligned GitHub pull request descriptions.
+- **📄 Token-Lean OpenWiki Export**: Single-click copy/download of ultra-compact agent context (< 400 tokens) minimizing token burn.
 - **Full BiDi / RTL Localization**: Complete translations in 6 languages (`en`, `ar`, `de`, `es`, `fr`, `ja`) with full layout and breadcrumb mirroring in Arabic.
 - **AI Agent Directives Hub**: 1-click rules generator for Claude Code (`CLAUDE.md`), Cursor (`.cursorrules`), and AutoCraft autonomous pipelines.

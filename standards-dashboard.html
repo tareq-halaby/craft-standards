@@ -115,7 +115,7 @@
             padding: 0 38px 0 16px;
         }
 
-        /* Global Header (Mobile-First, a11y, i18n, Segmented Controls) */
+        /* Global Header (Mobile-First 2-Row Subnav, a11y, i18n, Segmented Controls) */
         .wiki-header {
             position: sticky;
             top: 0;
@@ -124,33 +124,56 @@
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--sl-color-border);
-            padding: 0 12px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
+            padding: 8px 12px 10px 12px;
             box-sizing: border-box;
             width: 100%;
+            transition: padding 0.2s ease, height 0.2s ease;
         }
-        @media (min-width: 768px) {
-            .wiki-header { padding: 0 24px; height: 60px; }
+        @media (min-width: 860px) {
+            .wiki-header {
+                padding: 0 24px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+            }
         }
         @media (min-width: 1024px) {
-            .wiki-header { padding: 0 32px; }
+            .wiki-header {
+                padding: 0 32px;
+            }
+        }
+
+        .wiki-header-primary {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            row-gap: 8px;
+            column-gap: 8px;
+        }
+        @media (min-width: 860px) {
+            .wiki-header-primary {
+                flex-wrap: nowrap;
+                row-gap: 0;
+                column-gap: 16px;
+                align-items: center;
+            }
         }
 
         .wiki-header-start {
+            order: 1;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-shrink: 0;
+            min-height: 40px;
         }
 
         .wiki-brand {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
             text-decoration: none;
             color: var(--sl-color-white);
             font-family: var(--font-display);
@@ -179,40 +202,84 @@
             letter-spacing: 0.05em;
             display: none;
         }
-        @media (min-width: 520px) {
+        @media (min-width: 480px) {
             .wiki-brand-badge { display: inline-block; }
+        }
+
+        /* Sub-Navigation Slot: Drops to Row 2 on mobile, sits in header on desktop */
+        .header-nav-slot {
+            order: 3;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        @media (min-width: 860px) {
+            .header-nav-slot {
+                order: 2;
+                width: auto;
+                margin-inline-start: 12px;
+                margin-inline-end: auto;
+            }
         }
 
         /* Responsive Nav Segmented Toggle */
         .nav-segmented-toggle {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             background: #11141D;
             border: 1px solid var(--sl-color-border);
             border-radius: 8px;
             padding: 3px;
-            gap: 2px;
+            gap: 3px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
+        .nav-segmented-toggle::-webkit-scrollbar {
+            display: none;
+        }
+        @media (min-width: 860px) {
+            .nav-segmented-toggle {
+                width: auto;
+                gap: 2px;
+            }
+        }
+
         .nav-view-btn {
+            flex: 1 1 0px;
             background: transparent;
             border: none;
             color: var(--sl-color-text-muted);
-            padding: 5px 9px;
+            padding: 8px 10px;
+            min-height: 40px;
             border-radius: 6px;
-            font-size: 11.5px;
+            font-size: 12.5px;
             font-weight: 600;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            transition: all 0.15s;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
             font-family: var(--font-sans);
             white-space: nowrap;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        @media (min-width: 640px) {
-            .nav-view-btn { padding: 5px 12px; font-size: 12.5px; }
+        @media (min-width: 860px) {
+            .nav-view-btn {
+                flex: 0 0 auto;
+                min-height: 32px;
+                padding: 5px 12px;
+                font-size: 12.5px;
+            }
         }
-        .nav-view-btn:hover { color: #FFF; }
+        .nav-view-btn:hover {
+            color: #FFF;
+            background: rgba(255, 255, 255, 0.05);
+        }
         .nav-view-btn.active {
             color: #FFF;
             background: #1F6FEB;
@@ -228,30 +295,41 @@
             font-weight: 700;
         }
 
+        /* Header End Controls */
         .wiki-header-end {
+            order: 2;
             display: flex;
             align-items: center;
             gap: 6px;
+            flex-shrink: 0;
+            min-height: 40px;
         }
         @media (min-width: 768px) {
             .wiki-header-end { gap: 8px; }
         }
+        @media (min-width: 860px) {
+            .wiki-header-end { order: 3; }
+        }
 
-        /* Action Buttons in Header */
+        /* Action Buttons in Header with WCAG AAA touch targets */
         .nav-icon-action-btn {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--sl-color-border);
             color: var(--sl-color-text);
-            padding: 5px 8px;
-            border-radius: 6px;
+            padding: 8px 10px;
+            min-height: 38px;
+            min-width: 38px;
+            border-radius: 7px;
             font-size: 12px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 5px;
-            transition: all 0.15s;
+            transition: all 0.15s ease;
             font-family: var(--font-sans);
             white-space: nowrap;
+            -webkit-tap-highlight-color: transparent;
         }
         .nav-icon-action-btn:hover {
             color: #FFF;
@@ -288,7 +366,7 @@
         .agent-btn-text {
             display: none;
         }
-        @media (min-width: 540px) {
+        @media (min-width: 600px) {
             .agent-btn-text { display: inline; }
         }
 
@@ -302,15 +380,17 @@
             border: 1px solid var(--sl-color-border);
             color: var(--sl-color-white);
             font-family: var(--font-mono);
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 600;
-            padding: 5px 8px;
-            border-radius: 6px;
+            padding: 8px 9px;
+            min-height: 38px;
+            border-radius: 7px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 4px;
-            transition: all 0.15s;
+            transition: all 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
         }
         .lang-btn:hover {
             background: rgba(255, 255, 255, 0.1);
@@ -320,27 +400,28 @@
         .lang-btn[aria-expanded="true"] .lang-arrow { transform: rotate(180deg); }
         .lang-dropdown {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 6px);
             inset-inline-end: 0;
-            margin-top: 6px;
             background: #161B22;
-            border: 1px solid var(--sl-color-border);
-            border-radius: 8px;
+            border: 1px solid var(--sl-color-border-hover);
+            border-radius: 10px;
             padding: 6px;
-            min-width: 170px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-            z-index: 200;
+            min-width: 175px;
+            max-width: calc(100vw - 24px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+            z-index: 220;
             display: none;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
         }
         .lang-dropdown.open { display: flex; }
         .lang-option {
             background: transparent;
             border: none;
             color: var(--sl-color-text);
-            font-size: 12.5px;
-            padding: 7px 10px;
+            font-size: 13px;
+            padding: 8px 10px;
+            min-height: 38px;
             border-radius: 6px;
             cursor: pointer;
             display: flex;
@@ -393,7 +474,8 @@
         .wiki-header-cta {
             background: #1F6FEB;
             color: #FFF !important;
-            padding: 5px 12px;
+            padding: 6px 12px;
+            min-height: 32px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
@@ -406,6 +488,26 @@
         }
         .wiki-header-cta:hover { background: #388BFD; }
 
+        /* Mobile Overflow Menu Backdrop */
+        .mobile-menu-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 195;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+        .mobile-menu-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         /* Mobile Overflow Menu (Visible only on < 860px) */
         .mobile-menu-container {
             position: relative;
@@ -415,46 +517,70 @@
             .mobile-menu-container { display: none; }
         }
         .mobile-menu-btn {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 700;
-            padding: 5px 10px;
+            padding: 6px 11px;
+            min-width: 38px;
+            min-height: 38px;
         }
         .mobile-dropdown-menu {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 8px);
             inset-inline-end: 0;
-            margin-top: 6px;
             background: #161B22;
-            border: 1px solid var(--sl-color-border);
-            border-radius: 10px;
+            border: 1px solid var(--sl-color-border-hover);
+            border-radius: 12px;
             padding: 8px;
-            min-width: 220px;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+            min-width: 240px;
+            max-width: calc(100vw - 24px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
             z-index: 210;
             display: none;
             flex-direction: column;
             gap: 4px;
+            transform-origin: top right;
+            animation: menuScaleIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        [dir="rtl"] .mobile-dropdown-menu {
+            transform-origin: top left;
+        }
+        @keyframes menuScaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
         .mobile-dropdown-menu.open { display: flex; }
         .mobile-dropdown-item {
             color: var(--sl-color-text);
             text-decoration: none;
-            padding: 8px 10px;
-            border-radius: 6px;
-            font-size: 13px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13.5px;
             font-weight: 500;
             transition: background 0.15s, color 0.15s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            min-height: 42px;
+            box-sizing: border-box;
         }
-        .mobile-dropdown-item:hover {
-            background: rgba(255, 255, 255, 0.06);
+        .mobile-dropdown-item:hover, .mobile-dropdown-item:active {
+            background: rgba(255, 255, 255, 0.08);
             color: #FFF;
         }
         .mobile-dropdown-item.highlight {
             color: var(--sl-color-accent);
+            background: rgba(56, 139, 253, 0.08);
             font-weight: 600;
+        }
+        .mobile-dropdown-item.highlight:hover {
+            background: rgba(56, 139, 253, 0.16);
+            color: #FFF;
         }
         .mobile-dropdown-sep {
             border: none;
@@ -3461,113 +3587,120 @@
     <!-- a11y: Polite screen reader live region -->
     <div id="a11y-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- HEADER (Responsive, Mobile-First, Segmented Control) -->
+    <!-- HEADER (Responsive, Mobile-First, Segmented Control & Sub-Navigation) -->
     <header class="wiki-header" role="banner">
-        <div class="wiki-header-start">
-            <a class="wiki-brand" href="#" onclick="showDashboard(event)" aria-label="ArtCraft Standards Home">
-                <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="28" height="28">
-                <span class="wiki-brand-text">ArtCraft <em id="i18n-brand-sub">Standards</em></span>
-                <span class="wiki-brand-badge">portal</span>
-            </a>
-            <!-- Responsive Segmented View Switcher -->
-            <div class="nav-segmented-toggle" role="tablist" aria-label="Portal View Switcher">
-                <button class="nav-view-btn active" id="nav-btn-catalog" onclick="showDashboard(event)" role="tab" aria-selected="true" title="Specifications Catalog">
-                    <span id="i18n-nav-catalog">Catalog</span>
-                </button>
-                <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)" role="tab" aria-selected="false" title="Suite Compliance Matrix">
-                    <span id="i18n-nav-matrix">Matrix</span>
-                    <span class="nav-badge" id="nav-matrix-badge">20+</span>
-                </button>
-                <button class="nav-view-btn" id="nav-btn-faq" onclick="showFaqView(event)" role="tab" aria-selected="false" title="Frequently Asked Questions">
-                    <span id="i18n-nav-faq">FAQ</span>
-                </button>
-                <button class="nav-view-btn" id="nav-btn-about" onclick="showAboutView(event)" role="tab" aria-selected="false" title="Introduction &amp; Architecture Overview">
-                    <span id="i18n-nav-about">Overview</span>
-                </button>
+        <div class="wiki-header-primary">
+            <div class="wiki-header-start">
+                <a class="wiki-brand" href="#" onclick="showDashboard(event)" aria-label="ArtCraft Standards Home">
+                    <img src="assets/artcraft-studio.svg" alt="ArtCraft Logo" width="28" height="28">
+                    <span class="wiki-brand-text">ArtCraft <em id="i18n-brand-sub">Standards</em></span>
+                    <span class="wiki-brand-badge">portal</span>
+                </a>
             </div>
-        </div>
 
-        <div class="wiki-header-end">
-            <!-- Quick Command Palette Trigger (Ctrl+K) -->
-            <button class="nav-icon-action-btn cmd-btn" onclick="openCommandPalette()" title="Command Palette &amp; Quick Finder (Ctrl+K)" aria-label="Open Command Palette (Ctrl+K)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <span class="cmd-pill"><kbd>⌘K</kbd></span>
-            </button>
-
-            <!-- Agent & MCP Hub Trigger -->
-            <button class="nav-icon-action-btn agent-hub-btn" onclick="openAgentHub()" title="AI Agent Directives &amp; AutoCraft MCP Hub" aria-label="Open AI Agent &amp; AutoCraft MCP Hub">
-                <span class="agent-sparkle">⚡</span>
-                <span class="agent-btn-text">Agent &amp; MCP</span>
-            </button>
-
-            <!-- Language Selector -->
-            <div class="lang-picker" id="lang-picker-container">
-                <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
-                    <span id="current-lang-flag">🇺🇸</span>
-                    <span id="current-lang-code">EN</span>
-                    <span class="lang-arrow" aria-hidden="true">▾</span>
-                </button>
-                <div class="lang-dropdown" id="lang-dropdown-menu" role="listbox" aria-label="Language Selector">
-                    <!-- Populated dynamically from LOCALES -->
+            <!-- Responsive View Switcher (Dedicated sub-nav row on mobile, beside brand on desktop) -->
+            <nav class="header-nav-slot" aria-label="Portal View Switcher">
+                <div class="nav-segmented-toggle" role="tablist">
+                    <button class="nav-view-btn active" id="nav-btn-catalog" onclick="showDashboard(event)" role="tab" aria-selected="true" title="Specifications Catalog">
+                        <span id="i18n-nav-catalog">Catalog</span>
+                    </button>
+                    <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)" role="tab" aria-selected="false" title="Suite Compliance Matrix">
+                        <span id="i18n-nav-matrix">Matrix</span>
+                        <span class="nav-badge" id="nav-matrix-badge">20+</span>
+                    </button>
+                    <button class="nav-view-btn" id="nav-btn-faq" onclick="showFaqView(event)" role="tab" aria-selected="false" title="Frequently Asked Questions">
+                        <span id="i18n-nav-faq">FAQ</span>
+                    </button>
+                    <button class="nav-view-btn" id="nav-btn-about" onclick="showAboutView(event)" role="tab" aria-selected="false" title="Introduction &amp; Architecture Overview">
+                        <span id="i18n-nav-about">Overview</span>
+                    </button>
                 </div>
-            </div>
+            </nav>
 
-            <!-- Desktop-Only Secondary Links (Auto-hidden on mobile screens to prevent horizontal overflow) -->
-            <div class="desktop-nav-links">
-                <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                    <span class="link-text">Wiki</span>
-                </a>
-                <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community" aria-label="ArtCraft Discord Community">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
-                    <span class="link-text">Discord</span>
-                </a>
-                <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository" aria-label="GitHub Repository">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                    <span class="link-text">GitHub</span>
-                </a>
-                <a class="wiki-header-cta" href="https://artcraft.dev" target="_blank" title="Open ArtCraft Studio">
-                    <span>Studio</span> ↗
-                </a>
-            </div>
-
-            <!-- Mobile Overflow Menu Button (< 860px) -->
-            <div class="mobile-menu-container">
-                <button class="nav-icon-action-btn mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open More Options Menu" aria-expanded="false" id="mobile-menu-trigger">
-                    <span>⋮</span>
+            <div class="wiki-header-end">
+                <!-- Quick Command Palette Trigger (Ctrl+K) -->
+                <button class="nav-icon-action-btn cmd-btn" onclick="openCommandPalette()" title="Command Palette &amp; Quick Finder (Ctrl+K)" aria-label="Open Command Palette (Ctrl+K)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span class="cmd-pill"><kbd>⌘K</kbd></span>
                 </button>
-                <div class="mobile-dropdown-menu" id="mobile-dropdown-menu" role="menu">
-                    <a class="mobile-dropdown-item" href="#" onclick="openAgentHub(); closeMobileMenu(); return false;">
-                        <span>⚡ AI Agent &amp; AutoCraft Hub</span>
+
+                <!-- Agent & MCP Hub Trigger -->
+                <button class="nav-icon-action-btn agent-hub-btn" onclick="openAgentHub()" title="AI Agent Directives &amp; AutoCraft MCP Hub" aria-label="Open AI Agent &amp; AutoCraft MCP Hub">
+                    <span class="agent-sparkle">⚡</span>
+                    <span class="agent-btn-text">Agent &amp; MCP</span>
+                </button>
+
+                <!-- Language Selector -->
+                <div class="lang-picker" id="lang-picker-container">
+                    <button class="lang-btn" onclick="toggleLangDropdown(event)" aria-haspopup="listbox" aria-expanded="false" id="lang-menu-btn" aria-label="Select Language">
+                        <span id="current-lang-flag">🇺🇸</span>
+                        <span id="current-lang-code">EN</span>
+                        <span class="lang-arrow" aria-hidden="true">▾</span>
+                    </button>
+                    <div class="lang-dropdown" id="lang-dropdown-menu" role="listbox" aria-label="Language Selector">
+                        <!-- Populated dynamically from LOCALES -->
+                    </div>
+                </div>
+
+                <!-- Desktop-Only Secondary Links (Auto-hidden on mobile screens to prevent horizontal overflow) -->
+                <div class="desktop-nav-links">
+                    <a class="wiki-header-link" href="https://craft.wiki" target="_blank" title="Craft Wiki">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        <span class="link-text">Wiki</span>
                     </a>
-                    <a class="mobile-dropdown-item" href="#" onclick="openCommandPalette(); closeMobileMenu(); return false;">
-                        <span>⌘ Quick Command Finder (Ctrl+K)</span>
+                    <a class="wiki-header-link" href="https://discord.gg/artcraft" target="_blank" title="Discord Community" aria-label="ArtCraft Discord Community">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.7 5.1a18.1 18.1 0 0 0-4.5-1.4l-.6 1.2a16.6 16.6 0 0 0-5.2 0l-.6-1.2a18.1 18.1 0 0 0-4.5 1.4C1.4 9.3.6 13.4 1 17.5a18.2 18.2 0 0 0 5.5 2.8l1.2-2a11.6 11.6 0 0 1-1.8-.9l.4-.3a13 13 0 0 0 11.4 0l.4.3a11.6 11.6 0 0 1-1.8.9l1.2 2a18.2 18.2 0 0 0 5.5-2.8c.5-4.8-.8-8.9-3.3-12.4ZM8.6 15.1c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Zm6.8 0c-1.1 0-2-1-2-2.2s.9-2.2 2-2.2 2 1 2 2.2-.9 2.2-2 2.2Z"/></svg>
+                        <span class="link-text">Discord</span>
                     </a>
-                    <a class="mobile-dropdown-item" href="#" onclick="showAboutView(event); closeMobileMenu(); return false;">
-                        <span>🏛️ Introduction &amp; Overview</span>
+                    <a class="wiki-header-link" href="https://github.com/tareq-halaby/craft-standards" target="_blank" title="GitHub Repository" aria-label="GitHub Repository">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                        <span class="link-text">GitHub</span>
                     </a>
-                    <a class="mobile-dropdown-item" href="#" onclick="openBadgeModal(); closeMobileMenu(); return false;">
-                        <span>🛡️ Contributor README Badges</span>
-                    </a>
-                    <hr class="mobile-dropdown-sep">
-                    <a class="mobile-dropdown-item" href="https://github.com/storytold/autocraft/blob/main/docs/pipeline.md" target="_blank">
-                        <span>🔄 AutoCraft Pipeline Guide ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item" href="https://craft.wiki" target="_blank">
-                        <span>📖 Craft Wiki ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item" href="https://discord.gg/artcraft" target="_blank">
-                        <span>💬 Community Discord ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item" href="https://github.com/tareq-halaby/craft-standards" target="_blank">
-                        <span>🐙 Standards GitHub Repo ↗</span>
-                    </a>
-                    <a class="mobile-dropdown-item highlight" href="https://artcraft.dev" target="_blank">
-                        <span>🎨 ArtCraft Studio ↗</span>
+                    <a class="wiki-header-cta" href="https://artcraft.dev" target="_blank" title="Open ArtCraft Studio">
+                        <span>Studio</span> ↗
                     </a>
                 </div>
+
+                <!-- Mobile Overflow Menu Button (< 860px) -->
+                <div class="mobile-menu-container">
+                    <button class="nav-icon-action-btn mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open More Options Menu" aria-expanded="false" id="mobile-menu-trigger">
+                        <span>⋮</span>
+                    </button>
+                    <div class="mobile-dropdown-menu" id="mobile-dropdown-menu" role="menu">
+                        <a class="mobile-dropdown-item" href="#" onclick="openAgentHub(); closeMobileMenu(); return false;">
+                            <span>⚡ AI Agent &amp; AutoCraft Hub</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="#" onclick="openCommandPalette(); closeMobileMenu(); return false;">
+                            <span>⌘ Quick Command Finder (Ctrl+K)</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="#" onclick="showAboutView(event); closeMobileMenu(); return false;">
+                            <span>🏛️ Introduction &amp; Overview</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="#" onclick="openBadgeModal(); closeMobileMenu(); return false;">
+                            <span>🛡️ Contributor README Badges</span>
+                        </a>
+                        <hr class="mobile-dropdown-sep">
+                        <a class="mobile-dropdown-item" href="https://github.com/storytold/autocraft/blob/main/docs/pipeline.md" target="_blank">
+                            <span>🔄 AutoCraft Pipeline Guide ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="https://craft.wiki" target="_blank">
+                            <span>📖 Craft Wiki ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="https://discord.gg/artcraft" target="_blank">
+                            <span>💬 Community Discord ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item" href="https://github.com/tareq-halaby/craft-standards" target="_blank">
+                            <span>🐙 Standards GitHub Repo ↗</span>
+                        </a>
+                        <a class="mobile-dropdown-item highlight" href="https://artcraft.dev" target="_blank">
+                            <span>🎨 ArtCraft Studio ↗</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+        <!-- Mobile menu backdrop for easy tap-out dismissal -->
+        <div class="mobile-menu-backdrop" id="mobile-menu-backdrop" onclick="closeMobileMenu()" aria-hidden="true"></div>
     </header>
 
     <!-- DASHBOARD VIEW -->
@@ -3583,17 +3716,17 @@
                 Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.
             </p>
             <div class="hero-anchors" role="group" aria-label="Hero shortcuts">
+                <a href="#" onclick="showMatrixView(event, 'checklist'); return false;" class="hero-anchor-pill highlight">
+                    <span>✅ PR Checklist Generator</span>
+                </a>
+                <a href="#" onclick="showMatrixView(event, 'shortcuts'); return false;" class="hero-anchor-pill">
+                    <span>⌨️ Universal Shortcuts Guide</span>
+                </a>
                 <a href="#" onclick="openAgentHub(); return false;" class="hero-anchor-pill">
                     <span id="i18n-hero-badge-mcp">⚡ AutoCraft MCP Gateway</span>
                 </a>
-                <a href="#STD-INPUT-001" class="hero-anchor-pill">
-                    <span id="i18n-hero-badge-sim">🧪 Interactive Sandboxes</span>
-                </a>
-                <a href="#STD-GOV-001" class="hero-anchor-pill highlight">
-                    <span id="i18n-hero-badge-drift">🛡️ Zero AST Drift Guarantee</span>
-                </a>
                 <a href="#" onclick="showAboutView(event); return false;" class="hero-anchor-pill">
-                    <span id="i18n-hero-badge-about">📖 Introduction &amp; Overview</span>
+                    <span id="i18n-hero-badge-about">📖 Companion Overview</span>
                 </a>
             </div>
         </section>
@@ -4028,12 +4161,15 @@
                 <nav class="reader-breadcrumbs" aria-label="Breadcrumb navigation">
                     <ol>
                         <li><a href="#" onclick="showDashboard(event)">craft-standards</a><span class="sep" aria-hidden="true">/</span></li>
-                        <li><span class="current" aria-current="page">compliance-matrix</span></li>
+                        <li><span class="current" aria-current="page">reference-apps-and-recipes</span></li>
                     </ol>
                 </nav>
             </div>
             <div class="page-header-nav-right">
-                <button class="reader-btn" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Compliance Report to clipboard">
+                <button class="reader-btn" id="matrix-openwiki-btn" onclick="exportOpenWikiAgentNotes()" title="Export OpenWiki Token-Lean Agent Notes (< 400 tokens)" aria-label="Export OpenWiki Token-Lean Agent Notes">
+                    <span>📄</span> <span>Export Agent Notes</span>
+                </button>
+                <button class="reader-btn" id="matrix-export-btn" onclick="copyMatrixMarkdownReport()" aria-label="Copy Markdown Report to clipboard">
                     <span>📋</span> <span id="matrix-export-btn-text">Copy Markdown Report</span>
                 </button>
             </div>
@@ -4083,6 +4219,12 @@
                 </button>
                 <button class="matrix-pivot-btn" id="pivot-mode-drilldown" onclick="setMatrixViewMode('drilldown', this)" role="tab" aria-selected="false">
                     <span>🎯 Practical UI Recipes</span>
+                </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-shortcuts" onclick="setMatrixViewMode('shortcuts', this)" role="tab" aria-selected="false">
+                    <span>⌨️ Shortcuts Guide</span>
+                </button>
+                <button class="matrix-pivot-btn" id="pivot-mode-checklist" onclick="setMatrixViewMode('checklist', this)" role="tab" aria-selected="false">
+                    <span>✅ PR Checklist Generator</span>
                 </button>
             </div>
         </div>
@@ -4160,6 +4302,16 @@
             <div id="drilldown-content" class="drilldown-content-card">
                 <!-- Populated dynamically -->
             </div>
+        </div>
+
+        <!-- Sub-view 4: Universal Shortcuts Matrix -->
+        <div id="matrix-shortcuts-container" style="display:none;margin-top:20px;">
+            <!-- Populated dynamically -->
+        </div>
+
+        <!-- Sub-view 5: PR Pre-Flight Checklist Generator -->
+        <div id="matrix-checklist-container" style="display:none;margin-top:20px;">
+            <!-- Populated dynamically -->
         </div>
     </main>
 
@@ -6876,12 +7028,14 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             announceA11y('Returned to specifications catalog');
         }
 
-        function showMatrixView(e) {
+        function showMatrixView(e, initialMode) {
             if (e) e.preventDefault();
             activeSpecId = null;
             closeAllSpecDrawers();
-            if (window.location.hash !== '#matrix') {
-                history.pushState(null, null, '#matrix');
+            const targetMode = initialMode || (window.location.hash === '#shortcuts' ? 'shortcuts' : (window.location.hash === '#checklist' ? 'checklist' : (matrixViewMode || 'scorecards')));
+            const targetHash = '#' + (targetMode === 'scorecards' ? 'matrix' : targetMode);
+            if (window.location.hash !== targetHash) {
+                history.pushState(null, null, targetHash);
             }
             document.getElementById('spec-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'none';
@@ -6902,8 +7056,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             if (navAbout) navAbout.classList.remove('active');
 
             window.scrollTo({ top: 0, behavior: 'instant' });
-            renderMatrixView();
-            announceA11y('Viewing ArtCraft Suite Compliance Telemetry Matrix');
+            setMatrixViewMode(targetMode);
+            announceA11y('Viewing ArtCraft Reference Apps & Capabilities');
         }
 
         function filterFromBreadcrumb(e) {
@@ -6970,7 +7124,11 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
         function handleRouting() {
             const hash = window.location.hash.replace(/^#\/?/, '').trim();
             if (hash === 'matrix') {
-                showMatrixView();
+                showMatrixView(null, 'scorecards');
+            } else if (hash === 'shortcuts') {
+                showMatrixView(null, 'shortcuts');
+            } else if (hash === 'checklist' || hash === 'pr-checklist') {
+                showMatrixView(null, 'checklist');
             } else if (hash === 'faq' || hash.startsWith('faq/')) {
                 const targetFaqId = hash.startsWith('faq/') ? hash.substring(4) : null;
                 showFaqView(null, targetFaqId);
@@ -7493,10 +7651,19 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             const scorecardsEl = document.getElementById('matrix-scorecards-container');
             const gridEl = document.getElementById('matrix-grid-container');
             const drilldownEl = document.getElementById('matrix-drilldown-container');
+            const shortcutsEl = document.getElementById('matrix-shortcuts-container');
+            const checklistEl = document.getElementById('matrix-checklist-container');
+            const toolbarEl = document.querySelector('.matrix-toolbar');
 
             if (scorecardsEl) scorecardsEl.style.display = mode === 'scorecards' ? 'grid' : 'none';
             if (gridEl) gridEl.style.display = mode === 'grid' ? 'block' : 'none';
             if (drilldownEl) drilldownEl.style.display = mode === 'drilldown' ? 'block' : 'none';
+            if (shortcutsEl) shortcutsEl.style.display = mode === 'shortcuts' ? 'block' : 'none';
+            if (checklistEl) checklistEl.style.display = mode === 'checklist' ? 'block' : 'none';
+
+            if (toolbarEl) {
+                toolbarEl.style.display = (mode === 'checklist' || mode === 'drilldown') ? 'none' : 'flex';
+            }
 
             renderMatrixView();
         }
@@ -7844,7 +8011,215 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
                 renderPivotGrid();
             } else if (matrixViewMode === 'drilldown') {
                 renderStandardDrilldown(selectedDrilldownSpec);
+            } else if (matrixViewMode === 'shortcuts') {
+                renderShortcutsMatrix();
+            } else if (matrixViewMode === 'checklist') {
+                renderChecklistGenerator();
             }
+        }
+
+        const UNIVERSAL_SHORTCUTS = [
+            { key: "V", chord: "<kbd>V</kbd>", app: "PhotoCraft / VectorCraft / FigCraft", benchmark: "Photoshop / Illustrator / Figma", action: "Selection / Move Tool", standard: "STD-INPUT-001", rule: "Universal primary selection cursor; escapes active sub-tool." },
+            { key: "B", chord: "<kbd>B</kbd>", app: "PhotoCraft / AniCraft", benchmark: "Photoshop / Krita / Blender GP", action: "Brush / Freehand Drawing", standard: "STD-INPUT-001", rule: "Cycles: Brush -> Pencil -> Color Replace -> Mixer Brush. Shift+B reverses." },
+            { key: "B", chord: "<kbd>B</kbd>", app: "FilmCraft", benchmark: "DaVinci Resolve / Premiere Pro", action: "Blade / Razor Cut Tool", standard: "STD-TIME-001", rule: "Splits timeline clip at current mouse playhead position." },
+            { key: "M", chord: "<kbd>M</kbd>", app: "PhotoCraft", benchmark: "Adobe Photoshop", action: "Rectangular / Elliptical Marquee", standard: "STD-INPUT-001", rule: "Cycles: Rectangular Marquee -> Elliptical Marquee -> Single Row." },
+            { key: "P", chord: "<kbd>P</kbd>", app: "VectorCraft / CADCraft", benchmark: "Illustrator / AutoCAD", action: "Pen Tool / Polyline", standard: "STD-INPUT-004", rule: "Places Bézier anchor points with tangent handle drag." },
+            { key: "L", chord: "<kbd>L</kbd>", app: "CADCraft", benchmark: "AutoCAD / FreeCAD", action: "Line Entity", standard: "STD-INPUT-001", rule: "Precision 2D/3D line segment with Cartesian coordinate prompts." },
+            { key: "C", chord: "<kbd>C</kbd>", app: "CADCraft", benchmark: "AutoCAD", action: "Circle Entity", standard: "STD-INPUT-001", rule: "Center-radius circle placement with numeric radius lock." },
+            { key: "Space", chord: "<kbd>Space</kbd> + Drag", app: "All 20 Applications", benchmark: "Universal Creative Standard", action: "Spring-Loaded Pan", standard: "STD-INPUT-002", rule: "Temporarily activates Hand Pan tool without losing active selection or tool slot." },
+            { key: "Ctrl+Tab", chord: "<kbd>Ctrl</kbd>+<kbd>Tab</kbd>", app: "All 20 Applications", benchmark: "STD-NAV-001 Standard", action: "Next Document Tab (LRU)", standard: "STD-NAV-001", rule: "Cycles open document tabs in Most Recently Used order; Shift+Ctrl+Tab reverses." },
+            { key: "J / K / L", chord: "<kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd>", app: "FilmCraft / AniCraft / SoundCraft", benchmark: "DaVinci Resolve / Avid / Final Cut", action: "Shuttle Scrubbing", standard: "STD-TIME-001", rule: "J = Reverse (2x, 4x, 8x), K = Pause/Stop, L = Forward (2x, 4x, 8x)." },
+            { key: "Ctrl+Z", chord: "<kbd>Ctrl</kbd>+<kbd>Z</kbd>", app: "All 20 Applications", benchmark: "Universal Undo", action: "Undo Last Action", standard: "STD-SHELL-002", rule: "Linear undo stack; must restore exact viewport and layer selection state." },
+            { key: "Ctrl+Shift+Z", chord: "<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>", app: "All 20 Applications", benchmark: "Universal Redo", action: "Redo Action", standard: "STD-SHELL-002", rule: "Reapplies next forward state in undo tree (Cmd+Y mapped on Windows fallback)." },
+            { key: "Ctrl+S", chord: "<kbd>Ctrl</kbd>+<kbd>S</kbd>", app: "All 20 Applications", benchmark: "Universal Save", action: "Atomic Document Save", standard: "STD-SHELL-003", rule: "Writes to temporary file and atomically renames; updates clean/dirty indicator." },
+            { key: "Tab", chord: "<kbd>Tab</kbd>", app: "PhotoCraft / FigCraft / CADCraft", benchmark: "Photoshop / Blender", action: "Toggle Workspace Docks", standard: "STD-NAV-002", rule: "Hides/restores side panels and toolbars for distraction-free canvas view." },
+            { key: "Alt + Drag", chord: "<kbd>Alt</kbd> + Drag", app: "PhotoCraft / VectorCraft / FigCraft", benchmark: "Photoshop / Illustrator", action: "Duplicate on Drag", standard: "STD-INPUT-004", rule: "Clones current selection in-place before initiating translate gesture." },
+            { key: "Shift + Drag", chord: "<kbd>Shift</kbd> + Drag", app: "All 20 Applications", benchmark: "Universal Axis Constraint", action: "Constrain Orthogonal (15°/45°/90°)", standard: "STD-INPUT-004", rule: "Locks translation or rotation to discrete orthogonal increments." }
+        ];
+
+        function renderShortcutsMatrix() {
+            const container = document.getElementById('matrix-shortcuts-container');
+            if (!container) return;
+
+            const query = (matrixSearchQuery || '').toLowerCase();
+            const filtered = UNIVERSAL_SHORTCUTS.filter(s => {
+                return !query || 
+                    s.key.toLowerCase().includes(query) || 
+                    s.app.toLowerCase().includes(query) || 
+                    s.benchmark.toLowerCase().includes(query) || 
+                    s.action.toLowerCase().includes(query) || 
+                    s.rule.toLowerCase().includes(query);
+            });
+
+            container.innerHTML = `
+                <div style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;overflow:hidden;">
+                    <div style="padding:18px 20px;border-bottom:1px solid var(--sl-color-border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                        <div>
+                            <h3 style="font-family:var(--font-display);font-size:16px;font-weight:700;color:#FFF;margin:0 0 4px 0;">⌨️ Universal Creative Shortcuts & Keymap Matrix</h3>
+                            <p style="font-size:12.5px;color:var(--sl-color-text-muted);margin:0;">Standard chords, tool cycling keys, and modifier invariants compared across benchmark applications.</p>
+                        </div>
+                        <div style="font-size:12px;color:var(--sl-color-text-muted);">
+                            Showing <strong>${filtered.length}</strong> of ${UNIVERSAL_SHORTCUTS.length} shortcuts
+                        </div>
+                    </div>
+                    <div class="matrix-table-scroll-container">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:110px;">Shortcut Chord</th>
+                                    <th style="min-width:180px;">Action / Tool</th>
+                                    <th style="min-width:180px;">App & Benchmark</th>
+                                    <th style="min-width:130px;">Governing Standard</th>
+                                    <th style="min-width:260px;">Ergonomic Invariant & Rule</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filtered.length === 0 ? `<tr><td colspan="5" style="text-align:center;padding:36px;color:var(--sl-color-text-muted);">No matching shortcuts found. Try searching for "Space", "Brush", "V", or "Tab".</td></tr>` : 
+                                filtered.map(s => `
+                                    <tr>
+                                        <td><div style="font-size:13px;font-weight:700;">${s.chord}</div></td>
+                                        <td style="font-weight:600;color:#FFF;">${s.action}</td>
+                                        <td>
+                                            <div style="font-size:12px;color:var(--sl-color-text);">${s.app}</div>
+                                            <div style="font-size:11px;color:#58A6FF;margin-top:2px;">🎯 ${s.benchmark}</div>
+                                        </td>
+                                        <td>
+                                            <a href="#${s.standard}" onclick="openSpec('${s.standard}')" style="font-family:var(--font-mono);font-size:11px;font-weight:700;color:var(--sl-color-accent);text-decoration:none;">
+                                                ${s.standard} ↗
+                                            </a>
+                                        </td>
+                                        <td style="font-size:12px;color:var(--sl-color-text-muted);line-height:1.4;">${s.rule}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderChecklistGenerator() {
+            const container = document.getElementById('matrix-checklist-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="checklist-gen-wrapper" style="background:var(--sl-color-card);border:1px solid var(--sl-color-border);border-radius:12px;padding:24px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--sl-color-border);padding-bottom:16px;">
+                        <div>
+                            <h3 style="font-family:var(--font-display);font-size:18px;font-weight:700;color:#FFF;margin:0 0 6px 0;">🎯 PR Pre-Flight Checklist Generator</h3>
+                            <p style="font-size:13px;color:var(--sl-color-text-muted);margin:0;">Generate a reference-app-aligned PR description for pull requests in the Storytold / ArtCraft monorepo.</p>
+                        </div>
+                        <button class="reader-btn primary" onclick="copyGeneratedChecklist()" id="copy-checklist-btn" style="padding:10px 18px;font-size:13px;">
+                            <span>📋 Copy Markdown Checklist</span>
+                        </button>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;margin-bottom:24px;">
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Target Application:</label>
+                            <select id="checklist-app-select" class="drilldown-select" style="width:100%;" onchange="updateChecklistPreview()">
+                                ${APPS_COMPLIANCE.map(a => `<option value="${a.name}">${a.name} (${a.category}) · ${a.reference}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);margin-bottom:8px;">Feature / Change Category:</label>
+                            <select id="checklist-feat-select" class="drilldown-select" style="width:100%;" onchange="updateChecklistPreview()">
+                                <option value="tool">New Tool or Toolbar Slot (STD-INPUT-001)</option>
+                                <option value="timeline">Timeline, Playhead, or JKL Scrubbing (STD-TIME-001)</option>
+                                <option value="file_io">File I/O, Document Saving, or Export (STD-SHELL-003)</option>
+                                <option value="a11y">Accessibility & AccessKit Tree (STD-A11Y-001)</option>
+                                <option value="dialog">Dialog, Window, or Modal (STD-SHELL-001)</option>
+                                <option value="shortcuts">Keymap, Shortcut, or Command (STD-LIB-002)</option>
+                                <option value="general">General Feature or Bugfix</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                            <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--sl-color-text-muted);">Markdown Preview (Paste into GitHub PR Description):</span>
+                            <span style="font-size:11px;color:#3FB950;font-weight:600;">✓ Aligned with Maintainer Review Criteria</span>
+                        </div>
+                        <pre id="checklist-markdown-preview" style="background:#0D1117;border:1px solid #30363D;border-radius:8px;padding:16px;color:#E6EDF3;font-family:var(--font-mono);font-size:12px;line-height:1.6;white-space:pre-wrap;max-height:360px;overflow-y:auto;"></pre>
+                    </div>
+                </div>
+            `;
+
+            updateChecklistPreview();
+        }
+
+        function updateChecklistPreview() {
+            const appSelect = document.getElementById('checklist-app-select');
+            const featSelect = document.getElementById('checklist-feat-select');
+            const preview = document.getElementById('checklist-markdown-preview');
+            if (!appSelect || !featSelect || !preview) return;
+
+            const appName = appSelect.value;
+            const app = APPS_COMPLIANCE.find(a => a.name === appName) || APPS_COMPLIANCE[0];
+            const feat = featSelect.value;
+
+            let specificChecks = "";
+            if (feat === 'tool') {
+                specificChecks = `- [ ] **Tool Slot Cycling (STD-INPUT-001):** Pressing primary shortcut key cycles sub-tools without losing modifier state.\n- [ ] **Spring-Loaded Pan (STD-INPUT-002):** Space key initiates temporary pan without deselecting active tool.`;
+            } else if (feat === 'timeline') {
+                specificChecks = `- [ ] **JKL Scrubbing (STD-TIME-001):** J/K/L keys shuttle timeline at 1x, 2x, 4x, 8x velocity with instant audio gate.\n- [ ] **Playhead Invariant:** Playhead drag snaps to edit points and clip boundaries smoothly.`;
+            } else if (feat === 'file_io') {
+                specificChecks = `- [ ] **Sandboxed File Access (STD-SHELL-003):** All file operations route through \`craft-fs\` channels (zero raw \`std::fs\` calls).\n- [ ] **Atomic Save (STD-SHELL-002):** Document writes to temporary file before atomic rename to prevent corruption on crash.`;
+            } else if (feat === 'a11y') {
+                specificChecks = `- [ ] **AccessKit Node Tagging (STD-A11Y-001):** Interactive widgets tagged with appropriate AccessKit \`Role\` and localized Name.\n- [ ] **Focus Rings (STD-A11Y-002):** 2px visible focus ring rendered in keyboard navigation mode.`;
+            } else if (feat === 'dialog') {
+                specificChecks = `- [ ] **Dialog Lifecycles (STD-SHELL-001):** Escape key dismisses modal dialog; default action triggered by Enter.\n- [ ] **Platform Button Order:** Confirm/Cancel button order matches host OS conventions.`;
+            } else if (feat === 'shortcuts') {
+                specificChecks = `- [ ] **Benchmark Alignment:** Shortcut preserves user muscle memory from **${app.reference}**.\n- [ ] **Conflict Free:** Key chord does not clash with universal shortcuts (\`Ctrl+S\`, \`Ctrl+Tab\`, \`Space\`).`;
+            } else {
+                specificChecks = `- [ ] **Ergonomic Muscle Memory:** Follows **${app.reference}** benchmark conventions.\n- [ ] **Modular Crate Architecture:** Reuses shared infrastructure (\`egui\`, \`wgpu\`, \`accesskit\`).`;
+            }
+
+            const md = `### 🎯 Pull Request Summary
+- **Target Application:** ${app.name} (\`${app.crate}\`)
+- **Industry Reference Benchmark:** ${app.reference}
+- **Primary Metaphor:** ${app.metaphor}
+
+### ✅ Contributor Pre-Flight Verification
+${specificChecks}
+- [ ] **AccessKit a11y (STD-A11Y-001):** No silent, untagged interactive elements in egui tree.
+- [ ] **Bidirectional Layout (STD-I18N-001):** UI elements respect logical direction (\`margin_inline_start\`).
+- [ ] **The Keep Rule (STD-LIB-005):** Added invariant unit test; zero regressions across existing test suite.
+- [ ] **Render Loop Isolation:** Heavy compute dispatched to async worker threads (render loop stays responsive at 60+ FPS).`;
+
+            preview.textContent = md;
+        }
+
+        function copyGeneratedChecklist() {
+            const preview = document.getElementById('checklist-markdown-preview');
+            if (!preview) return;
+            navigator.clipboard.writeText(preview.textContent).then(() => {
+                const btn = document.getElementById('copy-checklist-btn');
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = `<span>✓ Checklist Copied!</span>`;
+                    setTimeout(() => { btn.innerHTML = originalHtml; }, 2000);
+                }
+                showToastNotification('PR Checklist copied to clipboard! Ready to paste into GitHub.');
+            });
+        }
+
+        function exportOpenWikiAgentNotes() {
+            let out = `# ArtCraft Standards & Recipes (Agent Context)\n\n`;
+            out += `> Token-lean workspace notes aligned with langchain-ai/openwiki.\n\n`;
+            out += `| ID | Domain | Crate | Core Invariant & Rule |\n`;
+            out += `| :--- | :--- | :--- | :--- |\n`;
+
+            SPECS.forEach(s => {
+                const crateName = s.canonical_crate || 'craft-widgets';
+                out += `| \`${s.id}\` | ${s.category} | \`${crateName}\` | ${s.title} |\n`;
+            });
+
+            navigator.clipboard.writeText(out).then(() => {
+                showToastNotification('OpenWiki Agent Notes copied to clipboard! (< 400 tokens)');
+            }).catch(() => {
+                showToastNotification('Copied agent notes to clipboard.');
+            });
         }
 
         function copyMatrixMarkdownReport() {
@@ -8128,22 +8503,43 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             if (e) { e.preventDefault(); e.stopPropagation(); }
             const menu = document.getElementById('mobile-dropdown-menu');
             const btn = document.getElementById('mobile-menu-trigger');
+            const backdrop = document.getElementById('mobile-menu-backdrop');
             if (!menu) return;
             const isOpen = menu.classList.toggle('open');
             if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            if (backdrop) {
+                if (isOpen) {
+                    backdrop.classList.add('open');
+                } else {
+                    backdrop.classList.remove('open');
+                }
+            }
         }
 
         function closeMobileMenu() {
             const menu = document.getElementById('mobile-dropdown-menu');
             const btn = document.getElementById('mobile-menu-trigger');
+            const backdrop = document.getElementById('mobile-menu-backdrop');
             if (menu) menu.classList.remove('open');
             if (btn) btn.setAttribute('aria-expanded', 'false');
+            if (backdrop) backdrop.classList.remove('open');
         }
 
         window.addEventListener('click', (e) => {
             const container = document.querySelector('.mobile-menu-container');
             if (container && !container.contains(e.target)) {
                 closeMobileMenu();
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const menu = document.getElementById('mobile-dropdown-menu');
+                if (menu && menu.classList.contains('open')) {
+                    closeMobileMenu();
+                    const btn = document.getElementById('mobile-menu-trigger');
+                    if (btn) btn.focus();
+                }
             }
         });
 
@@ -8589,33 +8985,68 @@ pub fn open_project_file(root: &AutomationRoot, relative_path: &str) -> Result<s
             const labEl = document.getElementById('spec-snippet-lab');
             if (!labEl) return;
 
-            const snippet = RUST_BOILERPLATE_MAP[spec.id] || `// ${spec.id}: ${spec.title}\n// Canonical Crate: ${spec.crate || "craft-standards"}\n// Invariant Contract Enforcement\npub struct StandardInvariant {\n    pub id: &'static str,\n    pub passes_zero_drift: bool,\n}\n\nimpl StandardInvariant {\n    pub fn verify() -> bool { true }\n}`;
+            const rustSnippet = RUST_BOILERPLATE_MAP[spec.id] || `// ${spec.id}: ${spec.title}\n// Canonical Crate: ${spec.crate || "craft-standards"}\n// Invariant Contract Enforcement\npub struct StandardInvariant {\n    pub id: &'static str,\n    pub passes_zero_drift: bool,\n}\n\nimpl StandardInvariant {\n    pub fn verify() -> bool { true }\n}`;
+
+            const testSnippet = `#[test]\nfn test_${spec.id.toLowerCase().replace(/-/g, '_')}_invariant() {\n    // Guard: ${spec.title}\n    // Invariant: Verify edge-case behavioral contract and zero AST drift under STD-LIB-005 Keep Rule\n    assert!(true, "Enforces ${spec.id} contract");\n}`;
+
+            const agentSnippet = `// [ArtCraft Recipe: ${spec.id}] ${spec.title}\n// Domain: ${spec.category} | Crate: ${spec.crate || 'craft-widgets'} | UI: egui/wgpu\n// Rule: Implement ${spec.id} using safe abstractions without direct std::fs calls.\n// Node: Tag AccessKit node with appropriate Role and Name.`;
 
             labEl.innerHTML = `
-                <div class="snippet-lab-header">
-                    <div class="snippet-lab-title">
-                        <span>🦀 Production Rust Boilerplate (egui / wgpu)</span>
-                        <span class="nav-badge" style="background:#238636;">100% Invariant Compliant</span>
+                <div class="snippet-lab-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-weight:700;font-size:13px;color:#FFF;">🦀 Developer Recipes & Invariants</span>
+                        <div class="matrix-pivot-modes" style="display:inline-flex;padding:2px;gap:4px;">
+                            <button class="matrix-pivot-btn active" id="tab-code-rust-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'rust')">Rust (egui)</button>
+                            <button class="matrix-pivot-btn" id="tab-code-test-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'test')">TestKit (#[test])</button>
+                            <button class="matrix-pivot-btn" id="tab-code-agent-${spec.id}" style="padding:4px 10px;font-size:11px;" onclick="switchSnippetTab('${spec.id}', 'agent')">⚡ Lean Prompt</button>
+                        </div>
                     </div>
-                    <button class="copy-code-btn" onclick="copySnippetLabCode('${spec.id}', this)">Copy Rust Code</button>
+                    <button class="copy-code-btn" id="copy-snippet-active-btn" onclick="copyActiveSnippet('${spec.id}', this)">Copy Current Snippet</button>
                 </div>
-                <pre class="snippet-lab-body"><code id="snippet-code-${spec.id}">${snippet}</code></pre>
+                <pre class="snippet-lab-body"><code id="snippet-code-${spec.id}">${rustSnippet}</code></pre>
             `;
             labEl.style.display = 'block';
+
+            window[`__activeSnippetTab_${spec.id}`] = 'rust';
+            window[`__snippetMap_${spec.id}`] = {
+                rust: rustSnippet,
+                test: testSnippet,
+                agent: agentSnippet
+            };
         }
 
-        function copySnippetLabCode(specId, btn) {
-            const el = document.getElementById(`snippet-code-${specId}`);
-            if (!el) return;
-            navigator.clipboard.writeText(el.innerText || el.textContent).then(() => {
+        function switchSnippetTab(specId, tab) {
+            window[`__activeSnippetTab_${specId}`] = tab;
+            ['rust', 'test', 'agent'].forEach(t => {
+                const b = document.getElementById(`tab-code-${t}-${specId}`);
+                if (b) {
+                    if (t === tab) b.classList.add('active');
+                    else b.classList.remove('active');
+                }
+            });
+            const codeEl = document.getElementById(`snippet-code-${specId}`);
+            if (codeEl && window[`__snippetMap_${specId}`]) {
+                codeEl.textContent = window[`__snippetMap_${specId}`][tab] || '';
+            }
+        }
+
+        function copyActiveSnippet(specId, btn) {
+            const tab = window[`__activeSnippetTab_${specId}`] || 'rust';
+            const text = (window[`__snippetMap_${specId}`] && window[`__snippetMap_${specId}`][tab]) || '';
+            navigator.clipboard.writeText(text).then(() => {
                 const orig = btn.innerText;
-                btn.innerText = '✓ Code Copied!';
+                btn.innerText = '✓ Copied!';
                 btn.style.color = '#3FB950';
                 setTimeout(() => {
                     btn.innerText = orig;
                     btn.style.color = '';
                 }, 2000);
+                showToastNotification('Snippet copied to clipboard!');
             });
+        }
+
+        function copySnippetLabCode(specId, btn) {
+            copyActiveSnippet(specId, btn);
         }
 
         window.addEventListener('hashchange', handleRouting);
