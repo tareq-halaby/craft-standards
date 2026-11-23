@@ -3476,7 +3476,7 @@
                 </button>
                 <button class="nav-view-btn" id="nav-btn-matrix" onclick="showMatrixView(event)" role="tab" aria-selected="false" title="Suite Compliance Matrix">
                     <span id="i18n-nav-matrix">Matrix</span>
-                    <span class="nav-badge">95.8%</span>
+                    <span class="nav-badge" id="nav-matrix-badge">20+</span>
                 </button>
                 <button class="nav-view-btn" id="nav-btn-faq" onclick="showFaqView(event)" role="tab" aria-selected="false" title="Frequently Asked Questions">
                     <span id="i18n-nav-faq">FAQ</span>
@@ -3578,7 +3578,7 @@
                 <span id="i18n-hero-eyebrow">Universal UX Invariants &amp; Ergonomic Contracts</span>
                 <span class="eyebrow-tag">v0.2.0</span>
             </div>
-            <h1 class="wiki-title" id="hero-title"><span id="i18n-hero-title">Standards for the <em id="i18n-hero-em">20+ ArtCraft</em> Creative Suite</span></h1>
+            <h1 class="wiki-title" id="hero-title">Standards for the <em id="i18n-hero-em">20+ ArtCraft</em> Creative Suite</h1>
             <p class="wiki-desc" id="i18n-hero-desc">
                 Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.
             </p>
@@ -4043,32 +4043,32 @@
         <section class="wiki-hero" style="margin-bottom:28px;">
             <div class="wiki-eyebrow">
                 <span class="live-pulse"></span>
-                <span id="i18n-matrix-eyebrow">Suite Architectural Verification · 20 Governed Apps</span>
-                <span class="eyebrow-tag">v0.2.0 CI</span>
+                <span id="i18n-matrix-eyebrow">Reference App Lineage &amp; Shared Infrastructure</span>
+                <span class="eyebrow-tag">v0.2.0 Guide</span>
             </div>
-            <h1 class="wiki-title" id="matrix-page-title">ArtCraft Suite Compliance Telemetry</h1>
+            <h1 class="wiki-title" id="matrix-page-title">ArtCraft Reference Apps &amp; Capabilities</h1>
             <p class="wiki-desc" id="matrix-page-desc">
-                Architectural contracts, invariant verification, and AST drift telemetry across all 20+ Storytold monorepo applications. Filter by domain, inspect scorecards, or pivot by standard category.
+                Explore how each ArtCraft desktop application aligns with its industry reference benchmark (Photoshop, DaVinci, AutoCAD) while sharing core egui/wgpu infrastructure.
             </p>
         </section>
 
         <!-- KPI Telemetry Bar -->
         <section class="matrix-kpi-bar" aria-label="Suite Invariant Metrics">
             <div class="matrix-kpi-card">
-                <div class="matrix-kpi-val highlight">95.8%</div>
-                <div class="matrix-kpi-lbl" id="kpi-score-lbl">Suite Compliance Score</div>
+                <div class="matrix-kpi-val highlight" id="kpi-apps-count">20+ Apps</div>
+                <div class="matrix-kpi-lbl" id="kpi-score-lbl">Creative Desktop Apps</div>
             </div>
             <div class="matrix-kpi-card">
-                <div class="matrix-kpi-val">115 / 120</div>
-                <div class="matrix-kpi-lbl" id="kpi-invariants-lbl">Verified Invariants</div>
+                <div class="matrix-kpi-val" id="kpi-domains-count">7 Domains</div>
+                <div class="matrix-kpi-lbl" id="kpi-invariants-lbl">Ergonomic Patterns</div>
             </div>
             <div class="matrix-kpi-card">
-                <div class="matrix-kpi-val" style="color:#58A6FF;" id="kpi-apps-val">20 Apps</div>
-                <div class="matrix-kpi-lbl" id="kpi-governed-lbl">Governed in Storytold Monorepo</div>
+                <div class="matrix-kpi-val" style="color:#58A6FF;" id="kpi-governed-val">Modular</div>
+                <div class="matrix-kpi-lbl" id="kpi-governed-lbl">Shared Infrastructure</div>
             </div>
             <div class="matrix-kpi-card">
-                <div class="matrix-kpi-val" style="color:#3FB950;" id="kpi-ci-val">Active CI</div>
-                <div class="matrix-kpi-lbl" id="kpi-guarantee-lbl">Zero AST Drift Guarantee</div>
+                <div class="matrix-kpi-val" style="color:#3FB950;" id="kpi-ci-val">Aligned</div>
+                <div class="matrix-kpi-lbl" id="kpi-guarantee-lbl">Reference App Benchmarks</div>
             </div>
         </section>
 
@@ -4076,13 +4076,13 @@
         <div class="matrix-view-switcher-bar">
             <div class="matrix-pivot-modes" role="tablist" aria-label="Matrix View Modes">
                 <button class="matrix-pivot-btn active" id="pivot-mode-scorecards" onclick="setMatrixViewMode('scorecards', this)" role="tab" aria-selected="true">
-                    <span>📋 App Scorecards (Overview)</span>
+                    <span>📋 Reference Apps (Lineage &amp; Roster)</span>
                 </button>
                 <button class="matrix-pivot-btn" id="pivot-mode-grid" onclick="setMatrixViewMode('grid', this)" role="tab" aria-selected="false">
-                    <span>📊 Category Pivot Matrix (Heatmap)</span>
+                    <span>📊 Shared Crates Matrix</span>
                 </button>
                 <button class="matrix-pivot-btn" id="pivot-mode-drilldown" onclick="setMatrixViewMode('drilldown', this)" role="tab" aria-selected="false">
-                    <span>🎯 Standard Invariant Drilldown</span>
+                    <span>🎯 Practical UI Recipes</span>
                 </button>
             </div>
         </div>
@@ -4418,6 +4418,9 @@
                 <div class="reader-actions-right">
                     <button class="reader-btn primary" onclick="showDashboard(event)" id="top-back-btn" aria-label="Back to Catalog (Shortcut: Escape)">
                         <span class="arrow-icon">←</span> <span id="i18n-back-btn-text">Catalog</span>
+                    </button>
+                    <button class="reader-btn" id="copy-lean-btn" onclick="copyCurrentLeanPrompt()" title="Copy Lean Agent Prompt (< 100 tokens)" aria-label="Copy Lean Agent Prompt (< 100 tokens)">
+                        <span>⚡</span> <span id="i18n-copy-lean-text">Lean Prompt</span>
                     </button>
                     <button class="reader-btn" id="copy-link-btn" onclick="copyCurrentLink()" aria-label="Copy direct specification link to clipboard">
                         <span id="i18n-copy-text">Copy Link</span> 🔗
@@ -4835,20 +4838,20 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "flag": "🇸🇦",
   "dir": "rtl",
   "brandSub": "المعايير",
-  "heroEyebrow": "ثوابت تجربة المستخدم والعقود الهندسية الموحدة",
+  "heroEyebrow": "وصفات هندسة الاستخدام واتفاقيات التطبيقات المرجعية",
   "heroTitle": "معايير حزمة <em id=\"i18n-hero-em\">ArtCraft</em> الإبداعية (+20 تطبيق)",
-  "heroDesc": "مواصفات قياسية حاكمة لتبديل الأدوات، والتمرير الزمني، وشجرة إمكانية الوصول AccessKit، والمحاذاة الكاملة للاتجاهين BiDi/RTL، وحوكمة وكلاء الذكاء الاصطناعي عبر كافة تطبيقات ArtCraft.",
+  "heroDesc": "وصفات واجهة مستخدم معيارية، وحزم برمجية مشتركة، ومخططات مرجعية لمعايير الصناعة (فوتوشوب، دافينشي، أوتوكاد) لحزمة ArtCraft الإبداعية.",
   "heroBadgeMCP": "⚡ بوابة AutoCraft MCP",
   "heroBadgeMatrix": "📊 قياس الامتثال الهندسي الحي",
   "heroBadgeSim": "🧪 محاكيات هندسة تجربة المستخدم",
-  "statStandards": "معايير نشطة",
-  "statStandardsSub": "مواصفات قابلة للتنفيذ بنسبة 100%",
-  "statApps": "تطبيقات خاضعة",
-  "statAppsSub": "PhotoCraft وCADCraft وFilmCraft...",
-  "statCI": "فحص آلي 100%",
-  "statCISub": "ضمان انعدام الانحراف البرمجي",
-  "statMCP": "خادم AutoCraft MCP",
-  "statMCPSub": "بوابة بروتوكول v0.2.0 Stdio",
+  "statStandards": "وصفات الواجهة",
+  "statStandardsSub": "أنماط معيارية لـ egui/wgpu",
+  "statApps": "تطبيقات إبداعية",
+  "statAppsSub": "PhotoCraft, CADCraft, FilmCraft...",
+  "statCI": "حزم مشتركة",
+  "statCISub": "AccessKit, craft-fs, egui",
+  "statMCP": "وكيل قليل الرموز",
+  "statMCPSub": "سياق وكيل منخفض التكلفة",
   "searchPlaceholder": "ابحث في المعايير والاختصارات (Ctrl+Tab) والحزم...",
   "searchClearLabel": "مسح نص البحث",
   "searchShortcut": "اضغط / للبحث",
@@ -4908,19 +4911,19 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "openReference": "افتح المرجع ↗",
   "activeBadge": "نشط",
   "allApps": "الكل",
-  "matrixPageTitle": "قياسات توافق حزمة ArtCraft الهندسية",
-  "matrixPageDesc": "العقود الهندسية والتحقق من الثوابت وقياسات انحراف شجرة البنية المجردة (AST) عبر أكثر من 20 تطبيقاً في مستودع Storytold الموحد. صفِّ حسب المجال، أو تفحص بطاقات التقييم، أو بدل المحاور حسب فئة المعايير.",
-  "matrixEyebrow": "التحقق المعماري للحزمة · 20 تطبيقاً معتمداً",
+  "matrixPageTitle": "تطبيقات ArtCraft المرجعية والقدرات المشتركة",
+  "matrixPageDesc": "استكشف كيف يتوافق كل تطبيق مكتبي في ArtCraft مع تطبيقه المرجعي في الصناعة (فوتوشوب، دافينشي، أوتوكاد) مع مشاركة البنية التحتية الأساسية.",
+  "matrixEyebrow": "النسب المرجعي والبنية التحتية المشتركة",
   "matrixBackBtn": "العودة للدليل",
-  "matrixKpiScore": "نسبة امتثال الحزمة",
-  "matrixKpiInvariants": "الثوابت المحققة",
-  "matrixKpiGoverned": "تطبيق في مستودع Storytold",
-  "matrixKpiGuarantee": "ضمان انعدام انحراف AST",
-  "matrixKpiActiveCI": "فحص CI نشط",
-  "matrixKpiAppsCount": "20 تطبيقاً",
-  "matrixModeScorecards": "📋 بطاقات تقييم التطبيقات (نظرة عامة)",
-  "matrixModePivot": "📊 مصفوفة المحاور حسب الفئة (خريطة حرارية)",
-  "matrixModeDrilldown": "🎯 تفصيل ثوابت المعيار",
+  "matrixKpiScore": "تطبيقات مكتبية إبداعية",
+  "matrixKpiInvariants": "أنماط الاستخدام",
+  "matrixKpiGoverned": "بنية تحتية مشتركة",
+  "matrixKpiGuarantee": "متوافق مع المراجع",
+  "matrixKpiActiveCI": "معياري",
+  "matrixKpiAppsCount": "+20 تطبيقاً",
+  "matrixModeScorecards": "📋 التطبيقات المرجعية (النسب والتراث)",
+  "matrixModePivot": "📊 مصفوفة الحزم المشتركة",
+  "matrixModeDrilldown": "🎯 وصفات واجهة عملية",
   "domainAll": "كافة التطبيقات (20)",
   "domainGraphics": "الرسوميات والتصميم (7)",
   "domainVideo": "الفيديو والحركة (3)",
@@ -5010,7 +5013,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "توجد كافة ترجمات المنصة في ملفات JSON معيارية ومستقلة داخل مجلد <code>locales/&lt;lang-code&gt;.json</code>. للمساهمة بلغة جديدة، أنشئ ملفاً جديداً (مثل <code>locales/it.json</code>) بالمفاتيح القياسية، ليقوم مُنشئ xtask بدمجه تلقائياً في التقرير عند البناء التالي."
     }
   },
-  "heroBadgeDrift": "🛡️ ضمان انعدام الانحراف البرمجي",
+  "heroBadgeDrift": "🛡️ متوافق مع المراجع الصناعية",
   "faqExpandAll": "توسيع الكل",
   "faqCollapseAll": "طي الكل",
   "faqLinkCopied": "تم نسخ رابط السؤال إلى الحافظة!",
@@ -5020,7 +5023,9 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "navAbout": "نظرة عامة",
   "aboutTitle": "مقدمة ونظرة عامة معمارية",
   "aboutEyebrow": "نظرة عامة تنفيذية وورقة بيضاء معمارية",
-  "aboutDesc": "العقود المعمارية المرجعية، وضوابط هندسة تجربة المستخدم، وحوكمة وكلاء الذكاء الاصطناعي التي توحد أكثر من 20 تطبيقاً في حزمة ArtCraft الإبداعية."
+  "aboutDesc": "العقود المعمارية المرجعية، وضوابط هندسة تجربة المستخدم، وحوكمة وكلاء الذكاء الاصطناعي التي توحد أكثر من 20 تطبيقاً في حزمة ArtCraft الإبداعية.",
+  "copyLeanPrompt": "⚡ نسخ موجه موجز (< 100 رمز)",
+  "leanPromptCopied": "تم نسخ الموجه الموجز! (استهلاك أدنى للرموز)"
 },
 "de": {
   "code": "de",
@@ -5028,20 +5033,20 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "flag": "🇩🇪",
   "dir": "ltr",
   "brandSub": "Standards",
-  "heroEyebrow": "Universelle UX-Invarianten & Ergonomische Verträge",
+  "heroEyebrow": "Ergonomische Rezepte & Referenz-App-Konventionen",
   "heroTitle": "Standards für die <em id=\"i18n-hero-em\">20+ ArtCraft</em> Creative Suite",
-  "heroDesc": "Autoritative Spezifikationen für Werkzeug-Slots, Timeline-Scrubbing, AccessKit-Barrierefreiheit, BiDi/RTL-Spiegelung und KI-Agenten-Governance über alle ArtCraft-Anwendungen.",
+  "heroDesc": "Modulare UI-Rezepte, gemeinsame Crates und Branchen-Referenz-Mappings (Photoshop, DaVinci, AutoCAD) für die ArtCraft Creative Suite.",
   "heroBadgeMCP": "⚡ AutoCraft MCP Gateway",
   "heroBadgeMatrix": "📊 Live-Konformitätstelemetrie",
   "heroBadgeSim": "🧪 Interaktive Ergonomie-Sandboxen",
-  "statStandards": "Aktive Standards",
-  "statStandardsSub": "100% Ausführbare Spezifikationen",
-  "statApps": "Geregelte Apps",
+  "statStandards": "UI-Rezepte",
+  "statStandardsSub": "Modulare egui/wgpu-Muster",
+  "statApps": "Kreativ-Apps",
   "statAppsSub": "PhotoCraft, CADCraft, FilmCraft...",
-  "statCI": "CI-Verifizierung",
-  "statCISub": "Null AST-Drift Garantie",
-  "statMCP": "AutoCraft MCP",
-  "statMCPSub": "v0.2.0 Stdio-Gateway",
+  "statCI": "Gemeinsame Crates",
+  "statCISub": "AccessKit, craft-fs, egui",
+  "statMCP": "Token-Lean MCP",
+  "statMCPSub": "Geringer Kontext-Overhead",
   "searchPlaceholder": "Standards, Tastenkürzel (Ctrl+Tab), Crates suchen...",
   "searchClearLabel": "Suchbegriff löschen",
   "searchShortcut": "Drücke / zum Suchen",
@@ -5101,19 +5106,19 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "openReference": "Referenz öffnen ↗",
   "activeBadge": "AKTIV",
   "allApps": "alle",
-  "matrixPageTitle": "ArtCraft Suite Konformitäts-Telemetrie",
-  "matrixPageDesc": "Architekturverträge, Invarianten-Verifikation und AST-Drift-Telemetrie über alle 20+ Storytold Monorepo-Anwendungen.",
-  "matrixEyebrow": "Suite-Architektur-Verifikation · 20 verwaltete Apps",
+  "matrixPageTitle": "ArtCraft Referenz-Apps & Fähigkeiten",
+  "matrixPageDesc": "Entdecken Sie, wie jede ArtCraft-Desktop-App auf ihre Branchen-Referenz (Photoshop, DaVinci, AutoCAD) abgestimmt ist und gleichzeitig Kern-Infrastruktur teilt.",
+  "matrixEyebrow": "Referenz-App-Tradition & Geteilte Basis",
   "matrixBackBtn": "Zurück zum Katalog",
-  "matrixKpiScore": "Suite-Konformitätswert",
-  "matrixKpiInvariants": "Verifizierte Invarianten",
-  "matrixKpiGoverned": "Im Storytold-Monorepo verwaltet",
-  "matrixKpiGuarantee": "Garantie für null AST-Drift",
-  "matrixKpiActiveCI": "Aktive CI",
-  "matrixKpiAppsCount": "20 Apps",
-  "matrixModeScorecards": "📋 App-Scorecards (Übersicht)",
-  "matrixModePivot": "📊 Kategorie-Pivot-Matrix (Heatmap)",
-  "matrixModeDrilldown": "🎯 Standard-Invarianten-Drilldown",
+  "matrixKpiScore": "Kreative Desktop-Apps",
+  "matrixKpiInvariants": "Ergonomische Muster",
+  "matrixKpiGoverned": "Gemeinsame Basis",
+  "matrixKpiGuarantee": "Referenz-Ausgerichtet",
+  "matrixKpiActiveCI": "Modular",
+  "matrixKpiAppsCount": "20+ Apps",
+  "matrixModeScorecards": "📋 Referenz-Apps (Tradition & Abstammung)",
+  "matrixModePivot": "📊 Matrix gemeinsamer Crates",
+  "matrixModeDrilldown": "🎯 Praktische UI-Rezepte",
   "domainAll": "Alle Apps (20)",
   "domainGraphics": "Grafik (7)",
   "domainVideo": "Video & Motion (3)",
@@ -5203,7 +5208,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "Alle Übersetzungen liegen in JSON-Dateien unter <code>locales/&lt;lang-code&gt;.json</code>. Erstellen Sie eine neue Datei (z. B. <code>locales/it.json</code>) mit den Standardschlüsseln; der xtask-Build integriert sie beim nächsten Mal automatisch!"
     }
   },
-  "heroBadgeDrift": "🛡️ Null AST-Drift-Garantie",
+  "heroBadgeDrift": "🛡️ Referenz-App-Abgestimmt",
   "faqExpandAll": "Alle aufklappen",
   "faqCollapseAll": "Alle zuklappen",
   "faqLinkCopied": "Link zur Frage in die Zwischenablage kopiert!",
@@ -5213,7 +5218,9 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "navAbout": "Übersicht",
   "aboutTitle": "Einführung & Architekturüberblick",
   "aboutEyebrow": "Executive Overview & Architektur-Whitepaper",
-  "aboutDesc": "Verbindliche Architekturverträge, ergonomische Invarianten und autonome KI-Agenten-Governance für die über 20 Desktop-Apps der ArtCraft Creative Suite."
+  "aboutDesc": "Verbindliche Architekturverträge, ergonomische Invarianten und autonome KI-Agenten-Governance für die über 20 Desktop-Apps der ArtCraft Creative Suite.",
+  "copyLeanPrompt": "⚡ Schlanken Prompt kopieren (< 100 Tokens)",
+  "leanPromptCopied": "Schlanker Prompt in die Zwischenablage kopiert!"
 },
 "en": {
   "code": "en",
@@ -5221,20 +5228,20 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "flag": "🇺🇸",
   "dir": "ltr",
   "brandSub": "Standards",
-  "heroEyebrow": "Universal UX Invariants & Ergonomic Contracts",
+  "heroEyebrow": "Ergonomic Recipes & Reference-App Conventions",
   "heroTitle": "Standards for the <em id=\"i18n-hero-em\">20+ ArtCraft</em> Creative Suite",
-  "heroDesc": "Authoritative specifications governing multi-tool button cycling, timeline scrubs, AccessKit accessibility trees, full shell BiDi mirroring, universal command taxonomy, and autonomous AI agent governance across all ArtCraft applications.",
+  "heroDesc": "Modular UI recipes, shared crates, and industry-standard reference mappings (Photoshop, DaVinci, AutoCAD) for the ArtCraft creative suite.",
   "heroBadgeMCP": "⚡ AutoCraft MCP Gateway",
   "heroBadgeMatrix": "📊 Live Compliance Telemetry",
   "heroBadgeSim": "🧪 Interactive Ergonomic Sandboxes",
-  "statStandards": "Active Standards",
-  "statStandardsSub": "100% Executable Specs",
-  "statApps": "Governed Apps",
+  "statStandards": "UI Recipes",
+  "statStandardsSub": "Modular egui/wgpu Patterns",
+  "statApps": "Creative Apps",
   "statAppsSub": "PhotoCraft, CADCraft, FilmCraft...",
-  "statCI": "CI Verification",
-  "statCISub": "Zero AST Drift Guarantee",
-  "statMCP": "AutoCraft MCP",
-  "statMCPSub": "v0.2.0 Stdio Gateway",
+  "statCI": "Shared Crates",
+  "statCISub": "AccessKit, craft-fs, egui",
+  "statMCP": "Token-Lean MCP",
+  "statMCPSub": "Low-Overhead Agent Context",
   "searchPlaceholder": "Search standards, shortcuts (Ctrl+Tab), crates...",
   "searchClearLabel": "Clear search query",
   "searchShortcut": "Press / to search",
@@ -5294,19 +5301,19 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "openReference": "Open Reference ↗",
   "activeBadge": "ACTIVE",
   "allApps": "all",
-  "matrixPageTitle": "ArtCraft Suite Compliance Telemetry",
-  "matrixPageDesc": "Architectural contracts, invariant verification, and AST drift telemetry across all 20+ Storytold monorepo applications. Filter by domain, inspect scorecards, or pivot by standard category.",
-  "matrixEyebrow": "Suite Architectural Verification · 20 Governed Apps",
+  "matrixPageTitle": "ArtCraft Reference Apps & Capabilities",
+  "matrixPageDesc": "Explore how each ArtCraft desktop application aligns with its industry reference app (Photoshop, DaVinci, AutoCAD) while sharing cross-cutting infrastructure crates (AccessKit, craft-fs, egui).",
+  "matrixEyebrow": "Reference-App Lineage & Shared Infrastructure",
   "matrixBackBtn": "Back to Catalog",
-  "matrixKpiScore": "Suite Compliance Score",
-  "matrixKpiInvariants": "Verified Invariants",
-  "matrixKpiGoverned": "Governed in Storytold Monorepo",
-  "matrixKpiGuarantee": "Zero AST Drift Guarantee",
-  "matrixKpiActiveCI": "Active CI",
-  "matrixKpiAppsCount": "20 Apps",
-  "matrixModeScorecards": "📋 App Scorecards (Overview)",
-  "matrixModePivot": "📊 Category Pivot Matrix (Heatmap)",
-  "matrixModeDrilldown": "🎯 Standard Invariant Drilldown",
+  "matrixKpiScore": "Creative Desktop Apps",
+  "matrixKpiInvariants": "Ergonomic Patterns",
+  "matrixKpiGoverned": "Shared Infrastructure",
+  "matrixKpiGuarantee": "Reference-App Aligned",
+  "matrixKpiActiveCI": "Modular",
+  "matrixKpiAppsCount": "20+ Apps",
+  "matrixModeScorecards": "📋 Reference Apps (Lineage & Heritage)",
+  "matrixModePivot": "📊 Shared Crates Matrix",
+  "matrixModeDrilldown": "🎯 Practical UI Recipes",
   "domainAll": "All Apps (20)",
   "domainGraphics": "Graphics (7)",
   "domainVideo": "Video & Motion (3)",
@@ -5396,7 +5403,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "All portal translations live in modular JSON files under <code>locales/&lt;lang-code&gt;.json</code>. To contribute a new language, create a new JSON file (e.g. <code>locales/it.json</code>) with the standard keys. The Rust <code>xtask</code> build automatically bundles it into the single-file dashboard on next build!"
     }
   },
-  "heroBadgeDrift": "🛡️ Zero AST Drift Guarantee",
+  "heroBadgeDrift": "🛡️ Reference-App Aligned",
   "faqExpandAll": "Expand All",
   "faqCollapseAll": "Collapse All",
   "faqLinkCopied": "Question link copied to clipboard!",
@@ -5406,7 +5413,9 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "navAbout": "Overview",
   "aboutTitle": "Introduction & Architecture Overview",
   "aboutEyebrow": "Executive Overview & Architectural Whitepaper",
-  "aboutDesc": "Authoritative architectural contracts, ergonomic invariants, and autonomous AI agent governance unifying the 20+ ArtCraft Creative Suite desktop applications."
+  "aboutDesc": "Authoritative architectural contracts, ergonomic invariants, and autonomous AI agent governance unifying the 20+ ArtCraft Creative Suite desktop applications.",
+  "copyLeanPrompt": "⚡ Copy Lean Prompt (< 100 tokens)",
+  "leanPromptCopied": "Lean prompt copied to clipboard! (Minimal token spend)"
 },
 "es": {
   "code": "es",
@@ -5414,20 +5423,20 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "flag": "🇪🇸",
   "dir": "ltr",
   "brandSub": "Estándares",
-  "heroEyebrow": "Invariantes UX Universales y Contratos Ergonómicos",
+  "heroEyebrow": "Recetas ergonómicas y convenciones de aplicaciones de referencia",
   "heroTitle": "Estándares para la Suite Creativa <em id=\"i18n-hero-em\">20+ ArtCraft</em>",
-  "heroDesc": "Especificaciones autorizadas que rigen el ciclado de herramientas, desplazamientos de línea de tiempo, árboles de accesibilidad AccessKit, reflejo BiDi/RTL y gobernanza de agentes de IA en todas las aplicaciones ArtCraft.",
+  "heroDesc": "Recetas modulares de interfaz de usuario, crates compartidas y asignaciones de referencia estándar (Photoshop, DaVinci, AutoCAD) para ArtCraft.",
   "heroBadgeMCP": "⚡ Pasarela AutoCraft MCP",
   "heroBadgeMatrix": "📊 Telemetría de Cumplimiento en Vivo",
   "heroBadgeSim": "🧪 Simuladores Ergonómicos Interactivos",
-  "statStandards": "Estándares Activos",
-  "statStandardsSub": "100% Especificaciones Ejecutables",
-  "statApps": "Apps Gobernadas",
+  "statStandards": "Recetas de UI",
+  "statStandardsSub": "Patrones modulares egui/wgpu",
+  "statApps": "Apps creativas",
   "statAppsSub": "PhotoCraft, CADCraft, FilmCraft...",
-  "statCI": "Verificación CI",
-  "statCISub": "Cero Desviación AST",
-  "statMCP": "AutoCraft MCP",
-  "statMCPSub": "Pasarela Stdio v0.2.0",
+  "statCI": "Crates compartidas",
+  "statCISub": "AccessKit, craft-fs, egui",
+  "statMCP": "MCP bajo en tokens",
+  "statMCPSub": "Bajo coste de contexto para agentes",
   "searchPlaceholder": "Buscar estándares, atajos (Ctrl+Tab), crates...",
   "searchClearLabel": "Limpiar consulta de búsqueda",
   "searchShortcut": "Presiona / para buscar",
@@ -5487,19 +5496,19 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "openReference": "Abrir referencia ↗",
   "activeBadge": "ACTIVO",
   "allApps": "todos",
-  "matrixPageTitle": "Telemetría de Cumplimiento de la Suite ArtCraft",
-  "matrixPageDesc": "Contratos arquitectónicos, verificación de invariantes y telemetría de desviación AST en más de 20 aplicaciones monorepo de Storytold.",
-  "matrixEyebrow": "Verificación Arquitectónica de la Suite · 20 Aplicaciones",
+  "matrixPageTitle": "Aplicaciones de referencia y capacidades de ArtCraft",
+  "matrixPageDesc": "Descubra cómo cada aplicación de ArtCraft se alinea con su referencia industrial (Photoshop, DaVinci, AutoCAD) compartiendo infraestructura común.",
+  "matrixEyebrow": "Herencia de referencia e infraestructura compartida",
   "matrixBackBtn": "Volver al Catálogo",
-  "matrixKpiScore": "Puntaje de Cumplimiento",
-  "matrixKpiInvariants": "Invariantes Verificados",
-  "matrixKpiGoverned": "Gobernado en el Monorepo",
-  "matrixKpiGuarantee": "Garantía de Cero Desviación AST",
-  "matrixKpiActiveCI": "CI Activo",
-  "matrixKpiAppsCount": "20 Apps",
-  "matrixModeScorecards": "📋 Fichas de Apps (Resumen)",
-  "matrixModePivot": "📊 Matriz Pivot por Categoría",
-  "matrixModeDrilldown": "🎯 Detalle por Invariante",
+  "matrixKpiScore": "Aplicaciones creativas",
+  "matrixKpiInvariants": "Patrones ergonómicos",
+  "matrixKpiGoverned": "Infraestructura compartida",
+  "matrixKpiGuarantee": "Alineado con referencia",
+  "matrixKpiActiveCI": "Modular",
+  "matrixKpiAppsCount": "20+ Apps",
+  "matrixModeScorecards": "📋 Aplicaciones de referencia (Herencia)",
+  "matrixModePivot": "📊 Matriz de crates compartidas",
+  "matrixModeDrilldown": "🎯 Recetas prácticas de interfaz",
   "domainAll": "Todas las Apps (20)",
   "domainGraphics": "Gráficos (7)",
   "domainVideo": "Vídeo y Movimiento (3)",
@@ -5589,7 +5598,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "Todas las traducciones residen en archivos modulares en <code>locales/&lt;lang-code&gt;.json</code>. Cree un nuevo archivo (ej. <code>locales/it.json</code>) con las claves estándar y xtask lo compilará automáticamente en el portal."
     }
   },
-  "heroBadgeDrift": "🛡️ Garantía de deriva AST cero",
+  "heroBadgeDrift": "🛡️ Alineado con la industria",
   "faqExpandAll": "Expandir todo",
   "faqCollapseAll": "Contraer todo",
   "faqLinkCopied": "¡Enlace a la pregunta copiado al portapapeles!",
@@ -5599,7 +5608,9 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "navAbout": "Visión general",
   "aboutTitle": "Introducción y descripción arquitectónica",
   "aboutEyebrow": "Resumen ejecutivo y documento técnico",
-  "aboutDesc": "Contratos arquitectónicos vinculantes, invariantes ergonómicas y gobernanza autónoma de agentes de IA que unifican las más de 20 aplicaciones de ArtCraft."
+  "aboutDesc": "Contratos arquitectónicos vinculantes, invariantes ergonómicas y gobernanza autónoma de agentes de IA que unifican las más de 20 aplicaciones de ArtCraft.",
+  "copyLeanPrompt": "⚡ Copiar prompt breve (< 100 tokens)",
+  "leanPromptCopied": "¡Prompt optimizado copiado al portapapeles!"
 },
 "fr": {
   "code": "fr",
@@ -5607,20 +5618,20 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "flag": "🇫🇷",
   "dir": "ltr",
   "brandSub": "Standards",
-  "heroEyebrow": "Invariants UX Universels et Contrats Ergonomiques",
+  "heroEyebrow": "Recettes ergonomiques et conventions des apps de référence",
   "heroTitle": "Standards pour la Suite Créative <em id=\"i18n-hero-em\">20+ ArtCraft</em>",
-  "heroDesc": "Spécifications faisant autorité régissant le cycle d'outils, le défilement temporel, l'arborescence AccessKit, le miroir BiDi/RTL et la gouvernance des agents IA dans toute la suite ArtCraft.",
+  "heroDesc": "Recettes d'interface modulaires, crates partagées et alignements sur les standards de l'industrie (Photoshop, DaVinci, AutoCAD) pour la suite ArtCraft.",
   "heroBadgeMCP": "⚡ Passerelle AutoCraft MCP",
   "heroBadgeMatrix": "📊 Télémétrie de Conformité en Direct",
   "heroBadgeSim": "🧪 Bacs à Sable Ergonomiques Interactifs",
-  "statStandards": "Standards Actifs",
-  "statStandardsSub": "100% Spécifications Exécutables",
-  "statApps": "Apps Régies",
+  "statStandards": "Recettes UI",
+  "statStandardsSub": "Modèles egui/wgpu modulaires",
+  "statApps": "Apps créatives",
   "statAppsSub": "PhotoCraft, CADCraft, FilmCraft...",
-  "statCI": "Vérification CI",
-  "statCISub": "Zéro Dérive AST Garantie",
-  "statMCP": "AutoCraft MCP",
-  "statMCPSub": "Passerelle Stdio v0.2.0",
+  "statCI": "Crates partagées",
+  "statCISub": "AccessKit, craft-fs, egui",
+  "statMCP": "MCP économe en tokens",
+  "statMCPSub": "Contexte agent ultra-léger",
   "searchPlaceholder": "Rechercher des standards, raccourcis (Ctrl+Tab), crates...",
   "searchClearLabel": "Effacer la recherche",
   "searchShortcut": "Appuyez sur / pour chercher",
@@ -5680,19 +5691,19 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "openReference": "Ouvrir la référence ↗",
   "activeBadge": "ACTIF",
   "allApps": "tous",
-  "matrixPageTitle": "Télémétrie de Conformité de la Suite ArtCraft",
-  "matrixPageDesc": "Contrats architecturaux, vérification des invariants et télémétrie de dérive AST sur plus de 20 applications monorepo Storytold.",
-  "matrixEyebrow": "Vérification Architecturale de la Suite · 20 Applications",
+  "matrixPageTitle": "Applications de référence et capacités partagées ArtCraft",
+  "matrixPageDesc": "Découvrez comment chaque application de bureau ArtCraft s'aligne sur son modèle industriel (Photoshop, DaVinci, AutoCAD) tout en partageant des bases communes.",
+  "matrixEyebrow": "Héritage des références et infrastructure partagée",
   "matrixBackBtn": "Retour au Catalogue",
-  "matrixKpiScore": "Score de Conformité",
-  "matrixKpiInvariants": "Invariants Vérifiés",
-  "matrixKpiGoverned": "Gouverné dans le Monorepo",
-  "matrixKpiGuarantee": "Garantie Zéro Dérive AST",
-  "matrixKpiActiveCI": "CI Actif",
-  "matrixKpiAppsCount": "20 Apps",
-  "matrixModeScorecards": "📋 Fiches d'Applications (Vue d'ensemble)",
-  "matrixModePivot": "📊 Matrice Pivot par Catégorie",
-  "matrixModeDrilldown": "🎯 Détail des Invariants",
+  "matrixKpiScore": "Applications créatives",
+  "matrixKpiInvariants": "Modèles ergonomiques",
+  "matrixKpiGoverned": "Infrastructure partagée",
+  "matrixKpiGuarantee": "Aligné sur les références",
+  "matrixKpiActiveCI": "Modulaire",
+  "matrixKpiAppsCount": "20+ Apps",
+  "matrixModeScorecards": "📋 Applications de référence (Héritage)",
+  "matrixModePivot": "📊 Matrice des crates partagées",
+  "matrixModeDrilldown": "🎯 Recettes pratiques d'interface",
   "domainAll": "Toutes les Apps (20)",
   "domainGraphics": "Graphisme (7)",
   "domainVideo": "Vidéo & Mouvement (3)",
@@ -5782,7 +5793,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "Toutes les traductions résident dans <code>locales/&lt;lang-code&gt;.json</code>. Créez un fichier (ex. <code>locales/it.json</code>) avec les clés standards et xtask l'intégrera automatiquement au prochain build."
     }
   },
-  "heroBadgeDrift": "🛡️ Garantie zéro dérive AST",
+  "heroBadgeDrift": "🛡️ Conforme aux références",
   "faqExpandAll": "Tout développer",
   "faqCollapseAll": "Tout réduire",
   "faqLinkCopied": "Lien vers la question copié dans le presse-papiers !",
@@ -5792,7 +5803,9 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "navAbout": "Vue d'ensemble",
   "aboutTitle": "Introduction et aperçu architectural",
   "aboutEyebrow": "Résumé exécutif et livre blanc architectural",
-  "aboutDesc": "Contrats architecturaux de référence, invariants ergonomiques et gouvernance autonome des agents d'IA unifiant les plus de 20 applications de la suite ArtCraft."
+  "aboutDesc": "Contrats architecturaux de référence, invariants ergonomiques et gouvernance autonome des agents d'IA unifiant les plus de 20 applications de la suite ArtCraft.",
+  "copyLeanPrompt": "⚡ Copier prompt court (< 100 tokens)",
+  "leanPromptCopied": "Prompt allégé copié dans le presse-papiers !"
 },
 "ja": {
   "code": "ja",
@@ -5800,20 +5813,20 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "flag": "🇯🇵",
   "dir": "ltr",
   "brandSub": "仕様基準",
-  "heroEyebrow": "統合UX不変則 & エルゴノミック規約",
+  "heroEyebrow": "エルゴノミクスレシピと参照アプリの規則",
   "heroTitle": "<em id=\"i18n-hero-em\">20+ ArtCraft</em> クリエイティブスイート標準規格",
-  "heroDesc": "マルチツールボタンスロットの巡回、タイムライン操作、AccessKitアクセシビリティツリー、BiDi/RTL両方向ミラーリング、AIエージェントガバナンスを規定する統括仕様書。",
+  "heroDesc": "ArtCraftクリエイティブスイート向けのモジュール式UIレシピ、共有クレート、業界標準リファレンスマッピング（Photoshop、DaVinci、AutoCAD）。",
   "heroBadgeMCP": "⚡ AutoCraft MCP ゲートウェイ",
   "heroBadgeMatrix": "📊 リアルタイム準拠テレメトリ",
   "heroBadgeSim": "🧪 対話型エルゴノミクス実験室",
-  "statStandards": "有効な仕様基準",
-  "statStandardsSub": "100% 実行可能な仕様書",
-  "statApps": "統括対象アプリ",
+  "statStandards": "UIレシピ",
+  "statStandardsSub": "モジュール式egui/wgpuパターン",
+  "statApps": "クリエイティブアプリ",
   "statAppsSub": "PhotoCraft, CADCraft, FilmCraft...",
-  "statCI": "CI 自動検証",
-  "statCISub": "AST 乖離ゼロ保証",
-  "statMCP": "AutoCraft MCP",
-  "statMCPSub": "v0.2.0 Stdio ゲートウェイ",
+  "statCI": "共有クレート",
+  "statCISub": "AccessKit, craft-fs, egui",
+  "statMCP": "トークン軽量MCP",
+  "statMCPSub": "エージェントのコンテキスト節約",
   "searchPlaceholder": "標準規格、ショートカット (Ctrl+Tab)、クレートを検索...",
   "searchClearLabel": "検索クエリをクリア",
   "searchShortcut": "/ キーで検索",
@@ -5873,19 +5886,19 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "openReference": "リファレンスを開く ↗",
   "activeBadge": "アクティブ",
   "allApps": "すべて",
-  "matrixPageTitle": "ArtCraft スイート準拠テレメトリ",
-  "matrixPageDesc": "20以上のStorytoldモノレポアプリケーション全体におけるアーキテクチャ契約、不変条件の検証、およびASTドリフトテレメトリ。",
-  "matrixEyebrow": "スイートアーキテクチャ検証 · 20の管理対象アプリ",
+  "matrixPageTitle": "ArtCraftリファレンスアプリと共有機能",
+  "matrixPageDesc": "各ArtCraftデスクトップアプリが業界のリファレンスアプリ（Photoshop、DaVinci、AutoCAD）にどのように準拠し、共通基盤を共有しているかを確認できます。",
+  "matrixEyebrow": "リファレンスアプリの系譜と共有基盤",
   "matrixBackBtn": "カタログに戻る",
-  "matrixKpiScore": "スイート準拠スコア",
-  "matrixKpiInvariants": "検証済み不変条件",
-  "matrixKpiGoverned": "モノレポ内の管理アプリ",
-  "matrixKpiGuarantee": "ASTドリフトゼロ保証",
-  "matrixKpiActiveCI": "アクティブCI",
-  "matrixKpiAppsCount": "20アプリ",
-  "matrixModeScorecards": "📋 アプリスコアカード（概要）",
-  "matrixModePivot": "📊 カテゴリピボットマトリックス（ヒートマップ）",
-  "matrixModeDrilldown": "🎯 標準不変条件ドリルダウン",
+  "matrixKpiScore": "デスクトップアプリ",
+  "matrixKpiInvariants": "エルゴノミクスパターン",
+  "matrixKpiGoverned": "共有インフラ基盤",
+  "matrixKpiGuarantee": "リファレンス準拠",
+  "matrixKpiActiveCI": "モジュール式",
+  "matrixKpiAppsCount": "20+ アプリ",
+  "matrixModeScorecards": "📋 リファレンスアプリ（系譜と遺産）",
+  "matrixModePivot": "📊 共有クレートマトリックス",
+  "matrixModeDrilldown": "🎯 実践的UIレシピ",
   "domainAll": "すべてのアプリ (20)",
   "domainGraphics": "グラフィックス (7)",
   "domainVideo": "動画・モーション (3)",
@@ -5975,7 +5988,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
       "a": "すべてのポータル翻訳は<code>locales/&lt;lang-code&gt;.json</code>に格納されています。新しい言語（例：<code>locales/it.json</code>）を追加するだけで、Rustの<code>xtask</code>ビルドが次回の単一ファイルダッシュボード生成時に自動的に取り込みます。"
     }
   },
-  "heroBadgeDrift": "🛡️ ASTドリフトゼロ保証",
+  "heroBadgeDrift": "🛡️ 業界リファレンス準拠",
   "faqExpandAll": "すべて展開",
   "faqCollapseAll": "すべて折りたたむ",
   "faqLinkCopied": "質問のリンクをクリップボードにコピーしました！",
@@ -5985,7 +5998,9 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
   "navAbout": "概要",
   "aboutTitle": "はじめにとアーキテクチャの概要",
   "aboutEyebrow": "エグゼクティブ概要とアーキテクチャホワイトペーパー",
-  "aboutDesc": "20以上のArtCraftクリエイティブスイートデスクトップアプリケーションを統合する、信頼できるアーキテクチャ規約、エルゴノミクス不変条件、および自律型AIエージェントガバナンス。"
+  "aboutDesc": "20以上のArtCraftクリエイティブスイートデスクトップアプリケーションを統合する、信頼できるアーキテクチャ規約、エルゴノミクス不変条件、および自律型AIエージェントガバナンス。",
+  "copyLeanPrompt": "⚡ 軽量プロンプトをコピー（100トークン未満）",
+  "leanPromptCopied": "軽量プロンプトをクリップボードにコピーしました！"
 }}
     </script>
 
@@ -6096,7 +6111,6 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             // Hero Section
             setTxt('i18n-hero-eyebrow', t.heroEyebrow);
             setHtml('hero-title', t.heroTitle);
-            setHtml('i18n-hero-title', t.heroTitle);
             setTxt('i18n-hero-desc', t.heroDesc);
             setTxt('i18n-hero-badge-mcp', t.heroBadgeMCP);
             setTxt('i18n-hero-badge-sim', t.heroBadgeSim);
@@ -6138,6 +6152,7 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             // Specification Reader View
             setTxt('i18n-back-btn-text', t.backBtn);
             setTxt('i18n-copy-text', t.copyLink);
+            setTxt('i18n-copy-lean-text', t.copyLeanPrompt ? t.copyLeanPrompt.replace(/^⚡\s*/, '') : 'Lean Prompt');
             setTxt('i18n-crate-label', t.canonicalCrate);
             setTxt('i18n-apps-label', t.governedApps);
             setTxt('i18n-wiki-label', t.craftWikiGuide);
@@ -6910,6 +6925,37 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
             }, 2000);
         }
 
+        function copyCurrentLeanPrompt() {
+            if (!activeSpecId) return;
+            const current = specsMap[activeSpecId];
+            if (!current) return;
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+            
+            // Generate a token-lean (< 100 tokens) prompt snippet for agents
+            const leanPrompt = [
+                `// [ArtCraft Recipe: ${current.id}] ${current.title}`,
+                `// Domain: ${current.category} | Crate: ${current.crate || 'craft-widgets'} | UI: egui/wgpu`,
+                `// Invariant: ${current.summary || current.title}`,
+                `// Contract: No unverified AST drift. Tag AccessKit accessibility nodes with Role & Name.`,
+                `// Sandbox: Do not invoke std::fs directly; route all file operations via craft-fs.`
+            ].join('\n');
+
+            navigator.clipboard.writeText(leanPrompt).then(() => {
+                const btn = document.getElementById('copy-lean-btn');
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = `<span>✓</span> <span>${t.leanPromptCopied ? t.leanPromptCopied.split('!')[0] : 'Copied (<100t)'}</span>`;
+                    announceA11y('Lean agent prompt copied to clipboard');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                    }, 2000);
+                }
+                showToastNotification(t.leanPromptCopied || 'Lean agent prompt copied (< 100 tokens)!');
+            }).catch(() => {
+                showToastNotification('Failed to copy prompt to clipboard');
+            });
+        }
+
         function navigateSpec(delta, e) {
             if (e) e.preventDefault();
             if (!activeSpecId) return;
@@ -7387,26 +7433,26 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
         // Intelligent Scalable Suite Compliance Telemetry Matrix
         // =========================================================================
         const APPS_COMPLIANCE = [
-            { name: "PhotoCraft", category: "Graphics", crate: "craft-apps/photocraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "VectorCraft", category: "Graphics", crate: "craft-apps/vectorcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "DesignCraft", category: "Graphics", crate: "craft-apps/designcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "LightCraft", category: "Graphics", crate: "craft-apps/lightcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "FigCraft", category: "Graphics", crate: "craft-apps/figcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "TextureCraft", category: "Graphics", crate: "craft-apps/texturecraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "MaterialCraft", category: "Graphics", crate: "craft-apps/materialcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "FilmCraft", category: "Video", crate: "craft-apps/filmcraft", engine: "egui/ffmpeg", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "EffectCraft", category: "Video", crate: "craft-apps/effectcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "AniCraft", category: "Video", crate: "craft-apps/anicraft", engine: "egui/timeline", tool: "Passed", tabs: "Passed", a11y: "In Progress", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "SoundCraft", category: "Audio", crate: "craft-apps/soundcraft", engine: "egui/cpal", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
-            { name: "CADCraft", category: "CAD", crate: "craft-apps/cadcraft", engine: "egui/opencascade", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
-            { name: "WordCraft", category: "Productivity", crate: "craft-apps/wordcraft", engine: "egui/cosmic-text", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "GridCraft", category: "Productivity", crate: "craft-apps/gridcraft", engine: "egui/calamine", tool: "Passed", tabs: "In Progress", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "DeckCraft", category: "Productivity", crate: "craft-apps/deckcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "PdfCraft", category: "Productivity", crate: "craft-apps/pdfcraft", engine: "egui/pdfium", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "Craft Anything", category: "DevTools", crate: "storytold/craft-anything", engine: "egui/mcp", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "SolidCraft", category: "3D", crate: "craft-apps/solidcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "MailCraft", category: "Productivity", crate: "craft-apps/mailcraft", engine: "egui/async-imap", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Planned", keep: "Passed" },
-            { name: "ArtCraft Studio", category: "AI Studio", crate: "craft-apps/studio", engine: "egui/mcp-gateway", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" }
+            { name: "PhotoCraft", category: "Graphics", crate: "craft-apps/photocraft", engine: "egui/wgpu", reference: "Adobe Photoshop / Krita", metaphor: "Raster layers, canvas pan/zoom, marquee selection", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "VectorCraft", category: "Graphics", crate: "craft-apps/vectorcraft", engine: "egui/wgpu", reference: "Adobe Illustrator / Inkscape", metaphor: "Bézier pen tool, vector anchor points, path math", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "DesignCraft", category: "Graphics", crate: "craft-apps/designcraft", engine: "egui/wgpu", reference: "InDesign / Affinity Publisher", metaphor: "Multi-page layout grids, master spreads, typographic flow", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "LightCraft", category: "Graphics", crate: "craft-apps/lightcraft", engine: "egui/wgpu", reference: "Adobe Lightroom / Capture One", metaphor: "Non-destructive RAW processing, exposure curves, color wheels", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "FigCraft", category: "Graphics", crate: "craft-apps/figcraft", engine: "egui/wgpu", reference: "Figma", metaphor: "Nested component frames, auto-layout, interactive prototyping", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "TextureCraft", category: "Graphics", crate: "craft-apps/texturecraft", engine: "egui/wgpu", reference: "Substance Designer / Painter", metaphor: "Procedural PBR node graphs, UV mapping, texture baking", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "MaterialCraft", category: "Graphics", crate: "craft-apps/materialcraft", engine: "egui/wgpu", reference: "Blender Shader Editor", metaphor: "Node-based material graphs, real-time viewport shading", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "FilmCraft", category: "Video", crate: "craft-apps/filmcraft", engine: "egui/ffmpeg", reference: "DaVinci Resolve / Premiere Pro", metaphor: "Multi-track timeline, JKL shuttle scrubbing, playhead, razor cut", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "EffectCraft", category: "Video", crate: "craft-apps/effectcraft", engine: "egui/wgpu", reference: "After Effects / Nuke", metaphor: "Node and layer compositing, keyframe graph editor, motion tracking", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "AniCraft", category: "Video", crate: "craft-apps/anicraft", engine: "egui/timeline", reference: "Blender Grease Pencil / Toon Boom", metaphor: "Frame-by-frame timeline, keyframing, onion skinning", tool: "Passed", tabs: "Passed", a11y: "In Progress", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "SoundCraft", category: "Audio", crate: "craft-apps/soundcraft", engine: "egui/cpal", reference: "Audacity / Pro Tools", metaphor: "Audio waveforms, decibel meters, clip snapping", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
+            { name: "CADCraft", category: "CAD", crate: "craft-apps/cadcraft", engine: "egui/opencascade", reference: "AutoCAD / FreeCAD / Blender", metaphor: "Precision Cartesian coordinates, snapping grid, orthogonal views", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
+            { name: "WordCraft", category: "Productivity", crate: "craft-apps/wordcraft", engine: "egui/cosmic-text", reference: "InDesign / Typora / Markdown", metaphor: "Typographic galleys, document sections, markdown rendering", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "GridCraft", category: "Productivity", crate: "craft-apps/gridcraft", engine: "egui/calamine", reference: "Excel / LibreOffice Calc", metaphor: "Cell grid, formula parsing, tabular data view", tool: "Passed", tabs: "In Progress", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "DeckCraft", category: "Productivity", crate: "craft-apps/deckcraft", engine: "egui/wgpu", reference: "Apple Keynote / PowerPoint", metaphor: "Slide master templates, layout canvas, presenter notes", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "PdfCraft", category: "Productivity", crate: "craft-apps/pdfcraft", engine: "egui/pdfium", reference: "Adobe Acrobat / PDF-XChange", metaphor: "Prepress proofing, vector annotations, page management", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "Craft Anything", category: "DevTools", crate: "storytold/craft-anything", engine: "egui/mcp", reference: "VS Code / Node-RED", metaphor: "Visual extension builder, canvas pipelines, MCP integration", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "SolidCraft", category: "3D", crate: "craft-apps/solidcraft", engine: "egui/wgpu", reference: "SolidWorks / Rhino", metaphor: "Parametric B-Rep solid modeling, constraint solver", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "MailCraft", category: "Productivity", crate: "craft-apps/mailcraft", engine: "egui/async-imap", reference: "Superhuman / Thunderbird", metaphor: "Rapid keyboard triage, split pane preview, offline IMAP cache", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Planned", keep: "Passed" },
+            { name: "ArtCraft Studio", category: "AI Studio", crate: "craft-apps/studio", engine: "egui/mcp-gateway", reference: "ComfyUI / Automatic1111", metaphor: "Node-based generative workflows, latent streaming, prompt queues", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" }
         ];
 
         let matrixViewMode = 'scorecards'; // 'scorecards' | 'grid' | 'drilldown'
@@ -7546,6 +7592,8 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
                 const matchesSearch = !matrixSearchQuery || 
                     app.name.toLowerCase().includes(matrixSearchQuery) || 
                     app.category.toLowerCase().includes(matrixSearchQuery) ||
+                    (app.reference && app.reference.toLowerCase().includes(matrixSearchQuery)) ||
+                    (app.metaphor && app.metaphor.toLowerCase().includes(matrixSearchQuery)) ||
                     app.crate.toLowerCase().includes(matrixSearchQuery);
                 return matchesCat && matchesSearch;
             });
@@ -7609,10 +7657,16 @@ When generating or auditing Rust code for any of the 20+ Storytold Craft applica
                                 <div class="app-scorecard-crate">
                                     <span>${app.crate}</span> · <code>${app.engine}</code>
                                 </div>
+                                <div style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#58A6FF;background:rgba(56,139,253,0.1);padding:3px 8px;border-radius:4px;margin-top:6px;border:1px solid rgba(56,139,253,0.25);">
+                                    <span>🎯 Benchmark:</span> <strong>${app.reference || 'Industry Standard'}</strong>
+                                </div>
+                                <div style="font-size:12px;color:var(--sl-color-text-muted);margin-top:6px;line-height:1.4;">
+                                    ${app.metaphor || ''}
+                                </div>
                             </div>
                             <div class="app-scorecard-gauge">
                                 <div class="app-gauge-val ${scorePct < 100 ? 'warn' : ''}">${scorePct}%</div>
-                                <div class="app-gauge-sub">${passedCount}/6 Core Contracts</div>
+                                <div class="app-gauge-sub">${passedCount}/6 Shared Crates</div>
                             </div>
                         </header>
 

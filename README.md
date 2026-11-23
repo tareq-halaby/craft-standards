@@ -4,10 +4,10 @@
   </a>
 </p>
 
-<h1 align="center">ArtCraft Standards (`craft-standards`)</h1>
+<h1 align="center">ArtCraft Standards &amp; Reference App Guide (`craft-standards`)</h1>
 
 <p align="center">
-  <b>The Single Source of Truth for UX Invariants, Shared Ergonomic Contracts, and AI Agent Governance across the entire ArtCraft Suite.</b>
+  <b>Practical UI Recipes, Shared Crates &amp; Reference-App Mappings for the 20+ ArtCraft Creative Desktop Applications.</b>
 </p>
 
 <p align="center">
@@ -20,25 +20,34 @@
   <img alt="Apps: 20+" src="https://img.shields.io/badge/ArtCraft%20Apps-20%2B-orange?style=flat-square">
 </p>
 
-> 📖 **Executive Overview:** Read the [Executive Introduction & Architectural Whitepaper](docs/INTRODUCTION.md) or visit the live portal at [https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/).
+> 📖 **Companion Overview:** Read the [Reference App & Architecture Guide](docs/INTRODUCTION.md) or explore the live interactive portal at [https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/).
 
 ---
 
-## The ArtCraft Ecosystem Roster
+## The ArtCraft Reference App Roster
 
-`craft-standards` governs interaction, accessibility, localization, keymaps, and shared library contracts across all **20+ applications** in the ArtCraft suite:
+In fast-moving Rust codebases with `egui` and `wgpu`, **the code is the documentation**. Individual applications intentionally align with their industry benchmark tools (Photoshop, DaVinci, AutoCAD) to preserve user muscle memory, while relying on shared crates for cross-cutting foundations:
 
-| Category | Applications | Primary Invariants & Standards |
-| :--- | :--- | :--- |
-| **AI & Generative Media** | **ArtCraft Studio** | Generative prompts, prompt history, model settings, latency & streaming state. |
-| **Graphics & Design** | **PhotoCraft**, **VectorCraft**, **LightCraft**, **DesignCraft**, **FigCraft**, **TextureCraft**, **MaterialCraft** | Multi-tool cycling (`STD-INPUT-001`), Canvas pan/zoom (`STD-INPUT-003`), Transform constraints (`STD-INPUT-004`). |
-| **Video & Effects** | **FilmCraft**, **EffectCraft**, **AniCraft** | Timeline scrubbing (`STD-NAV-003`), Keyframe navigation, Track solo/mute, Render preview contracts. |
-| **Audio** | **SoundCraft** | Decibel meter colors, Waveform zoom, Audio scrub gestures, Clip snapping. |
-| **CAD & Drafting** | **CADCraft** | Precision coordinate entry, Snapping grid, Orthogonal constraint modifiers. |
-| **Office & Productivity** | **WordCraft**, **GridCraft**, **DeckCraft**, **PdfCraft** | Document tabs (`STD-NAV-001`), AccessKit tree (`STD-A11Y-001`), Unit conversion (`STD-I18N-002`), Dirty indicators (`STD-SHELL-002`). |
-| **Developer Tools** | **Craft Anything** | Visual plugin builder, extension manifests, MCP integration. |
-| **Third-Party & Mail** | **SolidCraft**, **MailCraft** | Shell layout mirroring (`STD-I18N-001`), Focus rings (`STD-A11Y-002`), Universal shortcuts. |
-| **Suite Infrastructure** | **Craft Launcher**, **craft-libs**, **craft-wiki**, **autocraft** | Unified update checks, MCP gateway, shared crates (`craft-ui`, `craft-print`, `craft-keymap`). |
+| Application | Category | Industry Reference Benchmark | Primary Ergonomic Focus |
+| :--- | :--- | :--- | :--- |
+| **PhotoCraft** | Graphics | Adobe Photoshop / Krita | Raster layers, canvas zoom physics, marquee selection |
+| **FilmCraft** | Video | DaVinci Resolve / Premiere Pro | Multi-track timeline, JKL shuttle scrubbing, playhead, razor cut |
+| **VectorCraft** | Graphics | Adobe Illustrator / Inkscape | Bézier pen tool, vector anchor points, path math |
+| **CADCraft** | CAD / 3D | AutoCAD / FreeCAD / Blender | Precision Cartesian coordinates, snapping grid, orthogonal projection |
+| **WordCraft** | Productivity | InDesign / Typora / Markdown | Typographic galleys, document sections, markdown rendering |
+| **AniCraft** | Animation | Blender Grease Pencil / Toon Boom | Frame-by-frame timeline, keyframing, onion skinning |
+| **SoundCraft** | Audio | Audacity / Pro Tools | Audio waveforms, decibel meters, clip snapping |
+| **LightCraft** | Photography | Adobe Lightroom / Capture One | Non-destructive RAW processing, exposure curves, color wheels |
+| **TextureCraft** | 3D Texturing | Substance Designer / Painter | Procedural PBR node graphs, UV mapping, texture baking |
+| **MaterialCraft** | Shaders | Blender Shader Editor | Node-based material graphs, real-time viewport shading |
+| **FigCraft** | UI / Vector | Figma | Frames, auto-layout, nested vector components |
+| **DeckCraft** | Presentations| Apple Keynote / PowerPoint | Slide master templates, layout canvas, presenter notes |
+| **GridCraft** | Data | Excel / LibreOffice Calc | Cell grid, formula parsing, tabular data view |
+| **PdfCraft** | Prepress | Adobe Acrobat / PDF-XChange | Prepress proofing, vector annotations, page management |
+| **SolidCraft** | 3D Modeling | SolidWorks / Rhino | Parametric B-Rep solid modeling, constraint solver |
+| **MailCraft** | Communication| Superhuman / Thunderbird | Rapid keyboard triage, split pane preview, offline IMAP cache |
+| **Craft Anything** | DevTools | VS Code / Node-RED | Visual extension builder, canvas pipelines, MCP integration |
+| **ArtCraft Studio** | AI Studio | ComfyUI / Automatic1111 | Node-based generative workflows, latent streaming, prompt queues |
 
 ---
 

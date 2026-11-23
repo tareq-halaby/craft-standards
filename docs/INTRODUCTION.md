@@ -1,111 +1,88 @@
-# Introduction to ArtCraft Standards
+# ArtCraft Standards & Reference App Guide
 
-> **Authoritative Architectural Invariants & Ergonomic Contracts for the 20+ ArtCraft Creative Suite Desktop Applications**  
-> *Single Source of Truth · Zero AST Drift Guarantee · Model Context Protocol (MCP) Powered*  
-> **Live Portal:** [https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)
-
----
-
-## 1. Executive Summary
-
-The **ArtCraft Creative Suite** by Storytold is an ambitious open-source ecosystem consisting of **20+ professional desktop applications written in Rust** (*PhotoCraft, VectorCraft, FilmCraft, CADCraft, WordCraft, TextureCraft, LightCraft, AniCraft*, and others) developed by over **6,000+ community contributors and maintainers**.
-
-Historically, multi-application monorepos face an exponential consistency challenge: without enforceable global architectural invariants, individual apps inevitably diverge. Hotkeys clash, dialogs present buttons in reversed order, timeline scrub controls behave inconsistently, and accessibility trees break between applications.
-
-**`craft-standards`** was built to solve this problem permanently. It serves as:
-1. **The Single Source of Truth:** 28 machine-audited specifications covering interaction, navigation, accessibility (`AccessKit`), BiDi/RTL localization, sandboxing, and governance.
-2. **The AutoCraft AI Agent Hub:** A native Model Context Protocol (MCP) server that empowers autonomous coding agents (Claude Code, Cursor, Antigravity, AutoCraft) to query standards before writing a single line of Rust code.
-3. **The Sentinel CI Gate:** An automated GitHub Action that audits pull requests across all 20+ app repositories to guarantee **Zero AST Drift** before code can merge.
+> **Practical UI Recipes, Shared Crates, and Industry Reference Mappings for the 20+ ArtCraft Creative Desktop Applications**  
+> *Developer Companion · Respecting App Individuality · Token-Lean Agent Workflows*  
+> **Live Companion Portal:** [https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)
 
 ---
 
-## 2. The Architectural Challenge: Before vs. After
+## 1. Core Philosophy: Practical Recipes & Reference-App Individuality
 
-| Problem Dimension | Before `craft-standards` (Fragmented) | Today with `craft-standards` (Unified) |
-| :--- | :--- | :--- |
-| **User Muscle Memory** | Switching between PhotoCraft and FilmCraft required relearning canvas zoom physics, tool slot cycling, and scrubbing modifiers. | **Universal Ergonomic Contract:** Identical `[V, M, B]` tool slot cycling, spring-loaded modifiers, and JKL timeline controls across all 20 apps. |
-| **Accessibility (a11y)** | Inconsistent accessibility node registration; screen reader support varied widely between applications. | **Automated AccessKit Invariants (STD-A11Y-001):** Every interactive widget must register an AccessKit node with strict 7:1 AAA contrast in CI. |
-| **BiDi & Internationalization** | Apps struggled with Arabic/Hebrew layouts, misaligning sidebars and timeline cursors. | **Full BiDi Shell Mirroring (STD-I18N-001):** Complete spatial inversion of chrome, toolbars, and timeline canvases for RTL locales. |
-| **Security & Sandboxing** | Arbitrary `std::fs` calls caused permission panics and prevented safe background AI automation. | **Confined Automation Roots (STD-SHELL-003):** All I/O routes through `craft_fs::AutomationRoot` with directory traversal protection. |
-| **AI Agent Compliance** | AI coding agents hallucinated non-existent APIs and violated monorepo architectural rules. | **AutoCraft MCP Gateway (`STD-CMD-001`):** Agents query pre-flight standard rules and run `verify_component` before emitting code. |
-| **Code Review Overhead** | Maintainers manually scrutinized PRs for keymap clashes and licensing violations. | **Sentinel CI PR Gate (`actions/sentinel`):** Automated CI referee blocks PRs with licensing or architectural invariant violations. |
+The **ArtCraft Creative Suite** by Storytold is an ecosystem of **20+ desktop applications in Rust** (*PhotoCraft, VectorCraft, FilmCraft, CADCraft, WordCraft*, and more) built by over **6,000+ community contributors and maintainers**.
+
+In fast-moving Rust codebases with modern GUI frameworks (like `egui` and `wgpu`), **the code is the documentation**. A rigid, top-down governance manual quickly drifts out of date. 
+
+Furthermore, **apps intentionally behave differently based on their specific reference applications**:
+* **PhotoCraft** should feel familiar to **Adobe Photoshop / Krita** users (raster layers, marquee tools, canvas zoom physics).
+* **FilmCraft** should feel familiar to **DaVinci Resolve / Premiere Pro** editors (JKL playhead scrubbing, multi-track timeline, razor cuts).
+* **CADCraft** should feel familiar to **AutoCAD / Blender** designers (precision Cartesian coordinates, snapping grids, modal transformations).
+
+**`craft-standards`** exists not to homogenize apps, but to serve as a **practical developer companion**:
+1. **Reference-App Mappings:** Documenting each app's industry lineage so contributors and agents know which conventions to follow.
+2. **Shared Foundation Crates:** Providing reusable recipes for cross-cutting infrastructure where divergence causes bugs (AccessKit accessibility trees, safe file sandboxing via `craft-fs`, BiDi/RTL spatial mirroring).
+3. **Token-Lean Agent Snippets (< 50 lines):** Offering compact, token-efficient code snippets for AI coding agents (Claude Code, Cursor, AutoCraft) to avoid context window bloat.
 
 ---
 
-## 3. The 7 Architectural Domains
-
-All 28 specifications are organized into 7 distinct domains adhering to **Jakob's Law of Ergonomics**:
+## 2. When to Share vs. When to Specialize
 
 ```
-craft-standards/
-├── 00-governance/         # Clean-room engineering, patent isolation, PR lifecycle (STD-GOV, STD-META)
-├── 01-interaction/        # Multi-tool slot cycling, spring tools, canvas physics, color picking
-├── 02-navigation/         # Tab lifecycle, panel dock collapsing, arrow-key scrubbing, JKL timecodes
-├── 03-accessibility/      # AccessKit node tagging, keyboard focus rings, AAA contrast, reduced motion
-├── 04-internationalization/# Full shell BiDi mirroring, locale-aware numeric and time formatting
-├── 05-shell-and-chrome/   # Clipboard drag & drop, universal CLI flags, dialog button order, sandboxed I/O
-└── 06-unified-libs/       # Shared crates, keymaps, widget primitives, font store, GPU fallbacks
+┌────────────────────────────────────────────────────────────────────────┐
+│                   THE ARTCRAFT CONVERGENCE BOUNDARY                    │
+├───────────────────────────────────┬────────────────────────────────────┤
+│   SHARED FOUNDATIONS              │   APP-SPECIFIC INDIVIDUALITY       │
+│   (Cross-Cutting Infrastructure)  │   (Reference-App Aligned)          │
+├───────────────────────────────────┼────────────────────────────────────┤
+│ • AccessKit a11y Node Tagging     │ • Tool cycling & canvas gestures   │
+│ • Sandboxed File I/O (craft-fs)   │ • Timeline playhead & track logic  │
+│ • Full Shell BiDi & RTL Mirroring │ • Precision coordinate snapping    │
+│ • Clean-Room Licensing Checks     │ • Custom domain shaders & viewports│
+│ • Windowing & GPU device fallbacks│ • Domain keymaps (Photoshop vs CAD)│
+└───────────────────────────────────┴────────────────────────────────────┘
 ```
 
 ---
 
-## 4. How the Ecosystem Operates
+## 3. Reference App Lineage Roster
 
-```mermaid
-flowchart TD
-    subgraph Central["craft-standards Central Hub"]
-        direction TB
-        Registry["28 Authoritative Specifications<br/>(Markdown + Frontmatter)"]
-        MCPServer["craft-standards-mcp<br/>(Stdio Model Context Protocol)"]
-        Dashboard["Interactive Standards Dashboard<br/>(Single-File Zero-Dep HTML)"]
-        Registry --> MCPServer
-        Registry --> Dashboard
-    end
+Each ArtCraft application intentionally draws ergonomics and workflows from its benchmark creative tool:
 
-    subgraph Agents["Autonomous AI Coding Agents"]
-        Claude["Claude Code"]
-        Cursor["Cursor IDE"]
-        AutoCraft["AutoCraft Pipeline<br/>(Stages 1-9)"]
-        MCPServer -->|query rules & verify| Claude
-        MCPServer -->|pre-flight boilerplate| Cursor
-        MCPServer -->|Stage 5 & 6 referee| AutoCraft
-    end
-
-    subgraph Monorepo["20+ Governed Applications"]
-        PhotoCraft["PhotoCraft"]
-        FilmCraft["FilmCraft"]
-        CADCraft["CADCraft"]
-        WordCraft["WordCraft"]
-        More["16+ other apps..."]
-        Claude -->|generate compliant PR| PhotoCraft
-        Cursor -->|generate compliant PR| FilmCraft
-        AutoCraft -->|automated fixes| CADCraft
-    end
-
-    subgraph Enforcement["Sentinel CI Invariant Gate"]
-        Sentinel["actions/sentinel/action.yml<br/>(Zero AST Drift Enforcement)"]
-        PhotoCraft -->|PR| Sentinel
-        FilmCraft -->|PR| Sentinel
-        CADCraft -->|PR| Sentinel
-        Sentinel -->|Pass: 100% Compliant| MainBranch["Merged to main"]
-    end
-```
+| Application | Domain | Industry Reference Benchmark | Primary Ergonomic Metaphor |
+| :--- | :--- | :--- | :--- |
+| **PhotoCraft** | Graphics | Adobe Photoshop / Krita | Raster layers, blend modes, canvas pan/zoom, marquee selection |
+| **FilmCraft** | Video | DaVinci Resolve / Premiere Pro | Multi-track timeline, JKL shuttle scrubbing, playhead, razor cut |
+| **VectorCraft** | Graphics | Adobe Illustrator / Inkscape | Bézier pen tool, vector anchor points, path math |
+| **CADCraft** | CAD / 3D | AutoCAD / FreeCAD / Blender | Precision Cartesian coordinates, snapping grid, orthogonal views |
+| **WordCraft** | Productivity | InDesign / Typora / Markdown | Typographic galleys, document sections, markdown rendering |
+| **AniCraft** | Animation | Blender Grease Pencil / Toon Boom | Frame-by-frame timeline, keyframing, onion skinning |
+| **SoundCraft** | Audio | Audacity / Pro Tools | Audio waveforms, decibel meters, clip snapping |
+| **LightCraft** | Photography | Adobe Lightroom / Capture One | Non-destructive RAW processing, exposure curves, color wheels |
+| **TextureCraft** | 3D Texturing | Substance Designer / Painter | Procedural PBR node graphs, UV mapping, texture baking |
+| **MaterialCraft** | Shaders | Blender Shader Editor | Node-based material graphs, real-time viewport shading |
+| **FigCraft** | UI / Vector | Figma | Frames, auto-layout, nested vector components |
+| **DeckCraft** | Presentations| Apple Keynote / PowerPoint | Slide master templates, layout canvas, presenter notes |
+| **GridCraft** | Data | Excel / LibreOffice Calc | Cell grid, formula parsing, tabular data view |
+| **PdfCraft** | Prepress | Adobe Acrobat / PDF-XChange | Prepress proofing, vector annotations, page management |
+| **SolidCraft** | 3D Modeling | SolidWorks / Rhino | Parametric B-Rep solid modeling, constraint solver |
+| **MailCraft** | Communication| Superhuman / Thunderbird | Rapid keyboard triage, split pane preview, offline IMAP cache |
+| **Craft Anything** | DevTools | VS Code / Node-RED | Visual extension builder, canvas pipelines, MCP integration |
+| **ArtCraft Studio** | AI Studio | ComfyUI / Automatic1111 | Node-based generative workflows, latent streaming, prompt queues |
 
 ---
 
-## 5. Enterprise ROI & Key Metrics
+## 4. Token-Lean Agent Philosophy (OpenWiki Aligned)
 
-* **95.8% Suite Compliance Telemetry:** 115 of 120 architectural contracts verified and active across all 20 desktop apps.
-* **100% Machine Verification:** Zero unverified specifications; every contract specifies machine-executable criteria.
-* **10/10 Unit & Invariant Tests Passing:** The MCP server and `xtask` test harness run in < 1 second.
-* **6-Language Native Accessibility:** Localized across English, Arabic, German, Spanish, French, and Japanese with full spatial mirroring.
-* **6,000+ Contributor Scalability:** Contributors onboard instantly via standard recipes, reducing pull request review cycles by up to 70%.
+In agentic development, injecting multi-page markdown documents burns precious context window tokens and slows inference. 
+
+`craft-standards` adheres to a **token-lean, code-first approach**:
+* **Ultra-Compact Snippets:** Every recipe provides a `< 150 token` prompt snippet with exact Rust types and function signatures.
+* **OpenWiki Integration:** Compatible with multi-repo agent architectures (such as [langchain-ai/openwiki](https://github.com/langchain-ai/openwiki)), allowing agents to read and write modular workspace notes without token bloat.
+* **Code as Documentation:** Prioritizes copy-pasteable `egui 0.29+` and `wgpu` code snippets over abstract philosophical text.
 
 ---
 
-## 6. Accessing the Standards
+## 5. Explore the Companion Portal
 
-* 🌐 **Interactive Portal:** [https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)
-* 📊 **Compliance Matrix:** [https://tareq-halaby.github.io/craft-standards/#matrix](https://tareq-halaby.github.io/craft-standards/#matrix)
-* 💡 **FAQ & Contributor Guide:** [https://tareq-halaby.github.io/craft-standards/#faq](https://tareq-halaby.github.io/craft-standards/#faq)
-* ⚡ **Agent Hub & MCP:** Press `Ctrl+K` on the live portal or run `cargo run --bin craft-standards-mcp` locally.
+* 🌐 **Companion Portal:** [https://tareq-halaby.github.io/craft-standards/](https://tareq-halaby.github.io/craft-standards/)
+* 🎨 **Reference App Lineage:** [https://tareq-halaby.github.io/craft-standards/#matrix](https://tareq-halaby.github.io/craft-standards/#matrix)
+* 💡 **Developer FAQ:** [https://tareq-halaby.github.io/craft-standards/#faq](https://tareq-halaby.github.io/craft-standards/#faq)

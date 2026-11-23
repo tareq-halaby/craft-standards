@@ -104,7 +104,6 @@
             // Hero Section
             setTxt('i18n-hero-eyebrow', t.heroEyebrow);
             setHtml('hero-title', t.heroTitle);
-            setHtml('i18n-hero-title', t.heroTitle);
             setTxt('i18n-hero-desc', t.heroDesc);
             setTxt('i18n-hero-badge-mcp', t.heroBadgeMCP);
             setTxt('i18n-hero-badge-sim', t.heroBadgeSim);
@@ -146,6 +145,7 @@
             // Specification Reader View
             setTxt('i18n-back-btn-text', t.backBtn);
             setTxt('i18n-copy-text', t.copyLink);
+            setTxt('i18n-copy-lean-text', t.copyLeanPrompt ? t.copyLeanPrompt.replace(/^⚡\s*/, '') : 'Lean Prompt');
             setTxt('i18n-crate-label', t.canonicalCrate);
             setTxt('i18n-apps-label', t.governedApps);
             setTxt('i18n-wiki-label', t.craftWikiGuide);
@@ -918,6 +918,37 @@
             }, 2000);
         }
 
+        function copyCurrentLeanPrompt() {
+            if (!activeSpecId) return;
+            const current = specsMap[activeSpecId];
+            if (!current) return;
+            const t = LOCALES[currentLang] || LOCALES.en || {};
+            
+            // Generate a token-lean (< 100 tokens) prompt snippet for agents
+            const leanPrompt = [
+                `// [ArtCraft Recipe: ${current.id}] ${current.title}`,
+                `// Domain: ${current.category} | Crate: ${current.crate || 'craft-widgets'} | UI: egui/wgpu`,
+                `// Invariant: ${current.summary || current.title}`,
+                `// Contract: No unverified AST drift. Tag AccessKit accessibility nodes with Role & Name.`,
+                `// Sandbox: Do not invoke std::fs directly; route all file operations via craft-fs.`
+            ].join('\n');
+
+            navigator.clipboard.writeText(leanPrompt).then(() => {
+                const btn = document.getElementById('copy-lean-btn');
+                if (btn) {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = `<span>✓</span> <span>${t.leanPromptCopied ? t.leanPromptCopied.split('!')[0] : 'Copied (<100t)'}</span>`;
+                    announceA11y('Lean agent prompt copied to clipboard');
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                    }, 2000);
+                }
+                showToastNotification(t.leanPromptCopied || 'Lean agent prompt copied (< 100 tokens)!');
+            }).catch(() => {
+                showToastNotification('Failed to copy prompt to clipboard');
+            });
+        }
+
         function navigateSpec(delta, e) {
             if (e) e.preventDefault();
             if (!activeSpecId) return;
@@ -1395,26 +1426,26 @@
         // Intelligent Scalable Suite Compliance Telemetry Matrix
         // =========================================================================
         const APPS_COMPLIANCE = [
-            { name: "PhotoCraft", category: "Graphics", crate: "craft-apps/photocraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "VectorCraft", category: "Graphics", crate: "craft-apps/vectorcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "DesignCraft", category: "Graphics", crate: "craft-apps/designcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "LightCraft", category: "Graphics", crate: "craft-apps/lightcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "FigCraft", category: "Graphics", crate: "craft-apps/figcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "TextureCraft", category: "Graphics", crate: "craft-apps/texturecraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "MaterialCraft", category: "Graphics", crate: "craft-apps/materialcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "FilmCraft", category: "Video", crate: "craft-apps/filmcraft", engine: "egui/ffmpeg", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "EffectCraft", category: "Video", crate: "craft-apps/effectcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "AniCraft", category: "Video", crate: "craft-apps/anicraft", engine: "egui/timeline", tool: "Passed", tabs: "Passed", a11y: "In Progress", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "SoundCraft", category: "Audio", crate: "craft-apps/soundcraft", engine: "egui/cpal", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
-            { name: "CADCraft", category: "CAD", crate: "craft-apps/cadcraft", engine: "egui/opencascade", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
-            { name: "WordCraft", category: "Productivity", crate: "craft-apps/wordcraft", engine: "egui/cosmic-text", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "GridCraft", category: "Productivity", crate: "craft-apps/gridcraft", engine: "egui/calamine", tool: "Passed", tabs: "In Progress", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "DeckCraft", category: "Productivity", crate: "craft-apps/deckcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "PdfCraft", category: "Productivity", crate: "craft-apps/pdfcraft", engine: "egui/pdfium", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "Craft Anything", category: "DevTools", crate: "storytold/craft-anything", engine: "egui/mcp", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "SolidCraft", category: "3D", crate: "craft-apps/solidcraft", engine: "egui/wgpu", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
-            { name: "MailCraft", category: "Productivity", crate: "craft-apps/mailcraft", engine: "egui/async-imap", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Planned", keep: "Passed" },
-            { name: "ArtCraft Studio", category: "AI Studio", crate: "craft-apps/studio", engine: "egui/mcp-gateway", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" }
+            { name: "PhotoCraft", category: "Graphics", crate: "craft-apps/photocraft", engine: "egui/wgpu", reference: "Adobe Photoshop / Krita", metaphor: "Raster layers, canvas pan/zoom, marquee selection", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "VectorCraft", category: "Graphics", crate: "craft-apps/vectorcraft", engine: "egui/wgpu", reference: "Adobe Illustrator / Inkscape", metaphor: "Bézier pen tool, vector anchor points, path math", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "DesignCraft", category: "Graphics", crate: "craft-apps/designcraft", engine: "egui/wgpu", reference: "InDesign / Affinity Publisher", metaphor: "Multi-page layout grids, master spreads, typographic flow", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "LightCraft", category: "Graphics", crate: "craft-apps/lightcraft", engine: "egui/wgpu", reference: "Adobe Lightroom / Capture One", metaphor: "Non-destructive RAW processing, exposure curves, color wheels", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "FigCraft", category: "Graphics", crate: "craft-apps/figcraft", engine: "egui/wgpu", reference: "Figma", metaphor: "Nested component frames, auto-layout, interactive prototyping", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "TextureCraft", category: "Graphics", crate: "craft-apps/texturecraft", engine: "egui/wgpu", reference: "Substance Designer / Painter", metaphor: "Procedural PBR node graphs, UV mapping, texture baking", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "MaterialCraft", category: "Graphics", crate: "craft-apps/materialcraft", engine: "egui/wgpu", reference: "Blender Shader Editor", metaphor: "Node-based material graphs, real-time viewport shading", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "FilmCraft", category: "Video", crate: "craft-apps/filmcraft", engine: "egui/ffmpeg", reference: "DaVinci Resolve / Premiere Pro", metaphor: "Multi-track timeline, JKL shuttle scrubbing, playhead, razor cut", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "EffectCraft", category: "Video", crate: "craft-apps/effectcraft", engine: "egui/wgpu", reference: "After Effects / Nuke", metaphor: "Node and layer compositing, keyframe graph editor, motion tracking", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "AniCraft", category: "Video", crate: "craft-apps/anicraft", engine: "egui/timeline", reference: "Blender Grease Pencil / Toon Boom", metaphor: "Frame-by-frame timeline, keyframing, onion skinning", tool: "Passed", tabs: "Passed", a11y: "In Progress", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "SoundCraft", category: "Audio", crate: "craft-apps/soundcraft", engine: "egui/cpal", reference: "Audacity / Pro Tools", metaphor: "Audio waveforms, decibel meters, clip snapping", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
+            { name: "CADCraft", category: "CAD", crate: "craft-apps/cadcraft", engine: "egui/opencascade", reference: "AutoCAD / FreeCAD / Blender", metaphor: "Precision Cartesian coordinates, snapping grid, orthogonal views", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "In Progress", confine: "Passed", keep: "Passed" },
+            { name: "WordCraft", category: "Productivity", crate: "craft-apps/wordcraft", engine: "egui/cosmic-text", reference: "InDesign / Typora / Markdown", metaphor: "Typographic galleys, document sections, markdown rendering", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "GridCraft", category: "Productivity", crate: "craft-apps/gridcraft", engine: "egui/calamine", reference: "Excel / LibreOffice Calc", metaphor: "Cell grid, formula parsing, tabular data view", tool: "Passed", tabs: "In Progress", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "DeckCraft", category: "Productivity", crate: "craft-apps/deckcraft", engine: "egui/wgpu", reference: "Apple Keynote / PowerPoint", metaphor: "Slide master templates, layout canvas, presenter notes", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "PdfCraft", category: "Productivity", crate: "craft-apps/pdfcraft", engine: "egui/pdfium", reference: "Adobe Acrobat / PDF-XChange", metaphor: "Prepress proofing, vector annotations, page management", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "Craft Anything", category: "DevTools", crate: "storytold/craft-anything", engine: "egui/mcp", reference: "VS Code / Node-RED", metaphor: "Visual extension builder, canvas pipelines, MCP integration", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "SolidCraft", category: "3D", crate: "craft-apps/solidcraft", engine: "egui/wgpu", reference: "SolidWorks / Rhino", metaphor: "Parametric B-Rep solid modeling, constraint solver", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" },
+            { name: "MailCraft", category: "Productivity", crate: "craft-apps/mailcraft", engine: "egui/async-imap", reference: "Superhuman / Thunderbird", metaphor: "Rapid keyboard triage, split pane preview, offline IMAP cache", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Planned", keep: "Passed" },
+            { name: "ArtCraft Studio", category: "AI Studio", crate: "craft-apps/studio", engine: "egui/mcp-gateway", reference: "ComfyUI / Automatic1111", metaphor: "Node-based generative workflows, latent streaming, prompt queues", tool: "Passed", tabs: "Passed", a11y: "Passed", rtl: "Passed", confine: "Passed", keep: "Passed" }
         ];
 
         let matrixViewMode = 'scorecards'; // 'scorecards' | 'grid' | 'drilldown'
@@ -1554,6 +1585,8 @@
                 const matchesSearch = !matrixSearchQuery || 
                     app.name.toLowerCase().includes(matrixSearchQuery) || 
                     app.category.toLowerCase().includes(matrixSearchQuery) ||
+                    (app.reference && app.reference.toLowerCase().includes(matrixSearchQuery)) ||
+                    (app.metaphor && app.metaphor.toLowerCase().includes(matrixSearchQuery)) ||
                     app.crate.toLowerCase().includes(matrixSearchQuery);
                 return matchesCat && matchesSearch;
             });
@@ -1617,10 +1650,16 @@
                                 <div class="app-scorecard-crate">
                                     <span>${app.crate}</span> · <code>${app.engine}</code>
                                 </div>
+                                <div style="display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:#58A6FF;background:rgba(56,139,253,0.1);padding:3px 8px;border-radius:4px;margin-top:6px;border:1px solid rgba(56,139,253,0.25);">
+                                    <span>🎯 Benchmark:</span> <strong>${app.reference || 'Industry Standard'}</strong>
+                                </div>
+                                <div style="font-size:12px;color:var(--sl-color-text-muted);margin-top:6px;line-height:1.4;">
+                                    ${app.metaphor || ''}
+                                </div>
                             </div>
                             <div class="app-scorecard-gauge">
                                 <div class="app-gauge-val ${scorePct < 100 ? 'warn' : ''}">${scorePct}%</div>
-                                <div class="app-gauge-sub">${passedCount}/6 Core Contracts</div>
+                                <div class="app-gauge-sub">${passedCount}/6 Shared Crates</div>
                             </div>
                         </header>
 
