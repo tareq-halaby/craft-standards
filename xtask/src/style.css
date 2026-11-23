@@ -1465,7 +1465,7 @@
             font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
-            color: #FFF;
+            color: var(--sl-color-heading);
             line-height: 1.2;
         }
         @media (min-width: 768px) {
@@ -1473,7 +1473,7 @@
                 font-size: 26px;
             }
         }
-        .matrix-kpi-val.highlight { color: #3FB950; }
+        .matrix-kpi-val.highlight { color: var(--sl-color-green); }
         .matrix-kpi-lbl {
             font-size: 12px;
             color: var(--sl-color-text-muted);

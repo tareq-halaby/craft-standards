@@ -1498,7 +1498,7 @@
             font-family: var(--font-display);
             font-size: 22px;
             font-weight: 700;
-            color: #FFF;
+            color: var(--sl-color-heading);
             line-height: 1.2;
         }
         @media (min-width: 768px) {
@@ -1506,7 +1506,7 @@
                 font-size: 26px;
             }
         }
-        .matrix-kpi-val.highlight { color: #3FB950; }
+        .matrix-kpi-val.highlight { color: var(--sl-color-green); }
         .matrix-kpi-lbl {
             font-size: 12px;
             color: var(--sl-color-text-muted);
@@ -4983,11 +4983,11 @@
                 <div class="matrix-kpi-lbl" id="kpi-invariants-lbl">Ergonomic Patterns</div>
             </div>
             <div class="matrix-kpi-card">
-                <div class="matrix-kpi-val" style="color:#58A6FF;" id="kpi-governed-val">Modular</div>
+                <div class="matrix-kpi-val" style="color:var(--sl-color-accent);" id="kpi-governed-val">Modular</div>
                 <div class="matrix-kpi-lbl" id="kpi-governed-lbl">Shared Infrastructure</div>
             </div>
             <div class="matrix-kpi-card">
-                <div class="matrix-kpi-val" style="color:#3FB950;" id="kpi-ci-val">Aligned</div>
+                <div class="matrix-kpi-val" style="color:var(--sl-color-green);" id="kpi-ci-val">Aligned</div>
                 <div class="matrix-kpi-lbl" id="kpi-guarantee-lbl">Reference App Benchmarks</div>
             </div>
         </section>
